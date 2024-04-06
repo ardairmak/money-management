@@ -61,6 +61,14 @@ const UpcomingPaymentScreen = () => {
         </View>
     )
 
+    const onPressOnHamburgerMenuIcon = () => {
+        console.log('Hamburger')
+    }
+
+    const onPressOnPersonIcon = () => {
+        console.log('User thingy')
+    }
+
     return (
         <KeyboardAvoidingView style={{ flex: 1 }}>
             <View style={styles.container}>
@@ -71,6 +79,7 @@ const UpcomingPaymentScreen = () => {
                         size={50}
                         color='white'
                         style={styles.icon}
+                        onPress={onPressOnHamburgerMenuIcon}
                     />
                     <Text style={styles.headerTitle}>Yaklaşan Ödemelerim</Text>
                     <Ionicons
@@ -78,6 +87,7 @@ const UpcomingPaymentScreen = () => {
                         size={50}
                         color='white'
                         style={styles.icon}
+                        onPress={onPressOnPersonIcon}
                     />
                 </View>
 
