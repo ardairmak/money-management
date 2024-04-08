@@ -1,5 +1,5 @@
-import React, { useState, Fragment } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useState, Fragment, useRef, useEffect } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Easing } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
 import { Colors } from '../constants/Colors'
@@ -9,6 +9,7 @@ let closeHamburger: () => void
 
 export default function HamburgerBar() {
   const [isHamburgerVisible, setIsHamburgerVisible] = useState(false)
+  const slideAnim = useRef(new Animated.Value(-300)).current
 
   toggleHamburger = () => {
     setIsHamburgerVisible(!isHamburgerVisible)
@@ -17,6 +18,15 @@ export default function HamburgerBar() {
   closeHamburger = () => {
     setIsHamburgerVisible(false)
   }
+
+  useEffect(() => {
+    Animated.timing(slideAnim, {
+      toValue: isHamburgerVisible ? 0 : -300,
+      duration: 300,
+      easing: Easing.inOut(Easing.ease),
+      useNativeDriver: true,
+    }).start()
+  }, [isHamburgerVisible])
 
   const onButtonPressSettings = () => {
     console.log('Pressed Ayarlar')
@@ -33,7 +43,7 @@ export default function HamburgerBar() {
   return (
     <Fragment>
       {isHamburgerVisible && (
-        <View style={styles.hamburgerBar}>
+        <Animated.View style={[styles.hamburgerBar, { transform: [{ translateX: slideAnim }] }]}>
           <Ionicons
             name='close'
             size={50}
@@ -50,7 +60,7 @@ export default function HamburgerBar() {
           <TouchableOpacity style={[styles.barItem, styles.signOut]} onPress={onButtonPressSignout}>
             <Text style={styles.barItemText}>Çıkış Yap</Text>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
       )}
     </Fragment>
   )
