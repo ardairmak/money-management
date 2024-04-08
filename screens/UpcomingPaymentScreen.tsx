@@ -165,6 +165,7 @@ const UpcomingPaymentScreen = () => {
                 height: filteredData.length * 70 > 350 ? 350 : filteredData.length * 70,
               }}
             />
+            {filteredData.length === 0 && <Text style={styles.noPaymentText}>Ödeme bulunamadı</Text>}
           </View>
         </View>
       </View>
@@ -291,11 +292,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-
   swipeActions: {
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: Colors.secondary,
+  },
+  noPaymentText: {
+    margin: 20,
+    textAlign: 'center',
+    fontSize: 25,
+    color: 'white',
   },
 })
