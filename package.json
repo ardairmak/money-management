@@ -1,52 +1,29 @@
 {
-    "name": "money-management",
-    "version": "1.0.0",
-    "main": "node_modules/expo/AppEntry.js",
-    "scripts": {
-        "start": "expo start",
-        "android": "expo start --android",
-        "ios": "expo start --ios"
-    },
-    "dependencies": {
-        "@react-navigation/bottom-tabs": "^6.5.20",
-        "@react-navigation/native": "^6.1.17",
-        "@react-navigation/stack": "^6.3.29",
-        "expo": "^49.0.23",
-        "expo-status-bar": "~1.6.0",
-        "react": "18.2.0",
-        "react-native": "0.72.10",
-        "react-native-vector-icons": "^10.0.3"
-    },
-    "devDependencies": {
-        "@babel/core": "^7.20.0",
-        "@types/react": "~18.2.45",
-        "typescript": "^5.1.3"
-    },
-    "private": true,
-    "prettier": {
-        "tabWidth": 4,
-        "semi": false,
-        "singleQuote": true,
-        "jsxSingleQuote": true,
-        "overrides": [
-            {
-                "files": "*.json",
-                "options": {
-                    "tabWidth": 4,
-                    "semi": false,
-                    "jsxSingleQuote": true,
-                    "singleQuote": true
-                }
-            },
-            {
-                "files": "*.{js,jsx,ts,tsx}",
-                "options": {
-                    "tabWidth": 4,
-                    "semi": false,
-                    "jsxSingleQuote": true,
-                    "singleQuote": true
-                }
-            }
-        ]
-    }
+  "name": "money-management",
+  "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "^14.0.0",
+    "@react-navigation/bottom-tabs": "^6.5.20",
+    "@react-navigation/native": "^6.1.17",
+    "@react-navigation/stack": "^6.3.29",
+    "expo": "^49.0.23",
+    "expo-font": "~11.4.0",
+    "expo-status-bar": "~1.6.0",
+    "react": "18.2.0",
+    "react-native": "0.72.10",
+    "react-native-gesture-handler": "~2.12.0",
+    "react-native-vector-icons": "^10.0.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@types/react": "~18.2.45",
+    "typescript": "^5.1.3"
+  },
+  "private": true
 }
