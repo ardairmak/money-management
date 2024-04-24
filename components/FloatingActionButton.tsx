@@ -1,25 +1,30 @@
 import React, { Fragment, useState } from 'react'
 import { StyleSheet, TouchableOpacity, Text, View } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 
 import { Colors } from '../constants/Colors'
+import { NavigationProp } from '../type'
 
 let closeFABPopup: () => void
 
-function FloatingActionButtonPopup() {
+function FloatingActionButtonPopup({ navigation }: NavigationProp) {
   const onButtonPressA = () => {
     console.log('Pressed gelir gider ekle')
     closeFABPopup()
+    navigation.navigate('IEPS')
   }
 
   const onButtonPressB = () => {
     console.log('Pressed gelecek odeme ekle')
     closeFABPopup()
+    navigation.navigate('FPPS')
   }
 
   const onButtonPressC = () => {
     console.log('Pressed etkinlik ekle')
     closeFABPopup()
+    navigation.navigate('APS')
   }
 
   return (
@@ -39,6 +44,7 @@ function FloatingActionButtonPopup() {
 
 export default function FloatingActionButton() {
   const [showPopup, setShowPopup] = useState(false)
+  const navigation = useNavigation<NavigationProp>()
 
   const toggleFABPopup = () => {
     setShowPopup(!showPopup)
@@ -57,7 +63,7 @@ export default function FloatingActionButton() {
     <Fragment>
       {showPopup && (
         <View style={styles.fabPopup}>
-          <FloatingActionButtonPopup />
+          <FloatingActionButtonPopup navigation={navigation} />
         </View>
       )}
       <TouchableOpacity style={styles.fab} onPress={onButtonPress}>
