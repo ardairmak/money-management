@@ -1,5 +1,5 @@
 import React, { useState, Fragment, useRef, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Animated, Easing } from 'react-native'
+import { Text, StyleSheet, TouchableOpacity, Animated, Easing } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
 import { Colors } from '../constants/Colors'
@@ -30,38 +30,39 @@ export default function HamburgerBar() {
 
   const onButtonPressSettings = () => {
     console.log('Pressed Ayarlar')
+    closeHamburger()
   }
 
   const onButtonPressContacts = () => {
     console.log('Pressed İletişim')
+    closeHamburger()
   }
 
   const onButtonPressSignout = () => {
     console.log('Pressed Çıkış Yap')
+    closeHamburger()
   }
 
   return (
     <Fragment>
-      {isHamburgerVisible && (
-        <Animated.View style={[styles.hamburgerBar, { transform: [{ translateX: slideAnim }] }]}>
-          <Ionicons
-            name='close'
-            size={50}
-            color={Colors.primary}
-            onPress={closeHamburger}
-            style={{ marginLeft: 18, marginTop: 40 }}
-          />
-          <TouchableOpacity style={styles.barItem} onPress={onButtonPressSettings}>
-            <Text style={styles.barItemText}>Ayarlar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.barItem} onPress={onButtonPressContacts}>
-            <Text style={styles.barItemText}>İletişim</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.barItem, styles.signOut]} onPress={onButtonPressSignout}>
-            <Text style={styles.barItemText}>Çıkış Yap</Text>
-          </TouchableOpacity>
-        </Animated.View>
-      )}
+      <Animated.View style={[styles.hamburgerBar, { transform: [{ translateX: slideAnim }] }]}>
+        <Ionicons
+          name='close'
+          size={50}
+          color={Colors.primary}
+          onPress={closeHamburger}
+          style={{ marginLeft: 18, marginTop: 40 }}
+        />
+        <TouchableOpacity style={styles.barItem} onPress={onButtonPressSettings}>
+          <Text style={styles.barItemText}>Ayarlar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.barItem} onPress={onButtonPressContacts}>
+          <Text style={styles.barItemText}>İletişim</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.barItem, styles.signOut]} onPress={onButtonPressSignout}>
+          <Text style={styles.barItemText}>Çıkış Yap</Text>
+        </TouchableOpacity>
+      </Animated.View>
     </Fragment>
   )
 }
