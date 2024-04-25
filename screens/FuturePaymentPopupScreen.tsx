@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     borderWidth: 1,
     borderRadius: 8,
-    margin: 10,
+    marginTop: 10,
     paddingHorizontal: 10,
     flex: 1,
   },
