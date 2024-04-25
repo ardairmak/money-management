@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TouchableWithoutFeedback } from 'react-native'
+import { Keyboard, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 import StackNavigation from './navigation/StackNavigation'
@@ -7,6 +7,7 @@ import FloatingActionButton, { closeFABPopup } from './components/FloatingAction
 import HamburgerBar, { closeHamburger } from './components/HamburgerBar'
 
 const closePopups = () => {
+  Keyboard.dismiss()
   closeFABPopup()
   closeHamburger()
 }
