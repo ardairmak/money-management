@@ -1,6 +1,6 @@
 import moment from 'moment'
 import React, { useState } from 'react'
-import { Text, View, TextInput, Button, StyleSheet, KeyboardAvoidingView } from 'react-native'
+import { Text, View, TextInput, Button, StyleSheet, ScrollView } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
 import { TimeDatePicker, Modes } from 'react-native-time-date-picker'
 import { Colors } from '../constants/Colors'
@@ -52,7 +52,7 @@ export default function FuturePaymentPopupScreen() {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <ScrollView style={styles.container} keyboardDismissMode='none'>
       <View style={styles.IconContainer}>
         <FontAwesome5 name="money-bill" style={styles.Icon} size={24} color="white" />
         </View>
@@ -106,7 +106,9 @@ export default function FuturePaymentPopupScreen() {
       )}
       <View style={styles.inputContainer}>
         <Text style={styles.inputLabel}>Ödeneceği Tarih</Text>
+
         {/* //! fix here !// */}
+
         <Text style={styles.input}>placeholder go brr</Text>
         {false && (
           <TimeDatePicker
@@ -117,6 +119,7 @@ export default function FuturePaymentPopupScreen() {
             onTimeChange={() => {}}
             onSelectedChange={(selected: number) => {
               console.log(moment(selected))
+
               //? how to set to date
             }}
             disableTimeCloseButton={true}
@@ -175,7 +178,7 @@ export default function FuturePaymentPopupScreen() {
       <View style={styles.buttonContainer}>
         <Button title='Save' onPress={handleSave} />
       </View>
-    </KeyboardAvoidingView>
+    </ScrollView>
   )
 }
 
@@ -193,13 +196,13 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.secondary,
     justifyContent: 'center',
    alignItems: 'center',
-  },
+ },
   descriptionContainer: {
     width: '100%',
   },
   inputLabel: {
-    fontSize: 16,
-    width: "50%",
+   fontSize: 18,
+    width: '50%',
     textAlignVertical: 'center',
     color: Colors.secondary,
     fontWeight: 'bold',
@@ -218,8 +221,9 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 8,
-    marginVertical: 10,
+    margin: 10,
     padding: 10,
+    paddingHorizontal: 10,
     textAlignVertical: 'top',
     backgroundColor: Colors.secondary,
   },
@@ -242,7 +246,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 30,
-    marginBottom: 20
+    marginVertical: 10,
+
   },
   Icon: {
     backgroundColor: Colors.secondary,
