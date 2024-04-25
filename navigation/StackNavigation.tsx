@@ -56,7 +56,7 @@ export default function StackNavigation() {
 const styles = StyleSheet.create({
   headerTitle: {
     color: Colors.primary,
-    fontSize: 22,
-    fontWeight: '600',
+    fontSize: 25,
+    fontWeight: 'bold',
   },
 })
