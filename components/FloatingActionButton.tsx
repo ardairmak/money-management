@@ -67,7 +67,7 @@ export default function FloatingActionButton() {
         </View>
       )}
       <TouchableOpacity style={styles.fab} onPress={onButtonPress}>
-        <Ionicons name='add-circle' size={70} color={'#083c5c'} />
+        <Ionicons name='add-circle' size={72} color={'#083c5c'} />
       </TouchableOpacity>
     </Fragment>
   )
@@ -80,7 +80,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     bottom: 80,
-  },
+
+    },
   fabPopup: {
     backgroundColor: 'gray',
     position: 'absolute',

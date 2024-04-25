@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { Text, View, TextInput, Button, StyleSheet, KeyboardAvoidingView } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
 import { TimeDatePicker, Modes } from 'react-native-time-date-picker'
+import { Colors } from '../constants/Colors'
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const reiterationData = [
   { label: 'Hiçbir Zaman', value: '0' },
@@ -51,6 +53,9 @@ export default function FuturePaymentPopupScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
+      <View style={styles.IconContainer}>
+        <FontAwesome5 name="money-bill" style={styles.Icon} size={24} color="white" />
+        </View>
       <View style={styles.inputContainer}>
         <Text style={styles.inputLabel}>İsim</Text>
         <TextInput style={styles.input} placeholder='Gider' textAlign='right' value={name} onChangeText={setName} />
@@ -69,7 +74,7 @@ export default function FuturePaymentPopupScreen() {
       <View style={styles.inputContainer}>
         <Text style={styles.inputLabel}>Ödeme Periyodu</Text>
         <Dropdown
-          style={[styles.input, isReiterationDropdownFocus && { borderColor: 'blue' }]}
+          style={[styles.input, isReiterationDropdownFocus && { borderColor: Colors.primary }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           data={reiterationData}
@@ -121,7 +126,7 @@ export default function FuturePaymentPopupScreen() {
       <View style={styles.inputContainer}>
         <Text style={styles.inputLabel}>Hatırlatıcı</Text>
         <Dropdown
-          style={[styles.input, isReminderDropdownFocus && { borderColor: 'blue' }]}
+          style={[styles.input, isReminderDropdownFocus && { borderColor: Colors.primary }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           data={reminderData}
@@ -141,7 +146,7 @@ export default function FuturePaymentPopupScreen() {
       <View style={styles.inputContainer}>
         <Text style={styles.inputLabel}>Kategori</Text>
         <Dropdown
-          style={[styles.input, isCategoryDropdownFocus && { borderColor: 'blue' }]}
+          style={[styles.input, isCategoryDropdownFocus && { borderColor: Colors.primary }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           data={categoryData}
@@ -177,24 +182,31 @@ export default function FuturePaymentPopupScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 20,
   },
   inputContainer: {
-    height: 75,
+    height: 60,
     width: '100%',
     flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.secondary,
+    justifyContent: 'center',
+   alignItems: 'center',
   },
   descriptionContainer: {
     width: '100%',
   },
   inputLabel: {
-    fontSize: 24,
-    width: '50%',
+    fontSize: 16,
+    width: "50%",
     textAlignVertical: 'center',
+    color: Colors.secondary,
+    fontWeight: 'bold',
+    paddingTop : 20,
   },
   input: {
-    borderColor: 'gray',
+    color: Colors.primary,
     borderWidth: 1,
     borderRadius: 8,
     margin: 10,
@@ -206,13 +218,15 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 8,
-    margin: 10,
-    paddingHorizontal: 10,
+    marginVertical: 10,
+    padding: 10,
     textAlignVertical: 'top',
+    backgroundColor: Colors.secondary,
   },
   placeholderStyle: {
-    fontSize: 16,
-    textAlign: 'right',
+    fontSize: 14,
+    textAlign: 'center',
+
   },
   selectedTextStyle: {
     fontSize: 16,
@@ -223,5 +237,17 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     padding: 50,
+  },
+  IconContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 30,
+    marginBottom: 20
+  },
+  Icon: {
+    backgroundColor: Colors.secondary,
+    padding: 20,
+    borderRadius: 50,
+    position: 'absolute',
   },
 })
