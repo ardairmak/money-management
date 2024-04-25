@@ -1,5 +1,7 @@
 import { iconPaths } from './IconPaths'
 
+
+
 export const MockData = [
   {
     id: '1',
@@ -37,3 +39,13 @@ export const MockData = [
     icon: iconPaths['DisneyPlus'],
   },
 ]
+
+export const mockEvents = {
+    '2024-04-20': [
+        {
+        name: 'Event 1',
+        category: 'Expense',
+        time: '8:00 AM',
+        }]
+}
+
