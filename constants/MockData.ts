@@ -1,5 +1,5 @@
 import { iconPaths } from './IconPaths'
-
+import { Event } from '../type'
 
 
 export const MockData = [
@@ -40,7 +40,7 @@ export const MockData = [
   },
 ]
 
-export const mockEvents = {
+export const mockEvents: {[date : string] : Event[] } = {
     '2024-04-20': [
         {
         name: 'Event 1',
