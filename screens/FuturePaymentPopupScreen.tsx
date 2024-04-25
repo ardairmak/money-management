@@ -1,6 +1,6 @@
 import moment from 'moment'
 import React, { useState } from 'react'
-import { Text, View, TextInput, Button, StyleSheet, KeyboardAvoidingView } from 'react-native'
+import { Text, View, TextInput, Button, StyleSheet, ScrollView } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
 import { TimeDatePicker, Modes } from 'react-native-time-date-picker'
 
@@ -50,7 +50,7 @@ export default function FuturePaymentPopupScreen() {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <ScrollView style={styles.container} keyboardDismissMode='none'>
       <View style={styles.inputContainer}>
         <Text style={styles.inputLabel}>İsim</Text>
         <TextInput style={styles.input} placeholder='Gider' textAlign='right' value={name} onChangeText={setName} />
@@ -101,7 +101,9 @@ export default function FuturePaymentPopupScreen() {
       )}
       <View style={styles.inputContainer}>
         <Text style={styles.inputLabel}>Ödeneceği Tarih</Text>
+
         {/* //! fix here !// */}
+
         <Text style={styles.input}>placeholder go brr</Text>
         {false && (
           <TimeDatePicker
@@ -112,6 +114,7 @@ export default function FuturePaymentPopupScreen() {
             onTimeChange={() => {}}
             onSelectedChange={(selected: number) => {
               console.log(moment(selected))
+
               //? how to set to date
             }}
             disableTimeCloseButton={true}
@@ -170,7 +173,7 @@ export default function FuturePaymentPopupScreen() {
       <View style={styles.buttonContainer}>
         <Button title='Save' onPress={handleSave} />
       </View>
-    </KeyboardAvoidingView>
+    </ScrollView>
   )
 }
 
@@ -181,15 +184,17 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   inputContainer: {
-    height: 75,
+    height: 60,
     width: '100%',
     flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderColor: 'rgba(128, 128, 128, 0.5)',
   },
   descriptionContainer: {
     width: '100%',
   },
   inputLabel: {
-    fontSize: 24,
+    fontSize: 20,
     width: '50%',
     textAlignVertical: 'center',
   },
@@ -207,6 +212,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     margin: 10,
+    padding: 10,
     paddingHorizontal: 10,
     textAlignVertical: 'top',
   },
