@@ -1,9 +1,8 @@
 import React, { Fragment, useState } from 'react'
 import { Text, View, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import { Dropdown } from 'react-native-element-dropdown'
-import { TimeDatePicker, Modes } from 'react-native-time-date-picker'
 import { FontAwesome5 } from '@expo/vector-icons'
-import moment from 'moment'
 
 import { Colors } from '../constants/Colors'
 import { Category, FuturePayment, NavigationProp, RenewalPeriod } from '../type.d'
@@ -29,16 +28,21 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
   const [price, setPrice] = useState('')
   const [period, setPeriod] = useState('')
   const [repetition, setRepetition] = useState('')
-  const [date, setDate] = useState('')
+  const [date, setDate] = useState(new Date())
   const [reminder, setReminder] = useState('')
   const [category, setCategory] = useState('')
   const [description, setDescription] = useState('')
 
-  const [isReiterationDropdownFocus, setIsReiterationDropdownFocus] = useState(false)
-  const [isReminderDropdownFocus, setIsReminderDropdownFocus] = useState(false)
-  const [isCategoryDropdownFocus, setIsCategoryDropdownFocus] = useState(false)
-
   const [isAnyTextInputFocused, setIsAnyTextInputFocused] = useState(false)
+  const [showDatePicker, setShowDatePicker] = useState(false)
+
+  const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    const currentDate = selectedDate || date
+    setDate(currentDate)
+    setShowDatePicker(false)
+
+    console.log(currentDate.toLocaleDateString('tr-tr'))
+  }
 
   const handleSave = () => {
     const payment: FuturePayment = {
@@ -46,7 +50,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
       price: price as unknown as number,
       renewalPeriod: period as RenewalPeriod,
       repetition: repetition as unknown as number,
-      date: date as unknown as Date,
+      date: date,
       reminder: reminder as unknown as Date,
       category: category as Category,
       description: description,
@@ -59,8 +63,8 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
   return (
     <Fragment>
       <ScrollView style={styles.container} keyboardDismissMode='none'>
-        <View style={styles.IconContainer}>
-          <FontAwesome5 name='money-bill' style={styles.Icon} size={40} color='white' />
+        <View style={styles.iconContainer}>
+          <FontAwesome5 name='money-bill' style={styles.icon} size={40} color='white' />
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>İsim</Text>
@@ -101,11 +105,8 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             valueField='value'
             placeholder={'Periyot seç'}
             value={period}
-            onFocus={() => setIsReiterationDropdownFocus(true)}
-            onBlur={() => setIsReiterationDropdownFocus(false)}
             onChange={(item) => {
               setPeriod(item.value)
-              setIsReiterationDropdownFocus(false)
             }}
           />
         </View>
@@ -126,25 +127,14 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
         )}
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Ödeneceği Tarih</Text>
-
-          {/* //! fix here !// */}
-
-          <Text style={styles.input}>placeholder</Text>
-          {false && (
-            <TimeDatePicker
-              selectedDate={moment().valueOf()}
-              mode={Modes.calendar}
-              style={styles.datePicker}
-              onMonthYearChange={() => {}}
-              onTimeChange={() => {}}
-              onSelectedChange={(selected: number) => {
-                console.log(moment(selected))
-
-                //? how to set to date
-              }}
-              disableTimeCloseButton={true}
-            />
-          )}
+          <TouchableOpacity
+            style={styles.input}
+            onPress={() => {
+              setShowDatePicker(true)
+            }}
+          >
+            <Text style={styles.dateText}>{date.toLocaleDateString('tr-tr')}</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Hatırlatıcı</Text>
@@ -161,11 +151,8 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             valueField='value'
             placeholder={'Hatırlatıcı seç'}
             value={reminder}
-            onFocus={() => setIsReminderDropdownFocus(true)}
-            onBlur={() => setIsReminderDropdownFocus(false)}
             onChange={(item) => {
               setReminder(item.value)
-              setIsReminderDropdownFocus(false)
             }}
           />
         </View>
@@ -184,11 +171,8 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             valueField='value'
             placeholder={'Kategori seç'}
             value={category}
-            onFocus={() => setIsCategoryDropdownFocus(true)}
-            onBlur={() => setIsCategoryDropdownFocus(false)}
             onChange={(item) => {
               setCategory(item.value ? item.value : '')
-              setIsCategoryDropdownFocus(false)
             }}
           />
         </View>
@@ -208,6 +192,9 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
           <Text style={styles.buttonText}>EKLE</Text>
         </TouchableOpacity>
       )}
+      {showDatePicker && (
+        <RNDateTimePicker value={date} minimumDate={new Date()} display='default' onChange={onDateChange} />
+      )}
     </Fragment>
   )
 }
@@ -219,6 +206,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 20,
   },
+  iconContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 40,
+    marginTop: 10,
+  },
+  icon: {
+    backgroundColor: Colors.secondary,
+    padding: 25,
+    borderRadius: 50,
+    position: 'absolute',
+    elevation: 5,
+  },
   inputContainer: {
     height: 60,
     width: '100%',
@@ -228,27 +228,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
     paddingBottom: 5,
-  },
-  dropdownContainer: {
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: 'gray',
-    maxHeight: 200,
-  },
-  dropdownItemContainer: {
-    backgroundColor: 'lightgray',
-    borderWidth: 0.2,
-    borderColor: 'gray',
-  },
-  dropdownItemText: {
-    textAlign: 'right',
-    textAlignVertical: 'center',
-    paddingRight: 20,
-    margin: -5,
-  },
-  descriptionContainer: {
-    width: '100%',
-    paddingBottom: 10,
   },
   inputLabel: {
     fontSize: 18,
@@ -271,6 +250,35 @@ const styles = StyleSheet.create({
     marginBottom: 1,
     marginRight: 5,
   },
+  dropdownContainer: {
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: 'gray',
+    maxHeight: 200,
+  },
+  dropdownItemContainer: {
+    backgroundColor: 'lightgray',
+    borderWidth: 0.2,
+    borderColor: 'gray',
+  },
+  dropdownItemText: {
+    textAlign: 'right',
+    textAlignVertical: 'center',
+    paddingRight: 20,
+    margin: -5,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+    textAlign: 'right',
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    textAlign: 'right',
+  },
+  descriptionContainer: {
+    width: '100%',
+    paddingBottom: 10,
+  },
   description: {
     height: 150,
     borderColor: 'gray',
@@ -282,16 +290,10 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     backgroundColor: Colors.secondary,
   },
-  placeholderStyle: {
+  dateText: {
+    paddingRight: 20,
     fontSize: 16,
     textAlign: 'right',
-  },
-  selectedTextStyle: {
-    fontSize: 16,
-    textAlign: 'right',
-  },
-  datePicker: {
-    position: 'absolute',
   },
   button: {
     backgroundColor: Colors.primary,
@@ -305,18 +307,5 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 24,
-  },
-  IconContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 40,
-    marginTop: 10,
-  },
-  Icon: {
-    backgroundColor: Colors.secondary,
-    padding: 25,
-    borderRadius: 50,
-    position: 'absolute',
-    elevation: 5,
   },
 })
