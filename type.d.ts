@@ -8,6 +8,15 @@ export type MainStackNavigatorParamList = {
 }
 export type NavigationProp = NativeStackScreenProps<MainStackNavigatorParamList, Main, FPPS, IEPS, APS>
 
+export interface IncomeExpense {
+  isIncome: boolean
+  name: string
+  category: Category
+  price: int
+  date: Date
+  description: string
+}
+
 export interface FuturePayment {
   name: string
   price: int
@@ -20,10 +29,6 @@ export interface FuturePayment {
 }
 
 export interface Event {}
-
-export interface Expense {}
-
-export interface Income {}
 
 export enum RenewalPeriod {
   NONE = 'Yok',

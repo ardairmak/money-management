@@ -1,224 +1,267 @@
-import React, { useState } from 'react'
-import { Fragment } from 'react'
-import {Text, StyleSheet, View, TextInput, Button, TouchableOpacity, KeyboardAvoidingView, ScrollView} from 'react-native';
+import React, { Fragment, useState } from 'react'
+import { Text, StyleSheet, View, TextInput, TouchableOpacity, ScrollView } from 'react-native'
+import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
+import { Dropdown } from 'react-native-element-dropdown'
+
 import { Colors } from '../constants/Colors'
-import { Ionicons } from '@expo/vector-icons';
-import {StackActions} from "@react-navigation/native";
-import RNPickerSelect from 'react-native-picker-select';
-//import DateTimePickerModal from '@react-native-modal/datetime-picker';
+import { Category, IncomeExpense, NavigationProp } from '../type.d'
 
+const categoryData = Object.keys(Category).map((key) => ({
+  label: Category[key as keyof typeof Category],
+  value: key,
+}))
 
-export default function IncomeExpensePopupScreen() {
-  const [name, setName] = useState("")
-  const [price, setPrice] = useState("")
-  const [category, setCategory] = useState("")
-  //const [date, setDate] = useState(new Date());
-  const [date, setDate] = useState("")
-  const [description, setDescription] = useState('');
-  const [isIncome, setIsIncome] = useState(true);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+export default function IncomeExpensePopupScreen({ navigation }: NavigationProp) {
+  const [isIncome, setIsIncome] = useState(true)
+  const [name, setName] = useState('')
+  const [category, setCategory] = useState('')
+  const [price, setPrice] = useState('')
+  const [date, setDate] = useState(new Date())
+  const [description, setDescription] = useState('')
 
-  /*
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-  const handleConfirm = (selectedDate: Date | null) => {
-    const currentDate = selectedDate || new Date(); // If no date is selected, default to today's date
-    setDate(currentDate);
-    hideDatePicker(); 
-  };
-  */
+  const [isAnyTextInputFocused, setIsAnyTextInputFocused] = useState(false)
+  const [showDatePicker, setShowDatePicker] = useState(false)
 
-  const onPop = () => {
-    const popAction = StackActions.pop(1) //pops a particular screen
-    //navigation.dispatch(popAction);
-  };
+  const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    const currentDate = selectedDate || date
+    setDate(currentDate)
+    setShowDatePicker(false)
 
-  const onSubmit = () => {
-    const transaction = { name, price, category, date, description, isIncome }
-    if (!name || !price) return alert("Lütfen harcama adını ve miktarını girin!")
+    console.log(currentDate.toLocaleDateString('tr-tr'))
+  }
 
-    //dispatch(addTransaction(transaction)) //addTransaction değişecek
-    //resetting variables
-    setName('')
-    setPrice('') 
-    setCategory('')
-    setCategory('');
-    //setDate(new Date());
-    setDate('');
-    setDescription('');
-    //navigation.navigate("BudgetScreen");
-    onPop();
-};
-  
+  const handleSave = () => {
+    const incomeExpense: IncomeExpense = {
+      isIncome: isIncome,
+      name: name,
+      category: category as Category,
+      price: price as unknown as number,
+      date: date,
+      description: description,
+    }
+    console.log(incomeExpense)
+
+    if (!incomeExpense.name || !incomeExpense.price) {
+      return alert(`Lütfen ${incomeExpense.isIncome ? 'gelir' : 'gider'} adını ve miktarını girin!`)
+    }
+
+    navigation.goBack()
+  }
+
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }}>
-      <ScrollView>
-        {/* Name Input Area */}
-        <View style={[styles.inputContainer, {flex: 1, borderWidth: 1, borderRadius: 10, paddingVertical: 10, paddingHorizontal: 10, marginLeft: 20, marginRight: 20, marginBottom: 10, marginTop: 25,}]}>
-          <TextInput style={[styles.input, { fontSize: 25, borderBottomWidth: 0, color: Colors.primary }]}
-            placeholder="Harcama Adı"
+    <Fragment>
+      <ScrollView style={styles.container} keyboardDismissMode='none'>
+        <View style={styles.nameInputContainer}>
+          <TextInput
+            style={styles.nameInput}
+            textAlign='center'
+            placeholder={isIncome ? 'Gelir adı' : 'Gider adı'}
             value={name}
             onChangeText={setName}
-            placeholderTextColor={Colors.secondary}
+            onFocus={() => setIsAnyTextInputFocused(true)}
+            onBlur={() => setIsAnyTextInputFocused(false)}
           />
         </View>
-
-        {/* Income/Expense Buttons */}
-        <View style={[styles.formItem, {justifyContent: 'center'}]}>
-          <TouchableOpacity onPress={() => setIsIncome(true)} style={[styles.button, { marginRight: 40 }, { backgroundColor: isIncome ? Colors.primary : Colors.secondary }]}>
-            <Text style={[styles.buttonText, { color: isIncome ? "white" : "green" }]}>
-              GELİR
-            </Text>
+        <View style={styles.formItem}>
+          <TouchableOpacity
+            onPress={() => setIsIncome(true)}
+            style={[styles.settingButton, { backgroundColor: isIncome ? Colors.primary : Colors.secondary }]}
+          >
+            <Text style={[styles.settingButtonText, { color: isIncome ? 'white' : Colors.primary }]}>GELİR</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setIsIncome(false)} style={[styles.button, { backgroundColor: isIncome ? Colors.secondary : Colors.primary }]}>
-            <Text style={[styles.buttonText, { color: !isIncome ? "white" : "red" }]}>
-              GİDER
-            </Text>
+          <TouchableOpacity
+            onPress={() => setIsIncome(false)}
+            style={[styles.settingButton, { backgroundColor: isIncome ? Colors.secondary : Colors.primary }]}
+          >
+            <Text style={[styles.settingButtonText, { color: !isIncome ? 'white' : Colors.primary }]}>GİDER</Text>
           </TouchableOpacity>
         </View>
-
-        {/* Input areas */}
         <View style={styles.inputContainer}>
-          <Text style={styles.formItem}>Kategori</Text>
-          <RNPickerSelect
-            placeholder={{
-              label: 'Kategori Seçmek İçin Tıklayın',
-              value: null,
-              color: Colors.primary
+          <Text style={styles.inputLabel}>Kategori</Text>
+          <Dropdown
+            style={styles.input}
+            containerStyle={styles.dropdownContainer}
+            itemContainerStyle={styles.dropdownItemContainer}
+            itemTextStyle={styles.dropdownItemText}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            data={categoryData}
+            maxHeight={300}
+            labelField='label'
+            valueField='value'
+            placeholder={'Kategori seç'}
+            value={category}
+            onChange={(item) => {
+              setCategory(item.value ? item.value : '')
             }}
-            onValueChange={(value) => setCategory(value)}
-            items={[
-              { label: 'Alışveriş', value: 'Alışveriş' },
-              { label: 'Seyahat', value: 'Seyahat' },
-              { label: 'Fatura', value: 'Fatura' },
-            ]}
-            style={{
-              inputIOS: styles.input,
-              inputAndroid: styles.input,
-            }}
-            useNativeAndroidPickerStyle={false} // Ensure native Android picker style is not used
-          />                    
+          />
         </View>
-
-        {/* Gelir gidere göre renkli +, -ekle */}
         <View style={styles.inputContainer}>
-          <Text style={styles.formItem}>Ücret</Text>
+          <Text style={styles.inputLabel}>Ücret</Text>
           <TextInput
-            style={[styles.input, { color: price.trim() ? Colors.primary : Colors.secondary }]}
-            placeholder={"100 TL"}
+            style={styles.input}
+            textAlign='right'
+            keyboardType='numeric'
             value={price}
             onChangeText={setPrice}
-            keyboardType="numeric"
+            onFocus={() => setIsAnyTextInputFocused(true)}
+            onBlur={() => setIsAnyTextInputFocused(false)}
           />
-          
+          <Text style={styles.inputRightText}>TL</Text>
         </View>
-          
-        <View style={styles.inputContainer}>  
-          <Text style={styles.formItem}>Tarih</Text>
-          {/*
-            <TouchableOpacity onPress={showDatePicker}>
-              <Text>{date.toLocaleDateString()}</Text>
-            </TouchableOpacity>
-            <DateTimePickerModal
-              isVisible={isDatePickerVisible}
-              mode="date"
-              onConfirm={handleConfirm}
-              onCancel={hideDatePicker}
-            />
-          */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>Ödeneceği Tarih</Text>
+          <TouchableOpacity
+            style={styles.input}
+            onPress={() => {
+              setShowDatePicker(true)
+            }}
+          >
+            <Text style={styles.dateText}>{date.toLocaleDateString('tr-tr')}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.inputLabel}>Açıklama</Text>
           <TextInput
-            style={[styles.input, { color: date.trim() ? Colors.primary : Colors.secondary }]}
-            placeholder={"28.05.2024"}
-            value={date}
-            onChangeText={setDate}
-            keyboardType="numeric"
-          />
-        </View>
-
-        <View style={[styles.inputContainer, {borderBottomWidth: 0}]}> 
-          <Text style={styles.formItem}>Açıklama</Text>
-        </View>
-        <View style={[styles.inputContainer, {backgroundColor: Colors.secondary, borderRadius: 20, paddingVertical: 40, paddingHorizontal: 10, marginLeft: 20, marginRight: 20, marginBottom: 10}]}>
-          <TextInput
-            style={[styles.input, {borderBottomWidth: 0, height: 50,  paddingTop: 15, paddingBottom: 15 }, { color: description !== "" ? Colors.primary : "white" }]}
-            placeholder="File market harcaması"
-            multiline
-            numberOfLines={4}
+            style={styles.description}
             value={description}
             onChangeText={setDescription}
+            onFocus={() => setIsAnyTextInputFocused(true)}
+            onBlur={() => setIsAnyTextInputFocused(false)}
           />
         </View>
       </ScrollView>
-
-        {/* Save button */}
-        <TouchableOpacity style={[styles.button, { backgroundColor: Colors.primary }, {position: 'absolute'}, {bottom: 40}, {right: 30}]} onPress={onSubmit}>
-          <Text style={[styles.buttonText, { color: "white" }]}>EKLE</Text>
+      {!isAnyTextInputFocused && (
+        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+          <Text style={styles.saveButtonText}>EKLE</Text>
         </TouchableOpacity>
-    </KeyboardAvoidingView>
+      )}
+      {showDatePicker && (
+        <RNDateTimePicker value={date} minimumDate={new Date()} display='default' onChange={onDateChange} />
+      )}
+    </Fragment>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
-  topScreen: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomColor: Colors.secondary,
-    justifyContent: 'center',
-    paddingHorizontal: 10,
-    marginTop: 20,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    backgroundColor: '#fff',
     paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.secondary,
-    paddingVertical: 10,
+    marginBottom: 20,
   },
-  input: {
-    alignItems: 'center',
+  nameInputContainer: {
+    borderWidth: 3,
+    borderRadius: 10,
+    borderColor: Colors.secondary,
+    paddingVertical: 15,
     paddingHorizontal: 10,
-    marginLeft: 10, 
-    fontSize: 18,
-    color: Colors.primary,
+    marginTop: 25,
+    marginHorizontal: 20,
+  },
+  nameInput: {
+    fontSize: 24,
   },
   formItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    fontSize: 18,
-    color: "gray",
-    paddingVertical: 10,
+    flexDirection: 'row',
   },
-  inputAndroid: {
-    height: 40,
-    borderWidth: 1,
-    borderColor: Colors.secondary,
-    fontSize: 18,
-    color: Colors.primary,
-    paddingHorizontal: 10,
-  },
-  button: {
+  settingButton: {
+    borderRadius: 30,
     paddingVertical: 10,
     paddingHorizontal: 40,
-    backgroundColor: Colors.secondary,
-    borderRadius: 30,
+    marginVertical: 30,
+    marginHorizontal: 20,
+  },
+  settingButtonText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  inputContainer: {
+    height: 60,
+    width: '100%',
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.secondary,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingBottom: 5,
+  },
+  inputLabel: {
+    fontSize: 18,
+    textAlignVertical: 'center',
+    color: Colors.secondary,
+    fontWeight: 'bold',
+    paddingTop: 20,
+    paddingRight: 20,
+  },
+  input: {
+    color: 'black',
+    paddingHorizontal: 20,
+    flex: 1,
+    fontSize: 16,
+  },
+  inputRightText: {
+    fontSize: 18,
+    color: Colors.secondary,
+    marginBottom: 1,
+    marginRight: 5,
+  },
+  dropdownContainer: {
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: 'gray',
+    maxHeight: 200,
+  },
+  dropdownItemContainer: {
+    backgroundColor: 'lightgray',
+    borderWidth: 0.2,
+    borderColor: 'gray',
+  },
+  dropdownItemText: {
+    textAlign: 'right',
+    textAlignVertical: 'center',
+    paddingRight: 20,
+    margin: -5,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+    textAlign: 'right',
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    textAlign: 'right',
+  },
+  dateText: {
+    paddingRight: 20,
+    fontSize: 16,
+    textAlign: 'right',
+  },
+  descriptionContainer: {
+    width: '100%',
+    paddingBottom: 10,
+  },
+  description: {
+    height: 150,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 8,
     marginTop: 10,
-    marginBottom: 10,
-    elevation: 7
+    padding: 10,
+    paddingHorizontal: 10,
+    textAlignVertical: 'top',
+    backgroundColor: Colors.secondary,
   },
-  buttonText: {
-    fontSize: 20,
+  saveButton: {
+    backgroundColor: Colors.primary,
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 50,
+    borderRadius: 30,
   },
-
+  saveButtonText: {
+    color: 'white',
+    fontSize: 24,
+  },
 })
