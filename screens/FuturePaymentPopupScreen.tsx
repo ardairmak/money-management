@@ -48,14 +48,18 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
     const payment: FuturePayment = {
       name: name,
       price: price as unknown as number,
-      renewalPeriod: period as RenewalPeriod,
-      repetition: repetition as unknown as number,
+      renewalPeriod: (period as RenewalPeriod) || RenewalPeriod.NONE,
+      repetition: (repetition as unknown as number) || 0,
       date: date,
-      reminder: reminder as unknown as Date,
+      reminder: (reminder as unknown as Date) || undefined, //! calculate reminder day
       category: category as Category,
       description: description,
     }
     console.log(payment)
+
+    if (!payment.name || !payment.price) {
+      return alert('Lütfen ödeme adını ve miktarını girin!')
+    }
 
     navigation.goBack()
   }
@@ -236,7 +240,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingTop: 20,
     paddingRight: 20,
-    elevation: 10,
   },
   input: {
     color: 'black',
@@ -275,6 +278,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'right',
   },
+  dateText: {
+    paddingRight: 20,
+    fontSize: 16,
+    textAlign: 'right',
+  },
   descriptionContainer: {
     width: '100%',
     paddingBottom: 10,
@@ -289,11 +297,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     textAlignVertical: 'top',
     backgroundColor: Colors.secondary,
-  },
-  dateText: {
-    paddingRight: 20,
-    fontSize: 16,
-    textAlign: 'right',
   },
   button: {
     backgroundColor: Colors.primary,
