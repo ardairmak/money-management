@@ -4,7 +4,42 @@ export type MainStackNavigatorParamList = {
   Main: undefined
   FPPS: undefined // FuturePaymentPopupScreen
   IEPS: undefined // IncomeExpensePopupScreen
-  APS: undefined
+  APS: undefined  // ActivityPopupScreen
+}
+export type NavigationProp = NativeStackScreenProps<MainStackNavigatorParamList, Main, FPPS, IEPS, APS>
+
+export interface FuturePayment {
+  name : string
+  price : int
+  renewalPeriod : RenewalPeriod
+  repetition : int
+  date : Date
+  reminder : Date
+  category : Category
+  description : string
 }
 
-export type NavigationProp = NativeStackScreenProps<MainStackNavigatorParamList, Main, FPPS, IEPS, APS>
+export interface Event {}
+
+export interface Expense {}
+
+export interface Income {}
+
+export enum RenewalPeriod {
+  NONE = "Yok",
+  WEEKLY = "Haftalık",
+  MONTHLY = "Aylık",
+  ANNUALLY = "Yıllık",
+}
+
+export enum Category {
+  NONE = 'Yok',
+  FOOD = 'Yiyecek',
+  TRANSPORTATION = 'Ulaşım',
+  ENTERTAINMENT = 'Eğlence',
+  UTILITIES = 'Fatura',
+  SHOPPING = 'Alışveriş',
+  HEALTH = 'Sağlık',
+  EDUCATION = 'Eğitim',
+  OTHER = 'Diğer',
+}
