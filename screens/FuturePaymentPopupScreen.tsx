@@ -64,12 +64,12 @@ export default function FuturePaymentPopupScreen() {
         <Text style={styles.inputLabel}>Ücret</Text>
         <TextInput
           style={styles.input}
-          placeholder='TL'
           textAlign='right'
           keyboardType='numeric'
           value={price}
           onChangeText={setPrice}
         />
+        <Text style={{fontSize: 18,color: Colors.secondary,marginBottom: 1,marginRight: 5}}>TL</Text>
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.inputLabel}>Ödeme Periyodu</Text>
@@ -195,7 +195,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: Colors.secondary,
     justifyContent: 'center',
-   alignItems: 'center',
+    alignItems: 'flex-end',
+    paddingBottom : 5,
  },
   descriptionContainer: {
     width: '100%',
@@ -210,11 +211,11 @@ const styles = StyleSheet.create({
   },
   input: {
     color: Colors.primary,
-    borderWidth: 1,
     borderRadius: 8,
-    marginTop: 10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     flex: 1,
+    fontSize: 18,
+
   },
   description: {
     height: 150,
