@@ -80,8 +80,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     bottom: 80,
-
-    },
+  },
   fabPopup: {
     backgroundColor: 'gray',
     position: 'absolute',
