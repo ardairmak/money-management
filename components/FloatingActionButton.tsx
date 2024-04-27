@@ -70,15 +70,15 @@ export default function FloatingActionButton() {
         <View
           style={{
             position: 'absolute',
-            width: 58,
-            height: 58,
-            top: 9,
-            left: 5,
-            borderRadius: 35,
+            width: 64,
+            height: 64,
+            top: 6,
+            left: 2,
+            borderRadius: 40,
             backgroundColor: 'white',
           }}
         />
-        <Ionicons name='add-circle' style={{}} size={72} color={Colors.primary} />
+        <Ionicons name='add-circle' size={72} color={Colors.primary} />
       </TouchableOpacity>
     </Fragment>
   )
