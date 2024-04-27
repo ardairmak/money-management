@@ -55,4 +55,13 @@ export const budgetData = [
       { id: '6', name: 'KYK',type: 'income', amount: '850', icon: 'money' },
     ],
   },
+  {
+    month: 'Haziran',
+    data: [
+      { id: '7', name: 'Kira',type:'expense', amount: '3200', icon: 'home' },
+      { id: '8', name: 'Netflix',type:'expense', amount: '30', icon: 'netflix' },
+      { id: '9', name: 'KYK',type: 'income', amount: '850', icon: 'money' },
+      { id: '10', name: 'Market',type:'expense', amount: '80', icon: 'shopping-cart' },
+    ],
+  },
 ];

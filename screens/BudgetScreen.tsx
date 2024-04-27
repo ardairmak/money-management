@@ -145,6 +145,8 @@ export default function BudgetScreen(){
     setTotalMoney(totalExpense);
     setFilteredData(giderData);
   };
+
+  
   
     return (
       <View style={styles.container}>
@@ -168,22 +170,21 @@ export default function BudgetScreen(){
       </TouchableOpacity>
       </View>
 
-      <View>
       <FlatList
-  data={filteredData}
-  renderItem={({ item }) => {
+    data={filteredData}
+    renderItem={({ item }) => {
     // Check if there are any data items for the month
     if (item.data.length > 0) {
       return (
         <View style={styles.monthBox}>
-          <View style={styles.monthContainer}>
+          
             <Text style={styles.monthTitle}>{item.month}</Text>
             <FlatList
               data={item.data}
               renderItem={renderItem}
               keyExtractor={item => item.id}
             />
-          </View>
+         
         </View>
       );
     } else {
@@ -192,10 +193,7 @@ export default function BudgetScreen(){
   }}
   keyExtractor={(_, index) => index.toString()}
 />
-
       </View>
-
-    </View>
     );
 };
   const styles = StyleSheet.create({
@@ -235,7 +233,7 @@ export default function BudgetScreen(){
       backgroundColor: 'white',
     },
     total:{
-      paddingLeft:10,
+      alignSelf:'center',
       fontSize:50,
       fontWeight:'bold',
       color:'black',
@@ -256,8 +254,7 @@ export default function BudgetScreen(){
       padding:10,
       fontSize: 18,
       fontWeight: '600',
-      marginLeft: 10,
-      marginRight:10, 
+      alignSelf:'baseline',
       color:'#083c5c',
       marginTop:5,
     },
@@ -267,26 +264,30 @@ export default function BudgetScreen(){
       marginRight: 20, 
       marginTop:10,
     },
-
-    monthContainer: {
-      marginBottom: 10,
-    },
     monthTitle: {
       fontSize: 20,
       fontWeight: 'bold',
       marginBottom: 10,
-      marginLeft:165,
-      marginRight:100,
       color: 'white',
+      textAlign:'center',
     },
     monthBox: {
-      backgroundColor: '#9094ac', 
+      backgroundColor: '#9094ac', //itemColor
       borderRadius: 15, // Add border radius to make it look like a box
-      padding: 10, // Add padding to space content from the box edges
+      padding: 5, // Add padding to space content from the box edges
+      marginTop:5,
+      marginHorizontal:15,
       marginBottom: 15, // Add margin bottom to space boxes from each other
-      marginHorizontal:10,
       elevation: 3, // Add elevation to give it a shadow effect
     },
+   /* outerBox: {
+      flex: 1, // Make the outerBox take up all remaining space after the top sections
+      backgroundColor: '#9094ac', // Light background color for the box
+      borderRadius: 10, // Add some rounded corners for a nicer look
+      marginTop: 20, // Add some margin from the top section
+      marginBottom: 20, // Add some margin from the bottom
+      marginHorizontal: 10, // Add horizontal margin for spacing
+    },*/
   })
 
 
