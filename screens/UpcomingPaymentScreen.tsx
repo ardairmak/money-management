@@ -14,7 +14,7 @@ import {
 import { Colors } from '../constants/Colors'
 import { getDaysDifference } from '../helpers/dateHelpers'
 import { iconPaths } from '../constants/IconPaths'
-import { Swipeable } from 'react-native-gesture-handler'
+import { ScrollView, Swipeable } from 'react-native-gesture-handler'
 import { MockData } from '../constants/MockData'
 
 const UpcomingPaymentScreen = () => {
@@ -134,7 +134,7 @@ const UpcomingPaymentScreen = () => {
         </View>
       </Swipeable>
     )
-  }
+}
 
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: 'lightgrey' }}>
@@ -154,19 +154,13 @@ const UpcomingPaymentScreen = () => {
             />
           </View>
           {/* Fourth Section (Upcoming Payments) */}
-          <View style={styles.upcomingContainer}>
-            <Text style={styles.upcomingTitle}>Yaklaşan Ödemeler</Text>
-            <FlatList
-              data={filteredData}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id}
-              contentContainerStyle={[styles.flatListContentContainer]}
-              style={{
-                height: filteredData.length * 70 > 350 ? 350 : filteredData.length * 70,
-              }}
-            />
+
+
+          <ScrollView style={[styles.upcomingContainer,{height: data.length * 70 > 350 ? 350 : data.length * 70}]}>
+             <Text style={styles.upcomingTitle}>Yaklaşan Ödemeler</Text>
+            {filteredData.map((item, index) => renderItem({ item, index }))}
             {filteredData.length === 0 && <Text style={styles.noPaymentText}>Ödeme bulunamadı</Text>}
-          </View>
+          </ScrollView> 
         </View>
       </View>
     </KeyboardAvoidingView>
