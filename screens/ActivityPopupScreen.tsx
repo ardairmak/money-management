@@ -110,6 +110,8 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
       renewalPeriod: (renewalPeriod as RenewalPeriod) || RenewalPeriod.NONE,
       color: selectedColor.value,
       description: description,
+      category: '',
+      time: '',
     }
     console.log(payment)
 
