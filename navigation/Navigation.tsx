@@ -7,6 +7,7 @@ import CustomHeader from '../components/CustomHeader'
 import UpcomingPaymentScreen from '../screens/UpcomingPaymentScreen'
 import BudgetScreen from '../screens/BudgetScreen'
 import CalendarScreen from '../screens/CalendarScreen'
+import { NavigationProp } from '../type'
 
 const BUDGET_SCREEN_NAME = 'Bütçe'
 const UPCOMING_PAYMENT_SCREEN_NAME = 'Yaklaşan Ödemeler'
@@ -18,7 +19,7 @@ const CALENDAR_SCREEN_ICON_NAME = 'calendar'
 
 const Tab = createBottomTabNavigator()
 
-export default function Navigation() {
+export default function Navigation({ navigation }: NavigationProp) {
   return (
     <Tab.Navigator
       initialRouteName={UPCOMING_PAYMENT_SCREEN_NAME}
@@ -78,21 +79,21 @@ export default function Navigation() {
         name={BUDGET_SCREEN_NAME}
         component={BudgetScreen}
         options={{
-          header: () => <CustomHeader title={'Bütçem'} />,
+          header: () => <CustomHeader navigation={navigation} title={'Bütçem'} />,
         }}
       />
       <Tab.Screen
         name={UPCOMING_PAYMENT_SCREEN_NAME}
         component={UpcomingPaymentScreen}
         options={{
-          header: () => <CustomHeader title={'Yaklaşan Ödemelerim'} />,
+          header: () => <CustomHeader navigation={navigation} title={'Yaklaşan Ödemelerim'} />,
         }}
       />
       <Tab.Screen
         name={CALENDAR_SCREEN_NAME}
         component={CalendarScreen}
         options={{
-          header: () => <CustomHeader title={'Takvim'} />,
+          header: () => <CustomHeader navigation={navigation} title={'Takvim'} />,
         }}
       />
     </Tab.Navigator>
