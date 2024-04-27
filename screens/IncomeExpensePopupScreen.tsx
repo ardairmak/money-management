@@ -23,9 +23,10 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
   const [showDatePicker, setShowDatePicker] = useState(false)
 
   const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    setShowDatePicker(false)
+
     const newDate = selectedDate || date
     setDate(newDate)
-    setShowDatePicker(false)
 
     console.log(newDate.toLocaleDateString('tr-tr'))
   }
@@ -62,6 +63,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
             onBlur={() => setIsAnyTextInputFocused(false)}
           />
         </View>
+
         <View style={styles.formItem}>
           <TouchableOpacity
             onPress={() => setIsIncome(true)}
@@ -69,6 +71,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
           >
             <Text style={[styles.settingButtonText, { color: isIncome ? 'white' : Colors.primary }]}>GELİR</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() => setIsIncome(false)}
             style={[styles.settingButton, { backgroundColor: isIncome ? Colors.secondary : Colors.primary }]}
@@ -76,6 +79,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
             <Text style={[styles.settingButtonText, { color: !isIncome ? 'white' : Colors.primary }]}>GİDER</Text>
           </TouchableOpacity>
         </View>
+
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Kategori</Text>
           <Dropdown
@@ -96,6 +100,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
             }}
           />
         </View>
+
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Ücret</Text>
           <TextInput
@@ -109,6 +114,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
           />
           <Text style={styles.inputRightText}>TL</Text>
         </View>
+
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Ödeneceği Tarih</Text>
           <TouchableOpacity
@@ -120,6 +126,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
             <Text style={styles.dateText}>{date.toLocaleDateString('tr-tr')}</Text>
           </TouchableOpacity>
         </View>
+
         <View style={styles.descriptionContainer}>
           <Text style={styles.inputLabel}>Açıklama</Text>
           <TextInput
@@ -131,11 +138,13 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
           />
         </View>
       </ScrollView>
+
       {!isAnyTextInputFocused && (
         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
           <Text style={styles.saveButtonText}>EKLE</Text>
         </TouchableOpacity>
       )}
+
       {showDatePicker && (
         <RNDateTimePicker value={date} minimumDate={new Date()} display='default' onChange={onDateChange} />
       )}

@@ -13,19 +13,11 @@ import {
 } from 'react-native'
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import { Dropdown } from 'react-native-element-dropdown'
-import ColorPicker, {
-  LuminanceSlider,
-  OpacitySlider,
-  Panel3,
-  Preview,
-  Swatches,
-  colorKit,
-  returnedResults,
-} from 'reanimated-color-picker'
+import ColorPicker, { LuminanceSlider, Panel3, Preview, colorKit, returnedResults } from 'reanimated-color-picker'
+import Animated, { useSharedValue } from 'react-native-reanimated'
 
 import { Colors } from '../constants/Colors'
 import { Event, NavigationProp, RenewalPeriod } from '../type.d'
-import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 
 const renewalPeriodData = Object.keys(RenewalPeriod).map((key) => ({
   label: RenewalPeriod[key as keyof typeof RenewalPeriod],
@@ -51,41 +43,42 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
   const [isAnyTextInputFocused, setIsAnyTextInputFocused] = useState(false)
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [showTimePicker, setShowTimePicker] = useState(false)
-  const [isToggleEnabled, setIsToggleEnabled] = useState(false)
   const [showColorPicker, setShowColorPicker] = useState(false)
-
   const [isStartTimeSelected, setIsStartTimeSelected] = useState(false)
 
   const customSwatches = new Array(6).fill('#fff').map(() => colorKit.randomRgbColor().hex())
   const selectedColor = useSharedValue(customSwatches[0])
 
-  const toggleSwitch = () => setIsToggleEnabled((previousState) => !previousState)
+  const toggleSwitch = () => setIsAllDay((previousState) => !previousState)
 
   const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    setShowDatePicker(false)
+
     const newDate = selectedDate || date
     setDate(newDate)
-    setShowDatePicker(false)
 
     console.log(newDate.toLocaleDateString('tr-tr'))
   }
 
   const onTimeChange = (event: DateTimePickerEvent, selectedTime?: Date) => {
-    const newTimeStart = selectedTime || timeStart
-    const newTimeEnd = selectedTime || timeEnd
+    setShowTimePicker(false)
 
-    if (isStartTimeSelected && newTimeStart > timeEnd) {
+    const newTime = selectedTime || (isStartTimeSelected ? timeStart : timeEnd)
+
+    if (isStartTimeSelected && newTime > timeEnd) {
       return alert('Başlangıç saati bitiş saatinden sonra olamaz.')
     }
-    if (isStartTimeSelected && newTimeEnd > timeStart) {
-      return alert('Bitiş saati başlangıç saatinden sonra olamaz.')
+    if (!isStartTimeSelected && newTime < timeStart) {
+      return alert('Bitiş saati başlangıç saatinden önce olamaz.')
     }
 
     if (isStartTimeSelected) {
-      setTimeStart(newTimeStart)
+      setTimeStart(newTime)
     } else {
-      setTimeEnd(newTimeEnd)
+      setTimeEnd(newTime)
     }
-    setShowTimePicker(false)
+
+    console.log(newTime.toLocaleTimeString('tr-tr', { hour: '2-digit', minute: '2-digit' }))
   }
 
   const onColorSelect = (color: returnedResults) => {
@@ -94,14 +87,26 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
     console.log(color.hex)
   }
 
+  const calculateReminderDate = () => {
+    const reminderDate = new Date(date)
+    reminderDate.setDate(reminderDate.getDate() - (reminder as unknown as number))
+    return reminderDate
+  }
+
+  const calculateDateTime = (date: Date, time: Date) => {
+    const newDate = new Date(date)
+    newDate.setHours(time.getHours(), time.getMinutes())
+    return newDate
+  }
+
   const handleSave = () => {
     const payment: Event = {
       name: name,
       date: date,
       isAllDay: isAllDay,
-      timeStart: timeStart,
-      timeEnd: timeEnd,
-      reminder: (reminder as unknown as Date) || undefined, //! calculate reminder day
+      timeStart: calculateDateTime(date, timeStart),
+      timeEnd: calculateDateTime(date, timeEnd),
+      reminder: calculateReminderDate(),
       renewalPeriod: (renewalPeriod as RenewalPeriod) || RenewalPeriod.NONE,
       color: selectedColor.value,
       description: description,
@@ -129,6 +134,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
             onBlur={() => setIsAnyTextInputFocused(false)}
           />
         </View>
+
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Tarih</Text>
           <TouchableOpacity
@@ -141,11 +147,10 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
           </TouchableOpacity>
         </View>
 
-        {/* //! saat secme */}
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Süre</Text>
-          <View style={[styles.input, { flexDirection: 'column', alignItems: 'flex-end' }]}>
-            {!isToggleEnabled && (
+          <View style={[styles.input, { marginRight: 7, flexDirection: 'column', alignItems: 'flex-end' }]}>
+            {!isAllDay && (
               <View style={styles.timeContainer}>
                 <TouchableOpacity
                   style={styles.timeButton}
@@ -158,7 +163,9 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
                     {timeStart.toLocaleTimeString('tr-tr', { hour: '2-digit', minute: '2-digit' })}
                   </Text>
                 </TouchableOpacity>
+
                 <Text style={{ fontSize: 24 }}>-</Text>
+
                 <TouchableOpacity
                   style={styles.timeButton}
                   onPress={() => {
@@ -172,18 +179,20 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
                 </TouchableOpacity>
               </View>
             )}
+
             <View style={styles.switchContainer}>
               <Text style={{ marginRight: 10 }}>Gün boyu</Text>
               <Switch
                 style={{ height: 20 }}
                 trackColor={{ false: Colors.secondary, true: Colors.primary }}
-                thumbColor={isToggleEnabled ? 'lightblue' : 'white'}
+                thumbColor={isAllDay ? 'lightblue' : 'white'}
                 onValueChange={toggleSwitch}
-                value={isToggleEnabled}
+                value={isAllDay}
               />
             </View>
           </View>
         </View>
+
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Hatırlatıcı</Text>
           <Dropdown
@@ -204,6 +213,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
             }}
           />
         </View>
+
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Tekrarla</Text>
           <Dropdown
@@ -225,20 +235,20 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
           />
         </View>
 
-        {/* //! renk secimi */}
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Renk</Text>
           <View style={styles.input}>
             <Button title='Color Picker' onPress={() => setShowColorPicker(true)} />
             <Modal onRequestClose={() => setShowColorPicker(false)} visible={showColorPicker} animationType='slide'>
-              <Animated.View style={[styles.container, { backgroundColor: Colors.primary }]}>
-                <View style={styles.pickerContainer}>
+              <Animated.View style={[styles.container, { backgroundColor: 'black' }]}>
+                <View style={[styles.pickerContainer, { backgroundColor: 'darkgray' }]}>
                   <ColorPicker
                     value={selectedColor.value}
                     sliderThickness={25}
                     thumbShape='circle'
                     thumbSize={25}
                     onChange={onColorSelect}
+                    boundedThumb
                     adaptSpectrum
                   >
                     <View style={styles.previewContainer}>
@@ -246,14 +256,9 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
                     </View>
                     <Panel3 style={styles.panelStyle} centerChannel='hsl-saturation' />
                     <LuminanceSlider style={styles.sliderStyle} />
-                    <OpacitySlider style={styles.sliderStyle} />
-                    <Swatches
-                      style={styles.swatchesContainer}
-                      swatchStyle={styles.swatchStyle}
-                      colors={customSwatches}
-                    />
                   </ColorPicker>
                 </View>
+
                 <Pressable style={styles.closeButton} onPress={() => setShowColorPicker(false)}>
                   <Text style={{ color: '#707070', fontWeight: 'bold' }}>Close</Text>
                 </Pressable>
@@ -273,14 +278,17 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
           />
         </View>
       </ScrollView>
+
       {!isAnyTextInputFocused && (
         <TouchableOpacity style={styles.button} onPress={handleSave}>
           <Text style={styles.buttonText}>EKLE</Text>
         </TouchableOpacity>
       )}
+
       {showDatePicker && (
         <RNDateTimePicker value={date} minimumDate={new Date()} display='default' onChange={onDateChange} />
       )}
+
       {showTimePicker && <RNDateTimePicker mode='time' value={date} display='default' onChange={onTimeChange} />}
     </Fragment>
   )
@@ -289,7 +297,6 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     paddingHorizontal: 20,
     marginBottom: 20,
   },
@@ -320,7 +327,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
   },
-  hourInput: {},
   inputRightText: {
     fontSize: 18,
     color: Colors.secondary,
@@ -403,6 +409,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   pickerContainer: {
+    marginTop: 100,
     alignSelf: 'center',
     width: 300,
     backgroundColor: '#fff',
@@ -444,8 +451,6 @@ const styles = StyleSheet.create({
   previewContainer: {
     paddingBottom: 20,
     marginBottom: 20,
-    borderBottomWidth: 1,
-    borderColor: '#bebdbe',
   },
   previewStyle: {
     height: 40,
@@ -475,7 +480,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     paddingVertical: 10,
     backgroundColor: '#fff',
-
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -483,7 +487,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
   closeButton: {
@@ -494,7 +497,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignSelf: 'center',
     backgroundColor: '#fff',
-
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -502,7 +504,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
 })
