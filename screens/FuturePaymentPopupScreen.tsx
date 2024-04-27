@@ -13,9 +13,9 @@ const renewalPeriodData = Object.keys(RenewalPeriod).map((key) => ({
 }))
 
 const reminderData = [
-  { label: 'Yok', value: '0' },
-  { label: '1 gün önce', value: '1' },
-  { label: '2 gün önce', value: '2' },
+  { label: 'None', value: '0' },
+  { label: '1 day before', value: '1' },
+  { label: '2 day before', value: '2' },
 ]
 
 const categoryData = Object.keys(Category).map((key) => ({
@@ -65,7 +65,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
     console.log(payment)
 
     if (!payment.name || !payment.price) {
-      return alert('Lütfen ödeme adını ve miktarını girin!')
+      return alert('Please provide payment name or price.')
     }
 
     navigation.goBack()
@@ -79,7 +79,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>İsim</Text>
+          <Text style={styles.inputLabel}>Name</Text>
           <TextInput
             style={styles.input}
             textAlign='right'
@@ -91,7 +91,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Ücret</Text>
+          <Text style={styles.inputLabel}>Amount</Text>
           <TextInput
             style={styles.input}
             textAlign='right'
@@ -101,11 +101,11 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             onFocus={() => setIsAnyTextInputFocused(true)}
             onBlur={() => setIsAnyTextInputFocused(false)}
           />
-          <Text style={styles.inputRightText}>TL</Text>
+          <Text style={styles.inputRightText}>$</Text>
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Ödeme Periyodu</Text>
+          <Text style={styles.inputLabel}>Renewal Period</Text>
           <Dropdown
             style={styles.input}
             containerStyle={styles.dropdownContainer}
@@ -117,7 +117,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             maxHeight={300}
             labelField='label'
             valueField='value'
-            placeholder={'Periyot seç'}
+            placeholder={'Choose a period'}
             value={renewalPeriod}
             onChange={(item) => {
               setRenewalPeriod(item.value)
@@ -125,9 +125,9 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
           />
         </View>
 
-        {!['', '0'].includes(renewalPeriod) && (
+        {!['', 'NONE'].includes(renewalPeriod) && (
           <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Yineleme</Text>
+            <Text style={styles.inputLabel}>Repetition</Text>
             <TextInput
               style={styles.input}
               textAlign='right'
@@ -144,7 +144,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
         )}
 
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Ödeneceği Tarih</Text>
+          <Text style={styles.inputLabel}>Due Date</Text>
           <TouchableOpacity
             style={styles.input}
             onPress={() => {
@@ -156,7 +156,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Hatırlatıcı</Text>
+          <Text style={styles.inputLabel}>Reminder</Text>
           <Dropdown
             style={styles.input}
             containerStyle={styles.dropdownContainer}
@@ -168,7 +168,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             maxHeight={300}
             labelField='label'
             valueField='value'
-            placeholder={'Hatırlatıcı seç'}
+            placeholder={'Choose Reminder'}
             value={reminder}
             onChange={(item) => {
               setReminder(item.value)
@@ -177,7 +177,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Kategori</Text>
+          <Text style={styles.inputLabel}>Category</Text>
           <Dropdown
             style={styles.input}
             containerStyle={styles.dropdownContainer}
@@ -189,7 +189,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             maxHeight={300}
             labelField='label'
             valueField='value'
-            placeholder={'Kategori seç'}
+            placeholder={'Choose a category'}
             value={category}
             onChange={(item) => {
               setCategory(item.value ? item.value : '')
@@ -198,7 +198,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
         </View>
 
         <View style={styles.descriptionContainer}>
-          <Text style={styles.inputLabel}>Açıklama</Text>
+          <Text style={styles.inputLabel}>Description</Text>
           <TextInput
             style={styles.description}
             value={description}
@@ -211,7 +211,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
 
       {!isAnyTextInputFocused && (
         <TouchableOpacity style={styles.button} onPress={handleSave}>
-          <Text style={styles.buttonText}>EKLE</Text>
+          <Text style={styles.buttonText}>ADD</Text>
         </TouchableOpacity>
       )}
 
@@ -225,7 +225,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.primary,
     paddingHorizontal: 20,
     marginBottom: 20,
   },
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.secondary,
+    borderBottomColor: Colors.white,
     justifyContent: 'center',
     alignItems: 'flex-end',
     paddingBottom: 5,
@@ -255,20 +255,20 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 18,
     textAlignVertical: 'center',
-    color: Colors.secondary,
+    color: Colors.white,
     fontWeight: 'bold',
     paddingTop: 20,
     paddingRight: 20,
   },
   input: {
-    color: 'black',
+    color: 'white',
     paddingHorizontal: 20,
     flex: 1,
     fontSize: 16,
   },
   inputRightText: {
     fontSize: 18,
-    color: Colors.secondary,
+    color: '#8f8f8f',
     marginBottom: 1,
     marginRight: 5,
   },
@@ -292,21 +292,25 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     fontSize: 16,
     textAlign: 'right',
+    color: 'white',
   },
   selectedTextStyle: {
     fontSize: 16,
     textAlign: 'right',
+    color: 'white',
   },
   dateText: {
     paddingRight: 20,
     fontSize: 16,
     textAlign: 'right',
+    color: 'white',
   },
   descriptionContainer: {
     width: '100%',
     paddingBottom: 10,
   },
   description: {
+    color: 'white',
     height: 150,
     borderColor: 'gray',
     borderWidth: 1,
@@ -318,7 +322,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondary,
   },
   button: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.tertiary,
     position: 'absolute',
     bottom: 20,
     right: 20,
