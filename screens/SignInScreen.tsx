@@ -1,8 +1,7 @@
 import { Fragment, useState } from 'react'
-import { Text, StyleSheet, View, TextInput, TouchableOpacity, ScrollView } from 'react-native'
+import { Text, StyleSheet, View, TextInput, TouchableOpacity } from 'react-native'
+
 import { Colors } from '../constants/Colors'
-import { Ionicons } from '@expo/vector-icons'
-import { iconPaths } from '../constants/IconPaths'
 import { NavigationProp } from '../type'
 
 export default function SignInScreen({ navigation }: NavigationProp) {
@@ -11,20 +10,20 @@ export default function SignInScreen({ navigation }: NavigationProp) {
   const [password, setPassword] = useState('')
 
   const handleSave = () => {
-    console.warn('Sign In pressed');
+    console.warn('Sign In pressed')
 
     navigation.goBack()
   }
 
   const handleForgotPassword = () => {
-    console.warn('Forgot Password pressed');
+    console.warn('Forgot Password pressed')
 
     //Forgot Password sayfası yapılınca navigation düzenlenecek
     //navigation.goBack()
   }
 
   const handleSignUp = () => {
-    console.warn('Sign Up pressed');
+    console.warn('Sign Up pressed')
 
     //Sign Up sayfası yapılınca navigation düzenlenecek
     //navigation.goBack()
@@ -33,42 +32,39 @@ export default function SignInScreen({ navigation }: NavigationProp) {
   return (
     <Fragment>
       <View style={styles.topContainer}>
-        <Text style={styles.welcomeText} >Welcome!</Text>
+        <Text style={styles.welcomeText}>Welcome!</Text>
       </View>
-        <View style={styles.inputContainer}>
-          <TextInput style={styles.input}
-            value={username}
-            onChangeText={setUsername}
-            placeholder='Enter your username'
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput style={styles.input}
-            value={password}
-            onChangeText={setPassword}
-            placeholder='Enter your password'
-            secureTextEntry={true}
-          />
-        </View>
+      <View style={styles.inputContainer}>
+        <TextInput style={styles.input} value={username} onChangeText={setUsername} placeholder='Enter your username' />
+      </View>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+          placeholder='Enter your password'
+          secureTextEntry={true}
+        />
+      </View>
 
-        <View style={styles.saveButton}>
-          <TouchableOpacity onPress={handleSave}>
-            <Text style={styles.saveButtonText}>SIGN IN</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.saveButton}>
+        <TouchableOpacity onPress={handleSave}>
+          <Text style={styles.saveButtonText}>SIGN IN</Text>
+        </TouchableOpacity>
+      </View>
 
-        <View style={styles.forgotPasswordButton}>
-          <TouchableOpacity onPress={handleForgotPassword}>
-            <Text style={styles.forgotPasswordButtonText}>Forgot My Password</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.forgotPasswordButton}>
+        <TouchableOpacity onPress={handleForgotPassword}>
+          <Text style={styles.forgotPasswordButtonText}>Forgot My Password</Text>
+        </TouchableOpacity>
+      </View>
 
-        <View style={styles.forgotPasswordButton}>
-          <Text style={styles.forgotPasswordButtonText}>Don't you have an account? </Text>
-          <TouchableOpacity onPress={handleSignUp}>
-            <Text style={[styles.forgotPasswordButtonText, { color: Colors.primary }]}>SIGN UP</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.forgotPasswordButton}>
+        <Text style={styles.forgotPasswordButtonText}>Don't you have an account? </Text>
+        <TouchableOpacity onPress={handleSignUp}>
+          <Text style={[styles.forgotPasswordButtonText, { color: Colors.primary }]}>SIGN UP</Text>
+        </TouchableOpacity>
+      </View>
     </Fragment>
   )
 }
@@ -88,10 +84,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.secondary,
     padding: 20,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   inputContainer: {
-    backgroundColor: "#ffff",
+    backgroundColor: '#ffff',
     borderColor: Colors.secondary,
     borderWidth: 2,
     borderRadius: 10,
@@ -102,7 +98,7 @@ const styles = StyleSheet.create({
   },
   input: {
     color: Colors.primary,
-    fontSize: 18
+    fontSize: 18,
   },
   saveButton: {
     backgroundColor: Colors.primary,
@@ -117,23 +113,23 @@ const styles = StyleSheet.create({
   saveButtonText: {
     color: 'white',
     fontSize: 20,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   welcomeText: {
     color: 'white',
     fontSize: 35,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   forgotPasswordButton: {
     paddingVertical: 15,
     paddingHorizontal: 15,
     borderRadius: 20,
     marginTop: 15,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   forgotPasswordButtonText: {
-    color: Colors.itemColor,
+    color: Colors.tertiary,
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
 })
