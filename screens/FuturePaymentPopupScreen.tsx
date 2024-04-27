@@ -37,11 +37,18 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
   const [showDatePicker, setShowDatePicker] = useState(false)
 
   const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    const newDate = selectedDate || date
-    setDate(newDate)
     setShowDatePicker(false)
 
+    const newDate = selectedDate || date
+    setDate(newDate)
+
     console.log(newDate.toLocaleDateString('tr-tr'))
+  }
+
+  const calculateReminderDate = () => {
+    const reminderDate = new Date(date)
+    reminderDate.setDate(reminderDate.getDate() - (reminder as unknown as number))
+    return reminderDate
   }
 
   const handleSave = () => {
@@ -51,7 +58,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
       renewalPeriod: (renewalPeriod as RenewalPeriod) || RenewalPeriod.NONE,
       repetition: (repetition as unknown as number) || 0,
       date: date,
-      reminder: (reminder as unknown as Date) || undefined, //! calculate reminder day
+      reminder: calculateReminderDate(),
       category: category as Category,
       description: description,
     }
@@ -70,6 +77,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
         <View style={styles.iconContainer}>
           <FontAwesome5 name='money-bill' style={styles.icon} size={40} color='white' />
         </View>
+
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>İsim</Text>
           <TextInput
@@ -81,6 +89,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             onBlur={() => setIsAnyTextInputFocused(false)}
           />
         </View>
+
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Ücret</Text>
           <TextInput
@@ -94,6 +103,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
           />
           <Text style={styles.inputRightText}>TL</Text>
         </View>
+
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Ödeme Periyodu</Text>
           <Dropdown
@@ -114,6 +124,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             }}
           />
         </View>
+
         {!['', '0'].includes(renewalPeriod) && (
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Yineleme</Text>
@@ -131,6 +142,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             </Text>
           </View>
         )}
+
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Ödeneceği Tarih</Text>
           <TouchableOpacity
@@ -142,6 +154,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             <Text style={styles.dateText}>{date.toLocaleDateString('tr-tr')}</Text>
           </TouchableOpacity>
         </View>
+
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Hatırlatıcı</Text>
           <Dropdown
@@ -162,6 +175,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             }}
           />
         </View>
+
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Kategori</Text>
           <Dropdown
@@ -182,6 +196,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             }}
           />
         </View>
+
         <View style={styles.descriptionContainer}>
           <Text style={styles.inputLabel}>Açıklama</Text>
           <TextInput
@@ -193,11 +208,13 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
           />
         </View>
       </ScrollView>
+
       {!isAnyTextInputFocused && (
         <TouchableOpacity style={styles.button} onPress={handleSave}>
           <Text style={styles.buttonText}>EKLE</Text>
         </TouchableOpacity>
       )}
+
       {showDatePicker && (
         <RNDateTimePicker value={date} minimumDate={new Date()} display='default' onChange={onDateChange} />
       )}
