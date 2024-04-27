@@ -37,3 +37,22 @@ export const MockData = [
     icon: iconPaths['DisneyPlus'],
   },
 ]
+
+export const budgetData = [
+  {
+    month: 'Nisan',
+    data: [
+      { id: '1', name: 'Kira',type:'expense', amount: '3200', icon: 'home' },
+      { id: '2', name: 'Netflix',type:'expense', amount: '30', icon: 'netflix' },
+      { id: '3', name: 'KYK',type: 'income', amount: '850', icon: 'money' },
+      { id: '4', name: 'Market',type:'expense', amount: '80', icon: 'shopping-cart' },
+    ],
+  },
+  {
+    month: 'Mayıs',
+    data: [
+      { id: '5', name: 'Netflix',type:'expense', amount: '30', icon: 'netflix' },
+      { id: '6', name: 'KYK',type: 'income', amount: '850', icon: 'money' },
+    ],
+  },
+];
