@@ -23,11 +23,11 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
   const [showDatePicker, setShowDatePicker] = useState(false)
 
   const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    const currentDate = selectedDate || date
-    setDate(currentDate)
+    const newDate = selectedDate || date
+    setDate(newDate)
     setShowDatePicker(false)
 
-    console.log(currentDate.toLocaleDateString('tr-tr'))
+    console.log(newDate.toLocaleDateString('tr-tr'))
   }
 
   const handleSave = () => {

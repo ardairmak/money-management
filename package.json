@@ -21,8 +21,9 @@
     "react-native": "0.72.10",
     "react-native-element-dropdown": "^2.10.4",
     "react-native-gesture-handler": "~2.12.0",
-    "react-native-picker-select": "^9.1.3",
-    "react-native-vector-icons": "^10.0.3"
+    "react-native-reanimated": "^3.3.0",
+    "react-native-vector-icons": "^10.0.3",
+    "reanimated-color-picker": "^3.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
