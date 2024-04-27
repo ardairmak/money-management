@@ -1,4 +1,6 @@
 import { iconPaths } from './IconPaths'
+import { Event } from '../type'
+
 
 export const MockData = [
   {
@@ -37,3 +39,13 @@ export const MockData = [
     icon: iconPaths['DisneyPlus'],
   },
 ]
+
+export const mockEvents: {[date : string] : Event[] } = {
+    '2024-04-20': [
+        {
+        name: 'Event 1',
+        category: 'Expense',
+        time: '8:00 AM',
+        }]
+}
+
