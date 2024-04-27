@@ -40,6 +40,34 @@ export const MockData = [
   },
 ]
 
+export const budgetData = [
+  {
+    month: 'Nisan',
+    data: [
+      { id: '1', name: 'Kira',type:'expense', amount: '3200', icon: 'home' },
+      { id: '2', name: 'Netflix',type:'expense', amount: '30', icon: 'netflix' },
+      { id: '3', name: 'KYK',type: 'income', amount: '850', icon: 'money' },
+      { id: '4', name: 'Market',type:'expense', amount: '80', icon: 'shopping-cart' },
+    ],
+  },
+  {
+    month: 'Mayıs',
+    data: [
+      { id: '5', name: 'Netflix',type:'expense', amount: '30', icon: 'netflix' },
+      { id: '6', name: 'KYK',type: 'income', amount: '850', icon: 'money' },
+    ],
+  },
+  {
+    month: 'Haziran',
+    data: [
+      { id: '7', name: 'Kira',type:'expense', amount: '3200', icon: 'home' },
+      { id: '8', name: 'Netflix',type:'expense', amount: '30', icon: 'netflix' },
+      { id: '9', name: 'KYK',type: 'income', amount: '850', icon: 'money' },
+      { id: '10', name: 'Market',type:'expense', amount: '80', icon: 'shopping-cart' },
+    ],
+  },
+];
+
 export const mockEvents: {[date : string] : Event[] } = {
     '2024-04-20': [
         {
@@ -48,4 +76,3 @@ export const mockEvents: {[date : string] : Event[] } = {
         time: '8:00 AM',
         }]
 }
-
