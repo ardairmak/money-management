@@ -10,23 +10,22 @@ export default function SignInScreen({ navigation }: NavigationProp) {
   const [password, setPassword] = useState('')
 
   const handleSave = () => {
-    console.warn('Sign In pressed')
-
     navigation.goBack()
+    console.log('Sign In pressed')
   }
 
   const handleForgotPassword = () => {
-    console.warn('Forgot Password pressed')
+    navigation.goBack()
+    console.log('Forgot Password pressed')
 
     //Forgot Password sayfası yapılınca navigation düzenlenecek
-    //navigation.goBack()
   }
 
   const handleSignUp = () => {
-    console.warn('Sign Up pressed')
+    navigation.goBack()
+    console.log('Sign Up pressed')
 
     //Sign Up sayfası yapılınca navigation düzenlenecek
-    //navigation.goBack()
   }
 
   return (
@@ -49,20 +48,20 @@ export default function SignInScreen({ navigation }: NavigationProp) {
 
       <View style={styles.saveButton}>
         <TouchableOpacity onPress={handleSave}>
-          <Text style={styles.saveButtonText}>SIGN IN</Text>
+          <Text style={styles.saveButtonText}>Log In</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.forgotPasswordButton}>
         <TouchableOpacity onPress={handleForgotPassword}>
-          <Text style={styles.forgotPasswordButtonText}>Forgot My Password</Text>
+          <Text style={styles.forgotPasswordButtonText}>Forgot password?</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.forgotPasswordButton}>
-        <Text style={styles.forgotPasswordButtonText}>Don't you have an account? </Text>
+      <View style={[styles.forgotPasswordButton, { position: 'absolute', bottom: 10, alignSelf: 'center' }]}>
+        <Text style={styles.forgotPasswordButtonText}>Don't have an account? </Text>
         <TouchableOpacity onPress={handleSignUp}>
-          <Text style={[styles.forgotPasswordButtonText, { color: Colors.primary }]}>SIGN UP</Text>
+          <Text style={[styles.forgotPasswordButtonText, { color: 'white', marginTop: 5 }]}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </Fragment>
@@ -71,20 +70,9 @@ export default function SignInScreen({ navigation }: NavigationProp) {
 
 const styles = StyleSheet.create({
   topContainer: {
-    //flex: 1,
     backgroundColor: Colors.primary,
-    borderRadius: 20,
-    padding: 10,
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 120,
-    marginBottom: 25,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: Colors.secondary,
-    padding: 20,
-    alignItems: 'center',
+    paddingVertical: 80,
   },
   inputContainer: {
     backgroundColor: '#ffff',
@@ -94,7 +82,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 10,
     marginTop: 25,
-    marginHorizontal: 20,
+    marginHorizontal: 40,
   },
   input: {
     color: Colors.primary,
@@ -102,23 +90,25 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     backgroundColor: Colors.primary,
-    paddingVertical: 15,
+    paddingVertical: 10,
     paddingHorizontal: 15,
-    borderRadius: 20,
-    marginHorizontal: 120,
-    marginVertical: 10,
-    marginTop: 20,
+    marginHorizontal: 100,
+    marginTop: 40,
     alignItems: 'center',
+    borderRadius: 40,
+    borderWidth: 2,
+    borderColor: 'white',
   },
   saveButtonText: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
   },
   welcomeText: {
     color: 'white',
-    fontSize: 35,
+    fontSize: 64,
     fontWeight: 'bold',
+    letterSpacing: 3,
   },
   forgotPasswordButton: {
     paddingVertical: 15,

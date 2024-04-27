@@ -60,9 +60,11 @@ export default function StackNavigation() {
           component={SignInScreen}
           options={{
             title: '',
+            headerStyle: styles.headerStyle,
+            cardStyle: styles.cardStyle,
             headerTitleAlign: 'center',
             headerTitleStyle: styles.headerTitle,
-            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.primary} />,
+            headerBackImage: () => <Ionicons />,
           }}
         />
       </Stack.Navigator>
