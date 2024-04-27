@@ -58,7 +58,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
             textAlign='center'
             placeholder={isIncome ? 'Income Name' : 'Expense Name'}
             value={name}
-            placeholderTextColor={Colors.buttonColor}
+            placeholderTextColor={Colors.white}
             onChangeText={setName}
             onFocus={() => setIsAnyTextInputFocused(true)}
             onBlur={() => setIsAnyTextInputFocused(false)}
@@ -68,14 +68,14 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
         <View style={styles.formItem}>
           <TouchableOpacity
             onPress={() => setIsIncome(true)}
-            style={[styles.settingButton, { backgroundColor: isIncome ? Colors.itemColor : Colors.secondary }]}
+            style={[styles.settingButton, { backgroundColor: isIncome ? Colors.tertiary : Colors.secondary }]}
           >
             <Text style={[styles.settingButtonText, { color: isIncome ? 'white' : Colors.primary }]}>INCOME</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => setIsIncome(false)}
-            style={[styles.settingButton, { backgroundColor: isIncome ? Colors.secondary : Colors.itemColor }]}
+            style={[styles.settingButton, { backgroundColor: isIncome ? Colors.secondary : Colors.tertiary }]}
           >
             <Text style={[styles.settingButtonText, { color: !isIncome ? 'white' : Colors.primary }]}>EXPENSE</Text>
           </TouchableOpacity>
@@ -163,13 +163,12 @@ const styles = StyleSheet.create({
   nameInputContainer: {
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: Colors.buttonColor,
+    borderColor: Colors.white,
     paddingVertical: 15,
     paddingHorizontal: 10,
     marginTop: 25,
     marginHorizontal: 20,
-    backgroundColor: Colors.itemColor,
-
+    backgroundColor: Colors.tertiary,
   },
   nameInput: {
     fontSize: 24,
@@ -194,7 +193,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.buttonColor,
+    borderBottomColor: Colors.white,
     justifyContent: 'center',
     alignItems: 'flex-end',
     paddingBottom: 5,
@@ -202,13 +201,13 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 18,
     textAlignVertical: 'center',
-    color: Colors.buttonColor,
+    color: Colors.white,
     fontWeight: 'bold',
     paddingTop: 20,
     paddingRight: 20,
   },
   input: {
-    color: Colors.buttonColor,
+    color: Colors.white,
     paddingHorizontal: 20,
     flex: 1,
     fontSize: 16,
@@ -265,11 +264,11 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingHorizontal: 10,
     textAlignVertical: 'top',
-    backgroundColor: Colors.itemColor,
+    backgroundColor: Colors.tertiary,
     color: 'white',
   },
   saveButton: {
-    backgroundColor: Colors.itemColor,
+    backgroundColor: Colors.tertiary,
     position: 'absolute',
     bottom: 20,
     right: 20,

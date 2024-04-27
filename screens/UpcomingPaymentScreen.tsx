@@ -1,7 +1,5 @@
-import { Ionicons } from '@expo/vector-icons'
 import React, { useState } from 'react'
 import {
-
   Image,
   KeyboardAvoidingView,
   StyleSheet,
@@ -11,10 +9,12 @@ import {
   Animated,
   TouchableOpacity,
 } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
+import { ScrollView, Swipeable } from 'react-native-gesture-handler'
+
 import { Colors } from '../constants/Colors'
 import { getDaysDifference } from '../helpers/dateHelpers'
 import { iconPaths } from '../constants/IconPaths'
-import { ScrollView, Swipeable } from 'react-native-gesture-handler'
 import { MockData } from '../constants/MockData'
 
 const UpcomingPaymentScreen = () => {
@@ -33,7 +33,7 @@ const UpcomingPaymentScreen = () => {
 
   const getItemBackgroundColor = (date: string) => {
     const differenceIndays = getDaysDifference(date)
-    return differenceIndays <= 31 ? Colors.itemColor : Colors.UpcomingPaymentColor
+    return differenceIndays <= 31 ? Colors.tertiary : Colors.upcomingPaymentColor
   }
 
   const handleSearch = (text: string) => {
@@ -134,7 +134,7 @@ const UpcomingPaymentScreen = () => {
         </View>
       </Swipeable>
     )
-}
+  }
 
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: Colors.primary }}>
@@ -155,12 +155,11 @@ const UpcomingPaymentScreen = () => {
           </View>
           {/* Fourth Section (Upcoming Payments) */}
 
-
-          <ScrollView style={[styles.upcomingContainer,{height: data.length * 70 > 350 ? 350 : data.length * 70}]}>
-             <Text style={styles.upcomingTitle}>Upcoming Payments</Text>
+          <ScrollView style={[styles.upcomingContainer, { height: data.length * 70 > 350 ? 350 : data.length * 70 }]}>
+            <Text style={styles.upcomingTitle}>Upcoming Payments</Text>
             {filteredData.map((item, index) => renderItem({ item, index }))}
             {filteredData.length === 0 && <Text style={styles.noPaymentText}>No upcoming payment!</Text>}
-          </ScrollView> 
+          </ScrollView>
         </View>
       </View>
     </KeyboardAvoidingView>
@@ -223,7 +222,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     marginTop: 10,
-    backgroundColor: Colors.itemColor,
+    backgroundColor: Colors.tertiary,
     marginLeft: 60,
     marginRight: 60,
     marginBottom: 10,
@@ -247,7 +246,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 40,
-    backgroundColor: Colors.itemColor,
+    backgroundColor: Colors.tertiary,
     color: 'white',
     paddingHorizontal: 10,
     borderRadius: 5,
@@ -276,7 +275,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 20,
     paddingTop: 10,
-    backgroundColor: Colors.itemColor,
+    backgroundColor: Colors.tertiary,
   },
   noBottomBorder: {
     borderBottomWidth: 0,

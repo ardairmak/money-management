@@ -125,7 +125,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
           />
         </View>
 
-        {!['','NONE'].includes(renewalPeriod) && (
+        {!['', 'NONE'].includes(renewalPeriod) && (
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Repetition</Text>
             <TextInput
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.buttonColor,
+    borderBottomColor: Colors.white,
     justifyContent: 'center',
     alignItems: 'flex-end',
     paddingBottom: 5,
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 18,
     textAlignVertical: 'center',
-    color: Colors.buttonColor,
+    color: Colors.white,
     fontWeight: 'bold',
     paddingTop: 20,
     paddingRight: 20,
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
   selectedTextStyle: {
     fontSize: 16,
     textAlign: 'right',
-    color: 'white'
+    color: 'white',
   },
   dateText: {
     paddingRight: 20,
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondary,
   },
   button: {
-    backgroundColor: Colors.itemColor,
+    backgroundColor: Colors.tertiary,
     position: 'absolute',
     bottom: 20,
     right: 20,
