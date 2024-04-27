@@ -67,7 +67,18 @@ export default function FloatingActionButton() {
         </View>
       )}
       <TouchableOpacity style={styles.fab} onPress={onButtonPress}>
-        <Ionicons name='add-circle' size={72} color={'#083c5c'} />
+        <View
+          style={{
+            position: 'absolute',
+            width: 58,
+            height: 58,
+            top: 9,
+            left: 5,
+            borderRadius: 35,
+            backgroundColor: 'white',
+          }}
+        />
+        <Ionicons name='add-circle' style={{}} size={72} color={'#083c5c'} />
       </TouchableOpacity>
     </Fragment>
   )
