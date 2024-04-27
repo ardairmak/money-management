@@ -1,4 +1,5 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { ColorValue } from 'react-native'
 
 export type MainStackNavigatorParamList = {
   Main: undefined
@@ -28,7 +29,17 @@ export interface FuturePayment {
   description: string
 }
 
-export interface Event {}
+export interface Event {
+  name: string
+  date: Date
+  isAllDay: boolean
+  timeStart: Date 
+  timeEnd: Date 
+  reminder: Date | undefined
+  renewalPeriod: RenewalPeriod
+  color: string
+  description: string
+}
 
 export enum RenewalPeriod {
   NONE = 'Yok',

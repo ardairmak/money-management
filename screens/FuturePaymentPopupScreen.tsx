@@ -26,7 +26,7 @@ const categoryData = Object.keys(Category).map((key) => ({
 export default function FuturePaymentPopupScreen({ navigation }: NavigationProp) {
   const [name, setName] = useState('')
   const [price, setPrice] = useState('')
-  const [period, setPeriod] = useState('')
+  const [renewalPeriod, setRenewalPeriod] = useState('')
   const [repetition, setRepetition] = useState('')
   const [date, setDate] = useState(new Date())
   const [reminder, setReminder] = useState('')
@@ -37,18 +37,18 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
   const [showDatePicker, setShowDatePicker] = useState(false)
 
   const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    const currentDate = selectedDate || date
-    setDate(currentDate)
+    const newDate = selectedDate || date
+    setDate(newDate)
     setShowDatePicker(false)
 
-    console.log(currentDate.toLocaleDateString('tr-tr'))
+    console.log(newDate.toLocaleDateString('tr-tr'))
   }
 
   const handleSave = () => {
     const payment: FuturePayment = {
       name: name,
       price: price as unknown as number,
-      renewalPeriod: (period as RenewalPeriod) || RenewalPeriod.NONE,
+      renewalPeriod: (renewalPeriod as RenewalPeriod) || RenewalPeriod.NONE,
       repetition: (repetition as unknown as number) || 0,
       date: date,
       reminder: (reminder as unknown as Date) || undefined, //! calculate reminder day
@@ -108,13 +108,13 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             labelField='label'
             valueField='value'
             placeholder={'Periyot seç'}
-            value={period}
+            value={renewalPeriod}
             onChange={(item) => {
-              setPeriod(item.value)
+              setRenewalPeriod(item.value)
             }}
           />
         </View>
-        {!['', '0'].includes(period) && (
+        {!['', '0'].includes(renewalPeriod) && (
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Yineleme</Text>
             <TextInput
@@ -126,7 +126,9 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
               onFocus={() => setIsAnyTextInputFocused(true)}
               onBlur={() => setIsAnyTextInputFocused(false)}
             />
-            <Text style={styles.inputRightText}>{renewalPeriodData.find((item) => item.value === period)?.label}</Text>
+            <Text style={styles.inputRightText}>
+              {renewalPeriodData.find((item) => item.value === renewalPeriod)?.label}
+            </Text>
           </View>
         )}
         <View style={styles.inputContainer}>
