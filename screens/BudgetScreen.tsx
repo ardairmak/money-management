@@ -2,54 +2,32 @@ import React from 'react'
 import { useState } from 'react';
 import {View, Text, StyleSheet,FlatList,TouchableOpacity} from 'react-native'
 import {Ionicons,FontAwesome,MaterialCommunityIcons} from '@expo/vector-icons'
+import { budgetData } from '../constants/MockData'
+
 
 export default function BudgetScreen(){
 
+  let Data = budgetData
+
   const [totalMoney, setTotalMoney] = useState(1650);
-  
-  const [budgetData] = useState([
-    {
-      month: 'Nisan',
-      data: [
-        { id: '1', name: 'Kira', amount: '-3200', icon: 'home' },
-        { id: '2', name: 'Netflix', amount: '-30', icon: 'netflix' },
-        { id: '3', name: 'KYK', amount: '+850', icon: 'money' },
-        { id: '4', name: 'Market', amount: '-80', icon: 'shopping-cart' },
-      ],
-    },
-    {
-      month: 'Mayıs',
-      data: [
-        { id: '5', name: 'Netflix', amount: '-30', icon: 'netflix' },
-        { id: '6', name: 'KYK', amount: '+850', icon: 'money' },
-      ],
-    },
-  ]);
-
-    const [filteredData, setFilteredData] = useState(budgetData);
+  const [filteredData, setFilteredData] = useState(Data);
 
 
-    const renderItem = ({
-      item
-    }: {
-      item: {
-        id: string;
-        name: string;
-        amount: string;
-        icon: string;
-      }
-    }) => (
-      <View>
-        <View style={styles.separator} /> 
-        <View style={styles.budgetContainer}>
-          <View style={styles.budgetItemContainer}>
-            {renderIcon(item.icon)} 
-            <Text style={styles.budgetItem}>{item.name}</Text>
-            <Text style={[styles.amount, item.amount.startsWith('-') ? styles.negativeAmount : styles.positiveAmount]}>{item.amount}</Text>
-          </View>
+  const renderItem = ({ item }: { item: { id: string; name: string; amount: string; icon: string; type: string } }) => (
+    <View>
+      <View style={styles.separator} /> 
+      <View style={styles.budgetContainer}>
+        <View style={styles.budgetItemContainer}>
+          {renderIcon(item.icon)} 
+          <Text style={styles.budgetItem}>{item.name}</Text>
+          <Text style={[styles.amount, item.type === 'expense' ? styles.negativeAmount : styles.positiveAmount]}>
+            {item.type === 'income' ? '+' : '-'}{item.amount}
+          </Text>
         </View>
       </View>
+    </View>
   );
+  
 
   const renderIcon = (iconName: string) => {
     switch (iconName) {
@@ -66,49 +44,62 @@ export default function BudgetScreen(){
     }
   };
 
-  const itemSeparator = () => (
-    <View style={styles.separator} />
-  );
+  
   const handleTotalPress = (month: string) => {
     let totalAmount = 0;
-    budgetData.forEach(item => {
+  
+    Data.forEach(item => {
       if (item.month === month) {
         item.data.forEach(item => {
-          const amount = parseFloat(item.amount.replace(/[^0-9.-]+/g, ""));
-          totalAmount += amount;
+          const amount = parseFloat(item.amount);
+          
+          if (item.type === 'expense') {
+            totalAmount -= amount; 
+          } else if (item.type === 'income') {
+            totalAmount += amount; 
+          }
         });
       }
     });
+  
     console.log('Total pressed');
     console.log('Total amount:', totalAmount);
     setTotalMoney(totalAmount);
-    setFilteredData(budgetData);
+    setFilteredData(Data);
   };
 
   const handleGelirPress = (month: string) => {
     let totalIncome = 0;
-    const gelirData = budgetData.map(item => {
+    const gelirData = Data.map(item => {
       let monthlyIncome = 0;
+      let incomeItems: any[] = [];
+  
+      // First iteration to calculate total income for the specific month
       if (item.month === month) {
-        const incomeItems = item.data.filter(dataItem => {
-          const amount = parseFloat(dataItem.amount.replace(/[^0-9.-]+/g, ""));
+        item.data.forEach(dataItem => {
+          const amount = parseFloat(dataItem.amount) * (dataItem.type === 'income' ? 1 : -1);
           if (amount > 0) {
             monthlyIncome += amount;
-            totalIncome += amount;
-            return true;
           }
-          return false;
         });
-        return {
-          month: item.month,
-          data: incomeItems,
-          total: monthlyIncome.toFixed(2)
-        };
+      }
+  
+      // Second iteration to filter and process income items for the specific month
+      item.data.forEach(dataItem => {
+        const amount = parseFloat(dataItem.amount) * (dataItem.type === 'income' ? 1 : -1);
+        if ( amount > 0) {
+          incomeItems.push({ ...dataItem });
+        }
+      });
+  
+      // Update totalIncome for the specific month
+      if (item.month === month) {
+        totalIncome = monthlyIncome;
       }
       return {
         month: item.month,
-        data: item.data.filter(dataItem => parseFloat(dataItem.amount) > 0),
-        total: "0.00"
+        data: incomeItems,
+        total: monthlyIncome.toFixed(2)
       };
     });
   
@@ -116,41 +107,45 @@ export default function BudgetScreen(){
     setTotalMoney(totalIncome);
     setFilteredData(gelirData);
   };
-  
-
 
   const handleGiderPress = (month: string) => {
-    let totalExpenses = 0;
-    const giderData = budgetData.map(item => {
-      let monthlyExpenses = 0;
+    let totalExpense = 0;
+    const giderData = Data.map(item => {
+      let monthlyExpense = 0;
       let expenseItems: any[] = [];
   
+      // First iteration to calculate total income for the specific month
       if (item.month === month) {
-        expenseItems = item.data.filter(dataItem => {
-          const amount = parseFloat(dataItem.amount.replace(/[^0-9.-]+/g, ""));
+        item.data.forEach(dataItem => {
+          const amount = parseFloat(dataItem.amount) * (dataItem.type === 'income' ? 1 : -1);
           if (amount < 0) {
-            monthlyExpenses += amount;
-            totalExpenses += amount;
-            return true;
+            monthlyExpense += amount;
           }
-          return false;
         });
       }
-  
+      // Second iteration to filter and process income items for the specific month
+      item.data.forEach(dataItem => {
+        const amount = parseFloat(dataItem.amount) * (dataItem.type === 'income' ? 1 : -1);
+        if ( amount < 0) {
+          expenseItems.push({ ...dataItem});
+        }
+      });
+      // Update totalIncome for the specific month
+      if (item.month === month) {
+        totalExpense = monthlyExpense;
+      }
       return {
         month: item.month,
         data: expenseItems,
-        total: monthlyExpenses.toFixed(2)
+        total: monthlyExpense.toFixed(2)
       };
     });
   
-    console.log('Total expenses:', totalExpenses);
-    setTotalMoney(totalExpenses);
+    console.log('Total income:', totalExpense);
+    setTotalMoney(totalExpense);
     setFilteredData(giderData);
   };
   
-
-
     return (
       <View style={styles.container}>
         <View style={styles.paringRow}>
