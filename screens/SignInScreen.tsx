@@ -20,60 +20,70 @@ export default function SignInScreen({ navigation }: NavigationProp) {
     console.warn('Forgot Password pressed');
 
     //Forgot Password sayfası yapılınca navigation düzenlenecek
-    navigation.goBack()
+    //navigation.goBack()
   }
 
   const handleSignUp = () => {
     console.warn('Sign Up pressed');
 
-    //Forgot Password sayfası yapılınca navigation düzenlenecek
-    navigation.goBack()
+    //Sign Up sayfası yapılınca navigation düzenlenecek
+    //navigation.goBack()
   }
 
   return (
     <Fragment>
-      <ScrollView style={styles.container} keyboardDismissMode='none'>
+      <View style={styles.topContainer}>
+        <Text style={styles.welcomeText} >Welcome!</Text>
+      </View>
         <View style={styles.inputContainer}>
           <TextInput style={styles.input}
-            value={mail}
-            onChangeText={setMail}
-            placeholder='Emailinizi girin'
+            value={username}
+            onChangeText={setUsername}
+            placeholder='Enter your username'
           />
         </View>
         <View style={styles.inputContainer}>
           <TextInput style={styles.input}
             value={password}
             onChangeText={setPassword}
-            placeholder='Parolanızı girin'
+            placeholder='Enter your password'
             secureTextEntry={true}
           />
         </View>
 
         <View style={styles.saveButton}>
           <TouchableOpacity onPress={handleSave}>
-            <Text style={styles.saveButtonText}>GİRİŞ YAP</Text>
+            <Text style={styles.saveButtonText}>SIGN IN</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.forgotPasswordButton}>
           <TouchableOpacity onPress={handleForgotPassword}>
-            <Text style={styles.forgotPasswordButtonText} >Şifremi Unuttum</Text> {/* type="TERTIARY" */}
+            <Text style={styles.forgotPasswordButtonText}>Forgot My Password</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.forgotPasswordButton}>
-        <Text style={styles.forgotPasswordButtonText}>Hesabın yok mu? </Text>
+          <Text style={styles.forgotPasswordButtonText}>Don't you have an account? </Text>
           <TouchableOpacity onPress={handleSignUp}>
-            <Text style={styles.forgotPasswordButtonText}>KAYDOL</Text>
+            <Text style={[styles.forgotPasswordButtonText, { color: Colors.primary }]}>SIGN UP</Text>
           </TouchableOpacity>
         </View>
-
-      </ScrollView>
     </Fragment>
   )
 }
 
 const styles = StyleSheet.create({
+  topContainer: {
+    //flex: 1,
+    backgroundColor: Colors.primary,
+    borderRadius: 20,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 120,
+    marginBottom: 25,
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.secondary,
@@ -83,39 +93,47 @@ const styles = StyleSheet.create({
   inputContainer: {
     backgroundColor: "#ffff",
     borderColor: Colors.secondary,
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 10,
+    paddingVertical: 15,
     paddingHorizontal: 10,
-    marginVertical: 7
+    marginTop: 25,
+    marginHorizontal: 20,
   },
   input: {
-    color: Colors.primary
+    color: Colors.primary,
+    fontSize: 18
   },
   saveButton: {
     backgroundColor: Colors.primary,
-    bottom: 20,
-    right: 20,
     paddingVertical: 15,
-    paddingHorizontal: 70,
+    paddingHorizontal: 15,
     borderRadius: 20,
-    marginVertical: 7
+    marginHorizontal: 120,
+    marginVertical: 10,
+    marginTop: 20,
+    alignItems: 'center',
   },
   saveButtonText: {
     color: 'white',
-    fontSize: 24,
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  welcomeText: {
+    color: 'white',
+    fontSize: 35,
     fontWeight: 'bold'
   },
   forgotPasswordButton: {
-    bottom: 20,
-    right: 20,
     paddingVertical: 15,
-    paddingHorizontal: 70,
-    marginVertical: 7
+    paddingHorizontal: 15,
+    borderRadius: 20,
+    marginTop: 15,
+    alignItems: 'center'
   },
   forgotPasswordButtonText: {
     color: Colors.itemColor,
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold'
   },
-
 })
