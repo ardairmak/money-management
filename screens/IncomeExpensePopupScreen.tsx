@@ -56,8 +56,9 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
           <TextInput
             style={styles.nameInput}
             textAlign='center'
-            placeholder={isIncome ? 'Gelir adı' : 'Gider adı'}
+            placeholder={isIncome ? 'Income Name' : 'Expense Name'}
             value={name}
+            placeholderTextColor={Colors.buttonColor}
             onChangeText={setName}
             onFocus={() => setIsAnyTextInputFocused(true)}
             onBlur={() => setIsAnyTextInputFocused(false)}
@@ -67,21 +68,21 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
         <View style={styles.formItem}>
           <TouchableOpacity
             onPress={() => setIsIncome(true)}
-            style={[styles.settingButton, { backgroundColor: isIncome ? Colors.primary : Colors.secondary }]}
+            style={[styles.settingButton, { backgroundColor: isIncome ? Colors.itemColor : Colors.secondary }]}
           >
-            <Text style={[styles.settingButtonText, { color: isIncome ? 'white' : Colors.primary }]}>GELİR</Text>
+            <Text style={[styles.settingButtonText, { color: isIncome ? 'white' : Colors.primary }]}>INCOME</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => setIsIncome(false)}
-            style={[styles.settingButton, { backgroundColor: isIncome ? Colors.secondary : Colors.primary }]}
+            style={[styles.settingButton, { backgroundColor: isIncome ? Colors.secondary : Colors.itemColor }]}
           >
-            <Text style={[styles.settingButtonText, { color: !isIncome ? 'white' : Colors.primary }]}>GİDER</Text>
+            <Text style={[styles.settingButtonText, { color: !isIncome ? 'white' : Colors.primary }]}>EXPENSE</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Kategori</Text>
+          <Text style={styles.inputLabel}>Category</Text>
           <Dropdown
             style={styles.input}
             containerStyle={styles.dropdownContainer}
@@ -93,7 +94,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
             maxHeight={300}
             labelField='label'
             valueField='value'
-            placeholder={'Kategori seç'}
+            placeholder={'Choose a category'}
             value={category}
             onChange={(item) => {
               setCategory(item.value ? item.value : '')
@@ -102,7 +103,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Ücret</Text>
+          <Text style={styles.inputLabel}>Amount</Text>
           <TextInput
             style={styles.input}
             textAlign='right'
@@ -112,11 +113,11 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
             onFocus={() => setIsAnyTextInputFocused(true)}
             onBlur={() => setIsAnyTextInputFocused(false)}
           />
-          <Text style={styles.inputRightText}>TL</Text>
+          <Text style={styles.inputRightText}>$</Text>
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Ödeneceği Tarih</Text>
+          <Text style={styles.inputLabel}>Due Date</Text>
           <TouchableOpacity
             style={styles.input}
             onPress={() => {
@@ -128,7 +129,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
         </View>
 
         <View style={styles.descriptionContainer}>
-          <Text style={styles.inputLabel}>Açıklama</Text>
+          <Text style={styles.inputLabel}>Description</Text>
           <TextInput
             style={styles.description}
             value={description}
@@ -141,7 +142,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
 
       {!isAnyTextInputFocused && (
         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-          <Text style={styles.saveButtonText}>EKLE</Text>
+          <Text style={styles.saveButtonText}>ADD</Text>
         </TouchableOpacity>
       )}
 
@@ -155,21 +156,24 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.primary,
     paddingHorizontal: 20,
     marginBottom: 20,
   },
   nameInputContainer: {
-    borderWidth: 3,
+    borderWidth: 1,
     borderRadius: 10,
-    borderColor: Colors.secondary,
+    borderColor: Colors.buttonColor,
     paddingVertical: 15,
     paddingHorizontal: 10,
     marginTop: 25,
     marginHorizontal: 20,
+    backgroundColor: Colors.itemColor,
+
   },
   nameInput: {
     fontSize: 24,
+    color: 'white',
   },
   formItem: {
     flexDirection: 'row',
@@ -178,11 +182,11 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     paddingVertical: 10,
     paddingHorizontal: 40,
-    marginVertical: 30,
-    marginHorizontal: 20,
+    marginVertical: 25,
+    marginHorizontal: 10,
   },
   settingButtonText: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   inputContainer: {
@@ -190,7 +194,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.secondary,
+    borderBottomColor: Colors.buttonColor,
     justifyContent: 'center',
     alignItems: 'flex-end',
     paddingBottom: 5,
@@ -198,20 +202,20 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 18,
     textAlignVertical: 'center',
-    color: Colors.secondary,
+    color: Colors.buttonColor,
     fontWeight: 'bold',
     paddingTop: 20,
     paddingRight: 20,
   },
   input: {
-    color: 'black',
+    color: Colors.buttonColor,
     paddingHorizontal: 20,
     flex: 1,
     fontSize: 16,
   },
   inputRightText: {
     fontSize: 18,
-    color: Colors.secondary,
+    color: '#8f8f8f',
     marginBottom: 1,
     marginRight: 5,
   },
@@ -235,15 +239,18 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     fontSize: 16,
     textAlign: 'right',
+    color: 'white',
   },
   selectedTextStyle: {
     fontSize: 16,
     textAlign: 'right',
+    color: 'white',
   },
   dateText: {
     paddingRight: 20,
     fontSize: 16,
     textAlign: 'right',
+    color: 'white',
   },
   descriptionContainer: {
     width: '100%',
@@ -258,10 +265,11 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingHorizontal: 10,
     textAlignVertical: 'top',
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.itemColor,
+    color: 'white',
   },
   saveButton: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.itemColor,
     position: 'absolute',
     bottom: 20,
     right: 20,

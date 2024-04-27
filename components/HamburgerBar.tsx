@@ -54,13 +54,13 @@ export default function HamburgerBar() {
           style={{ marginLeft: 18, marginTop: 40 }}
         />
         <TouchableOpacity style={styles.barItem} onPress={onButtonPressSettings}>
-          <Text style={styles.barItemText}>Ayarlar</Text>
+          <Text style={styles.barItemText}>Settings</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.barItem} onPress={onButtonPressContacts}>
-          <Text style={styles.barItemText}>İletişim</Text>
+          <Text style={styles.barItemText}>Support</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.barItem, styles.signOut]} onPress={onButtonPressSignout}>
-          <Text style={styles.barItemText}>Çıkış Yap</Text>
+          <Text style={styles.barItemText}>Sign Out</Text>
         </TouchableOpacity>
       </Animated.View>
     </Fragment>
@@ -71,7 +71,7 @@ export { toggleHamburger, closeHamburger }
 
 const styles = StyleSheet.create({
   hamburgerBar: {
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.itemColor,
     position: 'absolute',
     left: 0,
     top: 0,
@@ -95,6 +95,6 @@ const styles = StyleSheet.create({
   barItemText: {
     flexDirection: 'row',
     fontSize: 30,
-    color: Colors.primary,
+    color: Colors.buttonColor,
   },
 })

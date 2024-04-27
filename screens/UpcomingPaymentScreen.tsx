@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import {
-  FlatList,
+
   Image,
   KeyboardAvoidingView,
   StyleSheet,
@@ -33,7 +33,7 @@ const UpcomingPaymentScreen = () => {
 
   const getItemBackgroundColor = (date: string) => {
     const differenceIndays = getDaysDifference(date)
-    return differenceIndays <= 31 ? Colors.itemColor : 'white'
+    return differenceIndays <= 31 ? Colors.itemColor : Colors.UpcomingPaymentColor
   }
 
   const handleSearch = (text: string) => {
@@ -137,18 +137,18 @@ const UpcomingPaymentScreen = () => {
 }
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1, backgroundColor: 'lightgrey' }}>
+    <KeyboardAvoidingView style={{ flex: 1, backgroundColor: Colors.primary }}>
       <View style={styles.container}>
         <View style={styles.middleSection}>
-          <Text style={styles.middleTitle}>Bu ay planlanan ödemelerin toplamı</Text>
-          <Text style={styles.amount}>120 TL</Text>
+          <Text style={styles.middleTitle}>This months planned total</Text>
+          <Text style={styles.amount}>$120.45</Text>
         </View>
         <View style={styles.upcomingSection}>
           <View style={styles.searchSection}>
             <Ionicons name='search-outline' size={24} color={Colors.primary} style={styles.searchIcon} />
             <TextInput
               style={styles.searchInput}
-              placeholder='Ödeme Ara'
+              placeholder='Search Payment'
               placeholderTextColor={'black'}
               onChange={(e) => handleSearch(e.nativeEvent.text)}
             />
@@ -157,9 +157,9 @@ const UpcomingPaymentScreen = () => {
 
 
           <ScrollView style={[styles.upcomingContainer,{height: data.length * 70 > 350 ? 350 : data.length * 70}]}>
-             <Text style={styles.upcomingTitle}>Yaklaşan Ödemeler</Text>
+             <Text style={styles.upcomingTitle}>Upcoming Payments</Text>
             {filteredData.map((item, index) => renderItem({ item, index }))}
-            {filteredData.length === 0 && <Text style={styles.noPaymentText}>Ödeme bulunamadı</Text>}
+            {filteredData.length === 0 && <Text style={styles.noPaymentText}>No upcoming payment!</Text>}
           </ScrollView> 
         </View>
       </View>
@@ -223,11 +223,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     marginTop: 10,
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.itemColor,
     marginLeft: 60,
     marginRight: 60,
     marginBottom: 10,
-    borderRadius: 25,
+    borderRadius: 30,
   },
   middleTitle: {
     fontSize: 18,
@@ -247,13 +247,13 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 40,
-    backgroundColor: Colors.secondary,
-    color: 'black',
+    backgroundColor: Colors.itemColor,
+    color: 'white',
     paddingHorizontal: 10,
     borderRadius: 5,
   },
   upcomingSection: {
-    backgroundColor: 'lightgrey',
+    backgroundColor: Colors.primary,
     paddingTop: 20,
   },
   upcomingTitle: {

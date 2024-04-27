@@ -1,15 +1,16 @@
 import React from 'react'
 import { useState } from 'react';
 import {View, Text, StyleSheet,FlatList,TouchableOpacity} from 'react-native'
-import {Ionicons,FontAwesome,MaterialCommunityIcons} from '@expo/vector-icons'
+import {FontAwesome,MaterialCommunityIcons} from '@expo/vector-icons'
 import { budgetData } from '../constants/MockData'
-
+import { Colors } from '../constants/Colors'
+import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 
 export default function BudgetScreen(){
 
   let Data = budgetData
 
-  const [totalMoney, setTotalMoney] = useState(1650);
+  const [totalMoney, setTotalMoney] = useState<Float>(1.650);
   const [filteredData, setFilteredData] = useState(Data);
 
 
@@ -32,13 +33,13 @@ export default function BudgetScreen(){
   const renderIcon = (iconName: string) => {
     switch (iconName) {
       case 'home':
-        return <FontAwesome name="home"  color="black" style={styles.budgetItem}  />;
+        return <FontAwesome name="home"  color={Colors.primary} style={styles.budgetItem}  />;
       case 'money':
-        return <FontAwesome name="money"  color="black" style={styles.budgetItem}  />;
+        return <FontAwesome name="money"  color={Colors.primary} style={styles.budgetItem}  />;
       case 'netflix':
-        return <MaterialCommunityIcons name="netflix"  color="black" style={styles.budgetItem}  />;
+        return <MaterialCommunityIcons name="netflix"  color={Colors.primary} style={styles.budgetItem}  />;
       case 'shopping-cart':
-        return <FontAwesome name="shopping-cart"  color="black" style={styles.budgetItem}  />;
+        return <FontAwesome name="shopping-cart"  color={Colors.primary} style={styles.budgetItem}  />;
       default:
         return null; 
     }
@@ -111,7 +112,7 @@ export default function BudgetScreen(){
   const handleGiderPress = (month: string) => {
     let totalExpense = 0;
     const giderData = Data.map(item => {
-      let monthlyExpense = 0;
+      let monthlyExpense = 0
       let expenseItems: any[] = [];
   
       // First iteration to calculate total income for the specific month
@@ -150,23 +151,27 @@ export default function BudgetScreen(){
   
     return (
       <View style={styles.container}>
+        
+
         <View style={styles.paringRow}>
+        <FontAwesome name="dollar" size={45} style={[styles.currencyIcon,{color: totalMoney < 0 ? '#cc0000' : '#06c258'}]} />
+
         <Text style={[styles.total, totalMoney < 0 ? styles.negativeAmount : styles.positiveAmount]}>{totalMoney}</Text>
-        <FontAwesome style={styles.currencyIcon} name="turkish-lira" size={30} color="black" />
+        
         </View>
 
-      <View style={styles.paringRow}>
-      <TouchableOpacity style={styles.pair} onPress={() => handleTotalPress('Nisan')}>
-        <Text style={styles.title}>Toplam</Text>
-        <MaterialCommunityIcons name="ellipse" size={15} color='#083c5c' />
+      <View style={[styles.paringRow,{marginLeft: 35}]}>
+      <TouchableOpacity style={styles.pair} onPress={() => handleTotalPress('April')}>
+        <Text style={styles.title}>Total</Text>
+        <MaterialCommunityIcons name="ellipse" size={15} color={Colors.buttonColor} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.pair} onPress={() => handleGelirPress('Nisan')}>
-        <Text style={styles.title}>Gelir</Text>
-        <MaterialCommunityIcons name="ellipse" size={15} color= '#083c5c' />
+      <TouchableOpacity style={styles.pair} onPress={() => handleGelirPress('April')}>
+        <Text style={styles.title}>Income</Text>
+        <MaterialCommunityIcons name="ellipse" size={15} color= {Colors.buttonColor}/>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.pair} onPress={() => handleGiderPress('Nisan')}>
-        <Text style={styles.title}>Gider</Text>
-        <MaterialCommunityIcons name="ellipse" size={15} color='#083c5c' />
+      <TouchableOpacity style={styles.pair} onPress={() => handleGiderPress('April')}>
+        <Text style={styles.title}>Expense</Text>
+        <MaterialCommunityIcons name="ellipse" size={15} color={Colors.buttonColor}/>
       </TouchableOpacity>
       </View>
 
@@ -199,7 +204,7 @@ export default function BudgetScreen(){
   const styles = StyleSheet.create({
     container:{
       flex:1,
-      backgroundColor:'#bfc3cc',
+      backgroundColor: Colors.primary,
     },
 
     budgetItem:{
@@ -222,10 +227,10 @@ export default function BudgetScreen(){
       marginVertical: 5,
     },
     negativeAmount: {
-      color: '#b90e0a',
+      color: '#cc0000',
     },
     positiveAmount: {
-      color: 'green',
+      color: '#06c258',
     },
     separator:{
       height:1,
@@ -236,7 +241,7 @@ export default function BudgetScreen(){
       alignSelf:'center',
       fontSize:50,
       fontWeight:'bold',
-      color:'black',
+      color:Colors.primary,
       marginTop:40,
       
     },
@@ -247,21 +252,21 @@ export default function BudgetScreen(){
     },
     currencyIcon:{
       paddingLeft:10,
-      marginTop:60, // tl nin yukarıdan boşluğu
-      color: '#083c5c',
+      marginTop:56, // tl nin yukarıdan boşluğu
+      marginRight: 5,
     },
     title: {
       padding:10,
       fontSize: 18,
       fontWeight: '600',
       alignSelf:'baseline',
-      color:'#083c5c',
+      color:Colors.buttonColor,
       marginTop:5,
     },
     pair: {
       flexDirection: 'column', 
       alignItems: 'center',
-      marginRight: 20, 
+      marginRight:20, 
       marginTop:10,
     },
     monthTitle: {
@@ -272,7 +277,7 @@ export default function BudgetScreen(){
       textAlign:'center',
     },
     monthBox: {
-      backgroundColor: '#9094ac', //itemColor
+      backgroundColor: Colors.itemColor, //itemColor
       borderRadius: 15, // Add border radius to make it look like a box
       padding: 5, // Add padding to space content from the box edges
       marginTop:5,

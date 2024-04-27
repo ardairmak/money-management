@@ -7,10 +7,12 @@ import CustomHeader from '../components/CustomHeader'
 import UpcomingPaymentScreen from '../screens/UpcomingPaymentScreen'
 import BudgetScreen from '../screens/BudgetScreen'
 import CalendarScreen from '../screens/CalendarScreen'
+import {Colors} from '../constants/Colors'
 
-const BUDGET_SCREEN_NAME = 'Bütçe'
-const UPCOMING_PAYMENT_SCREEN_NAME = 'Yaklaşan Ödemeler'
-const CALENDAR_SCREEN_NAME = 'Takvim'
+
+const BUDGET_SCREEN_NAME = 'Budget'
+const UPCOMING_PAYMENT_SCREEN_NAME = 'Upcoming Payments'
+const CALENDAR_SCREEN_NAME = 'Calendar'
 
 const BUDGET_SCREEN_ICON_NAME = 'wallet'
 const UPCOMING_PAYMENT_SCREEN_ICON_NAME = 'home'
@@ -44,14 +46,14 @@ export default function Navigation() {
             />
           )
         },
-
-        tabBarLabel: ({ focused }) => {
+                tabBarLabel: ({ focused }) => {
           return (
             <Text
               style={{
                 fontSize: 12,
                 fontWeight: 'bold',
-                marginBottom: 10,
+                marginBottom: 12,
+                color: 'white',
               }}
             >
               {focused ? route.name : ''}
@@ -60,11 +62,12 @@ export default function Navigation() {
         },
         tabBarHideOnKeyboard: true,
 
-        // main color #083c5c
-        tabBarActiveTintColor: '#083c5c',
+        // main color Colors.primary
+        tabBarActiveTintColor: 'white',
         tabBarStyle: {
           borderTopWidth: 5,
-          borderTopColor: '#083c5c',
+          backgroundColor : Colors.primary,
+          borderTopColor: Colors.secondary,
           height: 70,
         },
 
@@ -78,21 +81,21 @@ export default function Navigation() {
         name={BUDGET_SCREEN_NAME}
         component={BudgetScreen}
         options={{
-          header: () => <CustomHeader title={'Bütçem'} />,
+          header: () => <CustomHeader title={'My Budget'} />,
         }}
       />
       <Tab.Screen
         name={UPCOMING_PAYMENT_SCREEN_NAME}
         component={UpcomingPaymentScreen}
         options={{
-          header: () => <CustomHeader title={'Yaklaşan Ödemelerim'} />,
+          header: () => <CustomHeader title={'Upcoming Payments'} />,
         }}
       />
       <Tab.Screen
         name={CALENDAR_SCREEN_NAME}
         component={CalendarScreen}
         options={{
-          header: () => <CustomHeader title={'Takvim'} />,
+          header: () => <CustomHeader title={'Calendar'} />,
         }}
       />
     </Tab.Navigator>

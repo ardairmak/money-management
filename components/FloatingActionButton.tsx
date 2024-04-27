@@ -30,13 +30,13 @@ function FloatingActionButtonPopup({ navigation }: NavigationProp) {
   return (
     <Fragment>
       <TouchableOpacity style={styles.button} onPress={onButtonPressA}>
-        <Text style={styles.buttonText}>Gelir/Gider Ekle</Text>
+        <Text style={styles.buttonText}>Add Income/Expense</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={onButtonPressB}>
-        <Text style={styles.buttonText}>Gelecek Ödeme Ekle</Text>
+        <Text style={styles.buttonText}>Add Future Payment</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={onButtonPressC}>
-        <Text style={styles.buttonText}>Etkinlik Ekle</Text>
+      <TouchableOpacity style={[styles.button,{borderBottomWidth: 0}]} onPress={onButtonPressC}>
+        <Text style={styles.buttonText}>Add Event</Text>
       </TouchableOpacity>
     </Fragment>
   )
@@ -78,7 +78,7 @@ export default function FloatingActionButton() {
             backgroundColor: 'white',
           }}
         />
-        <Ionicons name='add-circle' style={{}} size={72} color={'#083c5c'} />
+        <Ionicons name='add-circle' style={{}} size={72} color={Colors.primary} />
       </TouchableOpacity>
     </Fragment>
   )
@@ -91,12 +91,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     bottom: 80,
+
   },
   fabPopup: {
-    backgroundColor: 'gray',
+    backgroundColor: Colors.secondary,
     position: 'absolute',
     right: 15,
     bottom: 160,
+    borderWidth: 2,
   },
   button: {
     flexDirection: 'row',
@@ -106,10 +108,11 @@ const styles = StyleSheet.create({
     width: 200,
     borderBottomWidth: 1,
     borderColor: 'white',
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.primary,
+
   },
   buttonText: {
-    color: Colors.primary,
+    color: Colors.buttonColor,
     fontSize: 17,
     fontWeight: '500',
     textAlign: 'center',

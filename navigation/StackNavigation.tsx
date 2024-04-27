@@ -24,28 +24,34 @@ export default function StackNavigation() {
           options={{
             title: '',
             headerTitleAlign: 'center',
+            headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitle,
-            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.primary} />,
+            cardStyle: styles.cardStyle,
+            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.buttonColor} />,
           }}
         />
         <Stack.Screen
           name='FPPS'
           component={FuturePaymentPopupScreen}
           options={{
-            title: 'Gelecek Ödeme Ekle',
+            title: 'Add Future Payment',
+            headerStyle: styles.headerStyle,
+            cardStyle: styles.cardStyle,
             headerTitleAlign: 'center',
             headerTitleStyle: styles.headerTitle,
-            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.primary} />,
+            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.buttonColor} />,
           }}
         />
         <Stack.Screen
           name='APS'
           component={ActivityPopupScreen}
           options={{
-            title: 'Etkinlik Ekle',
+            title: 'Add an Event',
+            headerStyle: styles.headerStyle,
             headerTitleAlign: 'center',
             headerTitleStyle: styles.headerTitle,
-            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.primary} />,
+            cardStyle: styles.cardStyle,
+            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.buttonColor} />,
           }}
         />
       </Stack.Navigator>
@@ -55,8 +61,16 @@ export default function StackNavigation() {
 
 const styles = StyleSheet.create({
   headerTitle: {
-    color: Colors.primary,
+    color: 'white',
     fontSize: 25,
     fontWeight: 'bold',
+  },
+  headerStyle: {
+    backgroundColor: Colors.primary,
+    shadowColor: 'transparent',
+    elevation: 0,
+  },
+  cardStyle: {
+    backgroundColor: Colors.primary,
   },
 })

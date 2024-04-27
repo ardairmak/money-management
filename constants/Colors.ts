@@ -1,5 +1,8 @@
 export const Colors = {
-  primary: '#083c5c',
-  secondary: '#bfc3cc',
-  itemColor: '#9094ac',
+  primary: '#151317',
+  secondary: '#2b2b2b',
+  itemColor: '#4f4f4f',
+  buttonColor: 'white',
+  UpcomingPaymentColor: '#8f8f8f',
+  
 }
