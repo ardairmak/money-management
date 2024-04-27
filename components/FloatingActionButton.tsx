@@ -35,7 +35,7 @@ function FloatingActionButtonPopup({ navigation }: NavigationProp) {
       <TouchableOpacity style={styles.button} onPress={onButtonPressB}>
         <Text style={styles.buttonText}>Add Future Payment</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button,{borderBottomWidth: 0}]} onPress={onButtonPressC}>
+      <TouchableOpacity style={[styles.button, { borderBottomWidth: 0 }]} onPress={onButtonPressC}>
         <Text style={styles.buttonText}>Add Event</Text>
       </TouchableOpacity>
     </Fragment>
@@ -91,7 +91,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     bottom: 80,
-
   },
   fabPopup: {
     backgroundColor: Colors.secondary,
@@ -109,10 +108,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: 'white',
     backgroundColor: Colors.primary,
-
   },
   buttonText: {
-    color: Colors.buttonColor,
+    color: Colors.white,
     fontSize: 17,
     fontWeight: '500',
     textAlign: 'center',

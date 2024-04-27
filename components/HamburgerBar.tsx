@@ -71,7 +71,7 @@ export { toggleHamburger, closeHamburger }
 
 const styles = StyleSheet.create({
   hamburgerBar: {
-    backgroundColor: Colors.itemColor,
+    backgroundColor: Colors.tertiary,
     position: 'absolute',
     left: 0,
     top: 0,
@@ -95,6 +95,6 @@ const styles = StyleSheet.create({
   barItemText: {
     flexDirection: 'row',
     fontSize: 30,
-    color: Colors.buttonColor,
+    color: Colors.white,
   },
 })

@@ -7,8 +7,7 @@ import CustomHeader from '../components/CustomHeader'
 import UpcomingPaymentScreen from '../screens/UpcomingPaymentScreen'
 import BudgetScreen from '../screens/BudgetScreen'
 import CalendarScreen from '../screens/CalendarScreen'
-import {Colors} from '../constants/Colors'
-
+import { Colors } from '../constants/Colors'
 
 const BUDGET_SCREEN_NAME = 'Budget'
 const UPCOMING_PAYMENT_SCREEN_NAME = 'Upcoming Payments'
@@ -46,7 +45,7 @@ export default function Navigation() {
             />
           )
         },
-                tabBarLabel: ({ focused }) => {
+        tabBarLabel: ({ focused }) => {
           return (
             <Text
               style={{
@@ -66,7 +65,7 @@ export default function Navigation() {
         tabBarActiveTintColor: 'white',
         tabBarStyle: {
           borderTopWidth: 5,
-          backgroundColor : Colors.primary,
+          backgroundColor: Colors.primary,
           borderTopColor: Colors.secondary,
           height: 70,
         },

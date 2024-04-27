@@ -166,7 +166,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
                   </Text>
                 </TouchableOpacity>
 
-                <Text style={{ fontSize: 24,color: 'white' }}>-</Text>
+                <Text style={{ fontSize: 24, color: 'white' }}>-</Text>
 
                 <TouchableOpacity
                   style={styles.timeButton}
@@ -183,7 +183,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
             )}
 
             <View style={styles.switchContainer}>
-              <Text style={{ marginRight: 10,color: 'white' }}>All day</Text>
+              <Text style={{ marginRight: 10, color: 'white' }}>All day</Text>
               <Switch
                 style={{ height: 20 }}
                 trackColor={{ false: Colors.secondary, true: Colors.primary }}
@@ -240,11 +240,11 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Color</Text>
           <View style={styles.input}>
-            <Button title='Pick Color' color={Colors.itemColor} onPress={() => setShowColorPicker(true)} />
+            <Button title='Pick Color' color={Colors.tertiary} onPress={() => setShowColorPicker(true)} />
             <Modal onRequestClose={() => setShowColorPicker(false)} visible={showColorPicker} animationType='slide'>
               <Animated.View style={[styles.container, { backgroundColor: 'black' }]}>
                 <View style={[styles.pickerContainer, { backgroundColor: 'darkgray' }]}>
-                  <ColorPicker 
+                  <ColorPicker
                     value={selectedColor.value}
                     sliderThickness={25}
                     thumbShape='circle'
@@ -262,7 +262,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
                 </View>
 
                 <Pressable style={styles.closeButton} onPress={() => setShowColorPicker(false)}>
-                  <Text style={{ color: Colors.itemColor, fontWeight: 'bold' }}>Choose</Text>
+                  <Text style={{ color: Colors.tertiary, fontWeight: 'bold' }}>Choose</Text>
                 </Pressable>
               </Animated.View>
             </Modal>
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.buttonColor,
+    borderBottomColor: Colors.white,
     alignItems: 'flex-end',
     justifyContent: 'space-between',
     paddingBottom: 5,
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 18,
     textAlignVertical: 'center',
-    color: Colors.buttonColor,
+    color: Colors.white,
     fontWeight: 'bold',
     paddingTop: 20,
     paddingRight: 20,
@@ -391,8 +391,8 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingHorizontal: 10,
     textAlignVertical: 'top',
-    backgroundColor: Colors.itemColor,
-    color: 'white'
+    backgroundColor: Colors.tertiary,
+    color: 'white',
   },
   timeContainer: {
     flexDirection: 'row',
@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   button: {
-    backgroundColor: Colors.itemColor,
+    backgroundColor: Colors.tertiary,
     position: 'absolute',
     bottom: 20,
     right: 20,

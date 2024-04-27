@@ -27,7 +27,7 @@ export default function StackNavigation() {
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitle,
             cardStyle: styles.cardStyle,
-            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.buttonColor} />,
+            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.white} />,
           }}
         />
         <Stack.Screen
@@ -39,7 +39,7 @@ export default function StackNavigation() {
             cardStyle: styles.cardStyle,
             headerTitleAlign: 'center',
             headerTitleStyle: styles.headerTitle,
-            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.buttonColor} />,
+            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.white} />,
           }}
         />
         <Stack.Screen
@@ -51,7 +51,7 @@ export default function StackNavigation() {
             headerTitleAlign: 'center',
             headerTitleStyle: styles.headerTitle,
             cardStyle: styles.cardStyle,
-            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.buttonColor} />,
+            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.white} />,
           }}
         />
       </Stack.Navigator>
