@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
-import {View, Text, StyleSheet,FlatList,TouchableOpacity} from 'react-native'
+import {View, Text, StyleSheet,FlatList,TouchableOpacity, SectionList} from 'react-native'
 import {Ionicons,FontAwesome,MaterialCommunityIcons} from '@expo/vector-icons'
 import { budgetData } from '../constants/MockData'
 
@@ -170,29 +170,20 @@ export default function BudgetScreen(){
       </TouchableOpacity>
       </View>
 
-      <FlatList
-    data={filteredData}
-    renderItem={({ item }) => {
-    // Check if there are any data items for the month
-    if (item.data.length > 0) {
-      return (
-        <View style={styles.monthBox}>
+      <View style={styles.outerBox}>
+        <SectionList
+          sections={filteredData} 
+           
+          renderSectionHeader={({ section }) => (
+            <View style={styles.monthBox}>
+              <Text style={styles.monthTitle}>{section.month}</Text>
+            </View>
+          )} 
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id} 
           
-            <Text style={styles.monthTitle}>{item.month}</Text>
-            <FlatList
-              data={item.data}
-              renderItem={renderItem}
-              keyExtractor={item => item.id}
-            />
-         
-        </View>
-      );
-    } else {
-      return null; // Skip rendering the month box if there are no data items
-    }
-  }}
-  keyExtractor={(_, index) => index.toString()}
-/>
+        />
+      </View>
       </View>
     );
 };
@@ -278,16 +269,16 @@ export default function BudgetScreen(){
       marginTop:5,
       marginHorizontal:15,
       marginBottom: 15, // Add margin bottom to space boxes from each other
-      elevation: 3, // Add elevation to give it a shadow effect
+      elevation: 0, // Add elevation to give it a shadow effect
     },
-   /* outerBox: {
+    outerBox: {
       flex: 1, // Make the outerBox take up all remaining space after the top sections
       backgroundColor: '#9094ac', // Light background color for the box
       borderRadius: 10, // Add some rounded corners for a nicer look
       marginTop: 20, // Add some margin from the top section
       marginBottom: 20, // Add some margin from the bottom
       marginHorizontal: 10, // Add horizontal margin for spacing
-    },*/
+    },
   })
 
 
