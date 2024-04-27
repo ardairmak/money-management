@@ -25,9 +25,9 @@ const renewalPeriodData = Object.keys(RenewalPeriod).map((key) => ({
 }))
 
 const reminderData = [
-  { label: 'Yok', value: '0' },
-  { label: '1 gün önce', value: '1' },
-  { label: '2 gün önce', value: '2' },
+  { label: 'None', value: '0' },
+  { label: '1 day before', value: '1' },
+  { label: '2 day before', value: '2' },
 ]
 
 export default function IncomeExpensePopupScreen({ navigation }: NavigationProp) {
@@ -66,10 +66,10 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
     const newTime = selectedTime || (isStartTimeSelected ? timeStart : timeEnd)
 
     if (isStartTimeSelected && newTime > timeEnd) {
-      return alert('Başlangıç saati bitiş saatinden sonra olamaz.')
+      return alert('Start time cannot be after end time.')
     }
     if (!isStartTimeSelected && newTime < timeStart) {
-      return alert('Bitiş saati başlangıç saatinden önce olamaz.')
+      return alert('End time cannot be before start time.')
     }
 
     if (isStartTimeSelected) {
@@ -116,7 +116,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
     console.log(payment)
 
     if (!payment.name || !payment.date) {
-      return alert('Lütfen etkinlik adını ve tarihini girin!')
+      return alert('Please provide event name or date.')
     }
 
     navigation.goBack()
@@ -126,7 +126,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
     <Fragment>
       <ScrollView style={styles.container} keyboardDismissMode='none'>
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>İsim</Text>
+          <Text style={styles.inputLabel}>Name</Text>
           <TextInput
             style={styles.input}
             textAlign='right'
@@ -138,7 +138,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Tarih</Text>
+          <Text style={styles.inputLabel}>Date</Text>
           <TouchableOpacity
             style={[styles.input, { flex: 1 }]}
             onPress={() => {
@@ -150,7 +150,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Süre</Text>
+          <Text style={styles.inputLabel}>Time</Text>
           <View style={[styles.input, { marginRight: 7, flexDirection: 'column', alignItems: 'flex-end' }]}>
             {!isAllDay && (
               <View style={styles.timeContainer}>
@@ -166,7 +166,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
                   </Text>
                 </TouchableOpacity>
 
-                <Text style={{ fontSize: 24 }}>-</Text>
+                <Text style={{ fontSize: 24,color: 'white' }}>-</Text>
 
                 <TouchableOpacity
                   style={styles.timeButton}
@@ -183,7 +183,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
             )}
 
             <View style={styles.switchContainer}>
-              <Text style={{ marginRight: 10 }}>Gün boyu</Text>
+              <Text style={{ marginRight: 10,color: 'white' }}>All day</Text>
               <Switch
                 style={{ height: 20 }}
                 trackColor={{ false: Colors.secondary, true: Colors.primary }}
@@ -196,7 +196,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Hatırlatıcı</Text>
+          <Text style={styles.inputLabel}>Reminder</Text>
           <Dropdown
             style={styles.input}
             containerStyle={styles.dropdownContainer}
@@ -208,7 +208,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
             maxHeight={300}
             labelField='label'
             valueField='value'
-            placeholder={'Hatırlatıcı seç'}
+            placeholder={'Choose Reminder'}
             value={reminder}
             onChange={(item) => {
               setReminder(item.value)
@@ -217,7 +217,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Tekrarla</Text>
+          <Text style={styles.inputLabel}>Repetition</Text>
           <Dropdown
             style={styles.input}
             containerStyle={styles.dropdownContainer}
@@ -229,7 +229,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
             maxHeight={300}
             labelField='label'
             valueField='value'
-            placeholder={'Periyot seç'}
+            placeholder={'Choose Repetition'}
             value={renewalPeriod}
             onChange={(item) => {
               setRenewalPeriod(item.value)
@@ -238,13 +238,13 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Renk</Text>
+          <Text style={styles.inputLabel}>Color</Text>
           <View style={styles.input}>
-            <Button title='Color Picker' onPress={() => setShowColorPicker(true)} />
+            <Button title='Pick Color' color={Colors.itemColor} onPress={() => setShowColorPicker(true)} />
             <Modal onRequestClose={() => setShowColorPicker(false)} visible={showColorPicker} animationType='slide'>
               <Animated.View style={[styles.container, { backgroundColor: 'black' }]}>
                 <View style={[styles.pickerContainer, { backgroundColor: 'darkgray' }]}>
-                  <ColorPicker
+                  <ColorPicker 
                     value={selectedColor.value}
                     sliderThickness={25}
                     thumbShape='circle'
@@ -262,7 +262,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
                 </View>
 
                 <Pressable style={styles.closeButton} onPress={() => setShowColorPicker(false)}>
-                  <Text style={{ color: '#707070', fontWeight: 'bold' }}>Close</Text>
+                  <Text style={{ color: Colors.itemColor, fontWeight: 'bold' }}>Choose</Text>
                 </Pressable>
               </Animated.View>
             </Modal>
@@ -270,7 +270,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
         </View>
 
         <View style={styles.descriptionContainer}>
-          <Text style={styles.inputLabel}>Açıklama</Text>
+          <Text style={styles.inputLabel}>Description</Text>
           <TextInput
             style={styles.description}
             value={description}
@@ -283,7 +283,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
 
       {!isAnyTextInputFocused && (
         <TouchableOpacity style={styles.button} onPress={handleSave}>
-          <Text style={styles.buttonText}>EKLE</Text>
+          <Text style={styles.buttonText}>ADD</Text>
         </TouchableOpacity>
       )}
 
@@ -301,13 +301,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     marginBottom: 20,
+    backgroundColor: Colors.primary,
   },
   inputContainer: {
     height: 60,
     width: '100%',
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.secondary,
+    borderBottomColor: Colors.buttonColor,
     alignItems: 'flex-end',
     justifyContent: 'space-between',
     paddingBottom: 5,
@@ -315,7 +316,7 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 18,
     textAlignVertical: 'center',
-    color: Colors.secondary,
+    color: Colors.buttonColor,
     fontWeight: 'bold',
     paddingTop: 20,
     paddingRight: 20,
@@ -324,14 +325,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   input: {
-    color: 'black',
+    color: 'white',
     paddingHorizontal: 20,
     flex: 1,
     fontSize: 16,
   },
   inputRightText: {
     fontSize: 18,
-    color: Colors.secondary,
+    color: '#8f8f8f',
     marginBottom: 1,
     marginRight: 5,
   },
@@ -355,12 +356,14 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     fontSize: 16,
     textAlign: 'right',
+    color: 'white',
   },
   selectedTextStyle: {
     fontSize: 16,
     textAlign: 'right',
   },
   dateText: {
+    color: 'white',
     paddingRight: 20,
     fontSize: 16,
     textAlign: 'right',
@@ -370,6 +373,7 @@ const styles = StyleSheet.create({
     width: '20%',
   },
   timeText: {
+    color: 'white',
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 15,
@@ -387,7 +391,8 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingHorizontal: 10,
     textAlignVertical: 'top',
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.itemColor,
+    color: 'white'
   },
   timeContainer: {
     flexDirection: 'row',
@@ -398,7 +403,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   button: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.itemColor,
     position: 'absolute',
     bottom: 20,
     right: 20,

@@ -22,11 +22,11 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ title }) => {
     <SafeAreaView>
       <View style={styles.headerSection}>
         <TouchableOpacity>
-          <Ionicons name='menu-outline' size={50} color='white' style={styles.icon} onPress={onPressOnHamburgerMenuIcon} />
+          <Ionicons name='menu-outline' size={50} color={Colors.buttonColor} style={styles.icon} onPress={onPressOnHamburgerMenuIcon} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{title}</Text>
         <TouchableOpacity>
-          <Ionicons name='person-circle-outline' size={50} color='white' style={styles.icon} onPress={onPressOnPersonIcon} />
+          <Ionicons name='person-circle-outline' size={50} color={Colors.buttonColor} style={styles.icon} onPress={onPressOnPersonIcon} />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
   },
   headerTitle: {
-    color: 'white',
+    color: Colors.buttonColor,
     fontSize: 20,
   },
   icon: {

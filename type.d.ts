@@ -48,20 +48,20 @@ export interface Event {
 }
 
 export enum RenewalPeriod {
-  NONE = 'Yok',
-  WEEKLY = 'Haftalık',
-  MONTHLY = 'Aylık',
-  ANNUALLY = 'Yıllık',
+  NONE = 'None',
+  WEEKLY = 'Weekly',
+  MONTHLY = 'Monthly',
+  ANNUALLY = 'Annually',
 }
 
 export enum Category {
-  NONE = 'Yok',
-  FOOD = 'Yiyecek',
-  TRANSPORTATION = 'Ulaşım',
-  ENTERTAINMENT = 'Eğlence',
-  UTILITIES = 'Fatura',
-  SHOPPING = 'Alışveriş',
-  HEALTH = 'Sağlık',
-  EDUCATION = 'Eğitim',
-  OTHER = 'Diğer',
+  NONE = 'None',
+  FOOD = 'Food',
+  TRANSPORTATION = 'Transportation',
+  ENTERTAINMENT = 'Entertainment',
+  UTILITIES = 'Utilities',
+  SHOPPING = 'Shopping',
+  HEALTH = 'Health',
+  EDUCATION = 'Education',
+  OTHER = 'Other',
 }
