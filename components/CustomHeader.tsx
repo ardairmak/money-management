@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+
 import { Colors } from '../constants/Colors'
 import { toggleHamburger } from './HamburgerBar'
 import { NavigationProp } from '../type'
@@ -25,11 +26,23 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ title, navigation }) => {
     <SafeAreaView>
       <View style={styles.headerSection}>
         <TouchableOpacity>
-          <Ionicons name='menu-outline' size={50} color='white' style={styles.icon} onPress={onPressOnHamburgerMenuIcon} />
+          <Ionicons
+            name='menu-outline'
+            size={50}
+            color={Colors.white}
+            style={styles.icon}
+            onPress={onPressOnHamburgerMenuIcon}
+          />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{title}</Text>
         <TouchableOpacity>
-          <Ionicons name='person-circle-outline' size={50} color='white' style={styles.icon} onPress={onPressOnPersonIcon} />
+          <Ionicons
+            name='person-circle-outline'
+            size={50}
+            color={Colors.white}
+            style={styles.icon}
+            onPress={onPressOnPersonIcon}
+          />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -46,7 +59,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
   },
   headerTitle: {
-    color: 'white',
+    color: Colors.white,
     fontSize: 20,
   },
   icon: {

@@ -1,12 +1,10 @@
-
 import React, { useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Calendar } from 'react-native-calendars'
-import { Colors } from '../constants/Colors'
-
-import { mockEvents } from '../constants/MockData'
-
 import { FontAwesome5 } from '@expo/vector-icons'
+
+import { Colors } from '../constants/Colors'
+import { mockEvents } from '../constants/MockData'
 
 const CalendarScreen: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
@@ -35,7 +33,7 @@ const CalendarScreen: React.FC = () => {
         <View style={styles.eventListContainer}>
           {events.map((event, index) => (
             <View key={index} style={styles.eventItem}>
-              <FontAwesome5 name='coins' size={12} color={Colors.secondary} />
+              <FontAwesome5 name='coins' size={30} color={Colors.white} />
 
               <View style={styles.eventDetails}>
                 <Text style={event.category === 'Expense' ? styles.expenseText : styles.incomeText}>{event.name}</Text>
@@ -58,7 +56,7 @@ const CalendarScreen: React.FC = () => {
         }}
         style={{ backgroundColor: Colors.primary, height: 370 }}
         theme={{
-          monthTextColor: 'white',
+          monthTextColor: Colors.white,
           textMonthFontSize: 20,
           arrowColor: 'white',
           calendarBackground: Colors.primary,
@@ -75,17 +73,19 @@ const CalendarScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.primary,
   },
   eventsContainer: {
     marginTop: 20,
     padding: 10,
+    backgroundColor: Colors.primary,
   },
   eventItem: {
     flexDirection: 'row',
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.tertiary,
     padding: 10,
     borderBottomWidth: 1,
-    borderRadius: 8,
+    borderRadius: 5,
     marginBottom: 10,
   },
   eventName: {
@@ -94,11 +94,11 @@ const styles = StyleSheet.create({
   },
   eventTime: {
     fontSize: 14,
-    color: '#666',
+    color: Colors.white,
   },
   eventListContainer: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 10,
+    backgroundColor: Colors.tertiary,
+    borderRadius: 20,
     padding: 10,
   },
   eventDetails: {
