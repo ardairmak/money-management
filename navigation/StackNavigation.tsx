@@ -9,6 +9,7 @@ import MainComponent from '../components/MainComponent'
 import FuturePaymentPopupScreen from '../screens/FuturePaymentPopupScreen'
 import IncomeExpensePopupScreen from '../screens/IncomeExpensePopupScreen'
 import ActivityPopupScreen from '../screens/ActivityPopupScreen'
+import SignInScreen from '../screens/SignInScreen'
 import { Colors } from '../constants/Colors'
 
 const Stack = createStackNavigator<MainStackNavigatorParamList>()
@@ -52,6 +53,16 @@ export default function StackNavigation() {
             headerTitleStyle: styles.headerTitle,
             cardStyle: styles.cardStyle,
             headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.white} />,
+          }}
+        />
+        <Stack.Screen
+          name='SignIn'
+          component={SignInScreen}
+          options={{
+            title: '',
+            headerTitleAlign: 'center',
+            headerTitleStyle: styles.headerTitle,
+            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.primary} />,
           }}
         />
       </Stack.Navigator>

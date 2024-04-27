@@ -4,12 +4,14 @@ import { Ionicons } from '@expo/vector-icons'
 
 import { Colors } from '../constants/Colors'
 import { toggleHamburger } from './HamburgerBar'
+import { NavigationProp } from '../type'
 
 interface CustomHeaderProps {
-  title: string
+  title: string;
+  navigation: NavigationProp;
 }
 
-const CustomHeader: React.FC<CustomHeaderProps> = ({ title }) => {
+const CustomHeader: React.FC<CustomHeaderProps> = ({ title, navigation }) => {
   const onPressOnHamburgerMenuIcon = () => {
     console.log('Hamburger')
     toggleHamburger()
@@ -17,6 +19,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ title }) => {
 
   const onPressOnPersonIcon = () => {
     console.log('User thingy')
+    navigation.navigate('SignIn')
   }
 
   return (

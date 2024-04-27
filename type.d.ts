@@ -1,19 +1,14 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { ColorValue } from 'react-native'
 
-export interface Event {
-    name : string
-    category : string
-    time : string
-    }
-
 export type MainStackNavigatorParamList = {
   Main: undefined
   FPPS: undefined // FuturePaymentPopupScreen
   IEPS: undefined // IncomeExpensePopupScreen
   APS: undefined // ActivityPopupScreen
+  SignIn: undefined // SignInScreen
 }
-export type NavigationProp = NativeStackScreenProps<MainStackNavigatorParamList, Main, FPPS, IEPS, APS>
+export type NavigationProp = NativeStackScreenProps<MainStackNavigatorParamList, Main, FPPS, IEPS, APS, SignIn>
 
 export interface IncomeExpense {
   isIncome: boolean

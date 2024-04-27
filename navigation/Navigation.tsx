@@ -7,6 +7,7 @@ import CustomHeader from '../components/CustomHeader'
 import UpcomingPaymentScreen from '../screens/UpcomingPaymentScreen'
 import BudgetScreen from '../screens/BudgetScreen'
 import CalendarScreen from '../screens/CalendarScreen'
+import { NavigationProp } from '../type'
 import { Colors } from '../constants/Colors'
 
 const BUDGET_SCREEN_NAME = 'Budget'
@@ -19,7 +20,7 @@ const CALENDAR_SCREEN_ICON_NAME = 'calendar'
 
 const Tab = createBottomTabNavigator()
 
-export default function Navigation() {
+export default function Navigation({ navigation }: NavigationProp) {
   return (
     <Tab.Navigator
       initialRouteName={UPCOMING_PAYMENT_SCREEN_NAME}
@@ -80,21 +81,21 @@ export default function Navigation() {
         name={BUDGET_SCREEN_NAME}
         component={BudgetScreen}
         options={{
-          header: () => <CustomHeader title={'My Budget'} />,
+          header: () => <CustomHeader navigation={navigation} title={'My Budget'} />,
         }}
       />
       <Tab.Screen
         name={UPCOMING_PAYMENT_SCREEN_NAME}
         component={UpcomingPaymentScreen}
         options={{
-          header: () => <CustomHeader title={'Upcoming Payments'} />,
+          header: () => <CustomHeader navigation={navigation} title={'Upcoming Payments'} />,
         }}
       />
       <Tab.Screen
         name={CALENDAR_SCREEN_NAME}
         component={CalendarScreen}
         options={{
-          header: () => <CustomHeader title={'Calendar'} />,
+          header: () => <CustomHeader navigation={navigation} title={'Calendar'} />,
         }}
       />
     </Tab.Navigator>
