@@ -1,6 +1,12 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { ColorValue } from 'react-native'
 
+export interface Event {
+    name : string
+    category : string
+    time : string
+    }
+
 export type MainStackNavigatorParamList = {
   Main: undefined
   FPPS: undefined // FuturePaymentPopupScreen
