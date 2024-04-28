@@ -1,22 +1,31 @@
 {
-    "expo": {
-        "name": "money-management",
-        "slug": "money-management",
-        "version": "1.0.0",
-        "orientation": "portrait",
-        "userInterfaceStyle": "light",
-        "splash": {
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
-        },
-        "assetBundlePatterns": ["**/*"],
-        "ios": {
-            "supportsTablet": true
-        },
-        "android": {
-            "adaptiveIcon": {
-                "backgroundColor": "#ffffff"
-            }
-        }
+  "expo": {
+    "name": "money-management",
+    "slug": "money-management",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ardairmak.moneymanagement"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.ardairmak.moneymanagement"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "eddb2655-1e11-42ab-997d-440cbcb13e3e"
+      }
     }
+  }
 }
