@@ -59,12 +59,7 @@ export default function StackNavigation() {
           name='SignIn'
           component={SignInScreen}
           options={{
-            title: '',
-            headerStyle: styles.headerStyle,
-            cardStyle: styles.cardStyle,
-            headerTitleAlign: 'center',
-            headerTitleStyle: styles.headerTitle,
-            headerBackImage: () => <Ionicons />,
+            headerShown: false,
           }}
         />
       </Stack.Navigator>

@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { Text, StyleSheet, View, TextInput, TouchableOpacity } from 'react-native'
 
 import { Colors } from '../constants/Colors'
@@ -29,7 +29,7 @@ export default function SignInScreen({ navigation }: NavigationProp) {
   }
 
   return (
-    <Fragment>
+    <View style={styles.container}>
       <View style={styles.topContainer}>
         <Text style={styles.welcomeText}>Welcome!</Text>
       </View>
@@ -64,15 +64,20 @@ export default function SignInScreen({ navigation }: NavigationProp) {
           <Text style={[styles.forgotPasswordButtonText, { color: 'white', marginTop: 5 }]}>Sign Up</Text>
         </TouchableOpacity>
       </View>
-    </Fragment>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.primary,
+  },
   topContainer: {
     backgroundColor: Colors.primary,
     alignItems: 'center',
-    paddingVertical: 80,
+    paddingTop: 180,
+    paddingBottom: 80,
   },
   inputContainer: {
     backgroundColor: '#ffff',
