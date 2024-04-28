@@ -11,6 +11,14 @@ export default function BudgetScreen() {
   const [totalMoney, setTotalMoney] = useState(1.65)
   const [filteredData, setFilteredData] = useState(Data)
 
+
+  const parseNegativeAmount = (amount: number) => {
+    if (amount < 0) {
+        return amount * -1
+        }
+    return amount
+  }
+
   const renderItem = ({ item }: { item: { id: string; name: string; amount: string; icon: string; type: string } }) => (
     <View>
       <View style={styles.separator} />
@@ -138,7 +146,7 @@ export default function BudgetScreen() {
       }
     })
 
-    console.log('Total income:', totalExpense)
+    console.log('Total expense:', totalExpense)
     setTotalMoney(totalExpense)
     setFilteredData(giderData)
   }
@@ -152,7 +160,7 @@ export default function BudgetScreen() {
           style={[styles.currencyIcon, { color: totalMoney < 0 ? '#cc0000' : '#06c258' }]}
         />
 
-        <Text style={[styles.total, totalMoney < 0 ? styles.negativeAmount : styles.positiveAmount]}>{totalMoney}</Text>
+        <Text style={[styles.total, totalMoney < 0 ? styles.negativeAmount : styles.positiveAmount]}>{parseNegativeAmount(totalMoney)}</Text>
       </View>
 
       <View style={[styles.paringRow, { marginLeft: 35 }]}>
