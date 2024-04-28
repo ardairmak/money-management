@@ -7,8 +7,8 @@ import { toggleHamburger } from './HamburgerBar'
 import { NavigationProp } from '../type'
 
 interface CustomHeaderProps {
-  title: string;
-  navigation: NavigationProp;
+  title: string
+  navigation: NavigationProp
 }
 
 const CustomHeader: React.FC<CustomHeaderProps> = ({ title, navigation }) => {
@@ -19,7 +19,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ title, navigation }) => {
 
   const onPressOnPersonIcon = () => {
     console.log('User thingy')
-    navigation.navigate('SignIn')
+    navigation.navigate('LogIn')
   }
 
   return (

@@ -4,14 +4,14 @@ import { Text, StyleSheet, View, TextInput, TouchableOpacity } from 'react-nativ
 import { Colors } from '../constants/Colors'
 import { NavigationProp } from '../type'
 
-export default function SignInScreen({ navigation }: NavigationProp) {
+export default function LogInScreen({ navigation }: NavigationProp) {
   const [mail, setMail] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const handleSave = () => {
     navigation.goBack()
-    console.log('Sign In pressed')
+    console.log('Log In pressed')
   }
 
   const handleForgotPassword = () => {
@@ -46,9 +46,9 @@ export default function SignInScreen({ navigation }: NavigationProp) {
         />
       </View>
 
-      <View style={styles.saveButton}>
+      <View style={styles.loginButton}>
         <TouchableOpacity onPress={handleSave}>
-          <Text style={styles.saveButtonText}>Log In</Text>
+          <Text style={styles.loginButtonText}>Log In</Text>
         </TouchableOpacity>
       </View>
 
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontSize: 18,
   },
-  saveButton: {
+  loginButton: {
     backgroundColor: Colors.primary,
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'white',
   },
-  saveButtonText: {
+  loginButtonText: {
     color: 'white',
     fontSize: 24,
     fontWeight: 'bold',

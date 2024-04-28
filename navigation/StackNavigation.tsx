@@ -9,7 +9,7 @@ import MainComponent from '../components/MainComponent'
 import FuturePaymentPopupScreen from '../screens/FuturePaymentPopupScreen'
 import IncomeExpensePopupScreen from '../screens/IncomeExpensePopupScreen'
 import ActivityPopupScreen from '../screens/ActivityPopupScreen'
-import SignInScreen from '../screens/SignInScreen'
+import LogInScreen from '../screens/LogInScreen'
 import { Colors } from '../constants/Colors'
 
 const Stack = createStackNavigator<MainStackNavigatorParamList>()
@@ -56,8 +56,8 @@ export default function StackNavigation() {
           }}
         />
         <Stack.Screen
-          name='SignIn'
-          component={SignInScreen}
+          name='LogIn'
+          component={LogInScreen}
           options={{
             headerShown: false,
           }}
