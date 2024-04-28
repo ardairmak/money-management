@@ -34,14 +34,14 @@ export default function SignInScreen({ navigation }: NavigationProp) {
         <Text style={styles.welcomeText}>Welcome!</Text>
       </View>
       <View style={styles.inputContainer}>
-        <TextInput style={styles.input} value={username} onChangeText={setUsername} placeholder='Enter your username' />
+        <TextInput style={styles.input} value={username} onChangeText={setUsername} placeholder='Username' />
       </View>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           value={password}
           onChangeText={setPassword}
-          placeholder='Enter your password'
+          placeholder='Password'
           secureTextEntry={true}
         />
       </View>
@@ -58,7 +58,7 @@ export default function SignInScreen({ navigation }: NavigationProp) {
         </TouchableOpacity>
       </View>
 
-      <View style={[styles.forgotPasswordButton, { position: 'absolute', bottom: 10, alignSelf: 'center' }]}>
+      <View style={styles.forgotPasswordButton}>
         <Text style={styles.forgotPasswordButtonText}>Don't have an account? </Text>
         <TouchableOpacity onPress={handleSignUp}>
           <Text style={[styles.forgotPasswordButtonText, { color: 'white', marginTop: 5 }]}>Sign Up</Text>
@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
   input: {
     color: Colors.primary,
     fontSize: 18,
+    paddingHorizontal: 10,
   },
   saveButton: {
     backgroundColor: Colors.primary,
