@@ -239,11 +239,16 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
 
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Color</Text>
-          <View style={styles.input}>
+          <View style={[styles.input, { marginLeft: 120 }]}>
             <Button title='Pick Color' color={Colors.tertiary} onPress={() => setShowColorPicker(true)} />
-            <Modal onRequestClose={() => setShowColorPicker(false)} visible={showColorPicker} animationType='slide'>
-              <Animated.View style={[styles.container, { backgroundColor: 'black' }]}>
-                <View style={[styles.pickerContainer, { backgroundColor: 'darkgray' }]}>
+            <Modal
+              onRequestClose={() => setShowColorPicker(false)}
+              visible={showColorPicker}
+              animationType='slide'
+              presentationStyle='fullScreen'
+            >
+              <Animated.View style={styles.container}>
+                <View style={styles.pickerContainer}>
                   <ColorPicker
                     value={selectedColor.value}
                     sliderThickness={25}
@@ -256,12 +261,12 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
                     <View style={styles.previewContainer}>
                       <Preview style={styles.previewStyle} />
                     </View>
-                    <Panel3 style={styles.panelStyle} centerChannel='hsl-saturation' />
+                    <Panel3 centerChannel='hsl-saturation' />
                     <LuminanceSlider style={styles.sliderStyle} />
                   </ColorPicker>
                 </View>
 
-                <Pressable style={styles.closeButton} onPress={() => setShowColorPicker(false)}>
+                <Pressable style={styles.chooseButton} onPress={() => setShowColorPicker(false)}>
                   <Text style={{ color: Colors.tertiary, fontWeight: 'bold' }}>Choose</Text>
                 </Pressable>
               </Animated.View>
@@ -416,101 +421,32 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   pickerContainer: {
-    marginTop: 100,
+    backgroundColor: Colors.upcomingPaymentColor,
     alignSelf: 'center',
+    marginTop: 100,
     width: 300,
-    backgroundColor: '#fff',
     padding: 20,
     borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
-
-    elevation: 10,
-  },
-  panelStyle: {
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   sliderStyle: {
     borderRadius: 20,
     marginTop: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
     elevation: 5,
   },
   previewContainer: {
-    paddingBottom: 20,
-    marginBottom: 20,
+    marginBottom: 40,
   },
   previewStyle: {
     height: 40,
     borderRadius: 14,
   },
-  swatchesContainer: {
-    borderTopWidth: 1,
-    borderColor: '#bebdbe',
-    marginTop: 20,
-    paddingTop: 20,
-    alignItems: 'center',
-    flexWrap: 'nowrap',
-    gap: 10,
-  },
-  swatchStyle: {
-    borderRadius: 20,
-    height: 30,
-    width: 30,
-    margin: 0,
-    marginBottom: 0,
-    marginHorizontal: 0,
-    marginVertical: 0,
-  },
-  openButton: {
-    width: '100%',
-    borderRadius: 20,
-    paddingHorizontal: 40,
-    paddingVertical: 10,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  closeButton: {
+  chooseButton: {
     position: 'absolute',
-    bottom: 10,
+    bottom: 30,
     borderRadius: 20,
-    paddingHorizontal: 40,
+    paddingHorizontal: 60,
     paddingVertical: 10,
     alignSelf: 'center',
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    backgroundColor: Colors.white,
   },
 })
