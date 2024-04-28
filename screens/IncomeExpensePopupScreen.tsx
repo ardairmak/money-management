@@ -43,7 +43,7 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
     console.log(incomeExpense)
 
     if (!incomeExpense.name || !incomeExpense.price) {
-      return alert(`Lütfen ${incomeExpense.isIncome ? 'gelir' : 'gider'} adını ve miktarını girin!`)
+      return alert(`Please provide the name of the ${incomeExpense.isIncome ? 'income' : 'expense'}!`)
     }
 
     navigation.goBack()
