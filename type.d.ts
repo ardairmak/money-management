@@ -6,9 +6,9 @@ export type MainStackNavigatorParamList = {
   FPPS: undefined // FuturePaymentPopupScreen
   IEPS: undefined // IncomeExpensePopupScreen
   APS: undefined // ActivityPopupScreen
-  SignIn: undefined // SignInScreen
+  LogIn: undefined // LogInScreen
 }
-export type NavigationProp = NativeStackScreenProps<MainStackNavigatorParamList, Main, FPPS, IEPS, APS, SignIn>
+export type NavigationProp = NativeStackScreenProps<MainStackNavigatorParamList, Main, FPPS, IEPS, APS, LogIn>
 
 export interface IncomeExpense {
   isIncome: boolean

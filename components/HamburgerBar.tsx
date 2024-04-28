@@ -38,7 +38,7 @@ export default function HamburgerBar() {
     closeHamburger()
   }
 
-  const onButtonPressSignout = () => {
+  const onButtonPressLogOut = () => {
     console.log('Pressed Çıkış Yap')
     closeHamburger()
   }
@@ -59,8 +59,8 @@ export default function HamburgerBar() {
         <TouchableOpacity style={styles.barItem} onPress={onButtonPressContacts}>
           <Text style={styles.barItemText}>Support</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.barItem, styles.signOut]} onPress={onButtonPressSignout}>
-          <Text style={styles.barItemText}>Sign Out</Text>
+        <TouchableOpacity style={[styles.barItem, styles.signOut]} onPress={onButtonPressLogOut}>
+          <Text style={styles.barItemText}>Log Out</Text>
         </TouchableOpacity>
       </Animated.View>
     </Fragment>
