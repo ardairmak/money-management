@@ -30,7 +30,7 @@ const reminderData = [
   { label: '2 day before', value: '2' },
 ]
 
-export default function IncomeExpensePopupScreen({ navigation }: NavigationProp) {
+export default function ActivityPopupScreen({ navigation }: NavigationProp) {
   const [name, setName] = useState('')
   const [date, setDate] = useState(new Date())
   const [isAllDay, setIsAllDay] = useState(false)
