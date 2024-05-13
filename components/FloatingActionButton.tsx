@@ -54,11 +54,6 @@ export default function FloatingActionButton() {
     setShowPopup(false)
   }
 
-  const onButtonPress = () => {
-    toggleFABPopup()
-    console.log('FAB pressed')
-  }
-
   return (
     <Fragment>
       {showPopup && (
@@ -66,7 +61,7 @@ export default function FloatingActionButton() {
           <FloatingActionButtonPopup navigation={navigation} />
         </View>
       )}
-      <TouchableOpacity style={styles.fab} onPress={onButtonPress}>
+      <TouchableOpacity style={styles.fab} onPress={toggleFABPopup}>
         <View
           style={{
             position: 'absolute',
