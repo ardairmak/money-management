@@ -20,7 +20,7 @@ const CALENDAR_SCREEN_ICON_NAME = 'calendar'
 
 const Tab = createBottomTabNavigator()
 
-export default function Navigation({ navigation }: NavigationProp) {
+export default function BottomTabBarNavigation({ navigation }: NavigationProp) {
   return (
     <Tab.Navigator
       initialRouteName={UPCOMING_PAYMENT_SCREEN_NAME}

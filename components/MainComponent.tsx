@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 
-import Navigation from '../navigation/Navigation'
+import BottomTabBarNavigation from '../navigation/BottomTabBarNavigation'
 import FloatingActionButton from './FloatingActionButton'
 import HamburgerBar from './HamburgerBar'
 import { NavigationProp } from '../type';
@@ -12,7 +12,7 @@ interface CustomHeaderProps {
 const MainComponent: React.FC<CustomHeaderProps> = ({ navigation }) => {
   return (
     <Fragment>
-      <Navigation navigation={navigation} />
+      <BottomTabBarNavigation navigation={navigation} />
       <FloatingActionButton />
       <HamburgerBar />
     </Fragment>

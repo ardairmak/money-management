@@ -3,8 +3,8 @@ import { Keyboard, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 import StackNavigation from './navigation/StackNavigation'
-import FloatingActionButton, { closeFABPopup } from './components/FloatingActionButton'
-import HamburgerBar, { closeHamburger } from './components/HamburgerBar'
+import { closeFABPopup } from './components/FloatingActionButton'
+import { closeHamburger } from './components/HamburgerBar'
 
 const closePopups = () => {
   Keyboard.dismiss()
