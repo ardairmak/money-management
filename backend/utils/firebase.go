@@ -11,6 +11,7 @@ import (
 )
 
 var FirestoreClient *firestore.Client
+var FirebaseAuth *auth.Client
 
 func InitFirebase(ctx context.Context, opt option.ClientOption) (*firebase.App, *firestore.Client, *auth.Client) {
 	app, err := firebase.NewApp(ctx, nil, opt)
@@ -28,6 +29,7 @@ func InitFirebase(ctx context.Context, opt option.ClientOption) (*firebase.App, 
 	if err != nil {
 		panic("Failed to create Auth client: " + err.Error())
 	}
+	FirebaseAuth = authClient
 
 	fmt.Println("Firebase initialized")
 
