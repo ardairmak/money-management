@@ -1,4 +1,4 @@
-module ardairmak.com/money-management/m
+module ardairmak.com/money-management
 
 go 1.22.2
 

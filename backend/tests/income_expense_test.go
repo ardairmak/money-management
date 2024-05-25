@@ -8,8 +8,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"ardairmak.com/money-management/m/handlers"
-	"ardairmak.com/money-management/m/utils"
+	"ardairmak.com/money-management/handlers"
+	"ardairmak.com/money-management/utils"
 	"cloud.google.com/go/firestore"
 	"github.com/gorilla/mux"
 	"google.golang.org/api/option"

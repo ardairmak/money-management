@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"ardairmak.com/money-management/m/models"
-	"ardairmak.com/money-management/m/utils"
+	"ardairmak.com/money-management/models"
+	"ardairmak.com/money-management/utils"
 	"github.com/gorilla/mux"
 )
 

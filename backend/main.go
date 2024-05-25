@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"ardairmak.com/money-management/m/handlers"
-	"ardairmak.com/money-management/m/utils"
+	"ardairmak.com/money-management/handlers"
+	"ardairmak.com/money-management/utils"
 	"github.com/gorilla/mux"
 	"google.golang.org/api/option"
 )
