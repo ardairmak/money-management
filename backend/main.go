@@ -22,20 +22,20 @@ func main() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/income-expenses", handlers.AddIncomeExpense).Methods("POST")
-	r.HandleFunc("/income-expenses", handlers.GetIncomeExpenses).Methods("GET")
-	r.HandleFunc("/income-expenses/{id}", handlers.UpdateIncomeExpense).Methods("PUT")
-	r.HandleFunc("/income-expenses/{id}", handlers.DeleteIncomeExpense).Methods("DELETE")
+	r.HandleFunc("/income-expense", handlers.AddIncomeExpense).Methods("POST")
+	r.HandleFunc("/income-expense", handlers.GetIncomeExpense).Methods("GET")
+	r.HandleFunc("/income-expense/{id}", handlers.UpdateIncomeExpense).Methods("PUT")
+	r.HandleFunc("/income-expense/{id}", handlers.DeleteIncomeExpense).Methods("DELETE")
 
-	r.HandleFunc("/events", handlers.AddEvent).Methods("POST")
-	r.HandleFunc("/events", handlers.GetEvents).Methods("GET")
-	r.HandleFunc("/events/{id}", handlers.UpdateEvent).Methods("PUT")
-	r.HandleFunc("/events/{id}", handlers.DeleteEvent).Methods("DELETE")
+	r.HandleFunc("/event", handlers.AddEvent).Methods("POST")
+	r.HandleFunc("/event", handlers.GetEvent).Methods("GET")
+	r.HandleFunc("/event/{id}", handlers.UpdateEvent).Methods("PUT")
+	r.HandleFunc("/event/{id}", handlers.DeleteEvent).Methods("DELETE")
 
-	r.HandleFunc("/future-payments", handlers.AddUpcomingPayment).Methods("POST")
-	r.HandleFunc("/future-payments", handlers.GetUpcomingPayments).Methods("GET")
-	r.HandleFunc("/future-payments/{id}", handlers.UpdateUpcomingPayment).Methods("PUT")
-	r.HandleFunc("/future-payments/{id}", handlers.DeleteUpcomingPayment).Methods("DELETE")
+	r.HandleFunc("/upcoming-payment", handlers.AddUpcomingPayment).Methods("POST")
+	r.HandleFunc("/upcoming-payment", handlers.GetUpcomingPayment).Methods("GET")
+	r.HandleFunc("/upcoming-payment/{id}", handlers.UpdateUpcomingPayment).Methods("PUT")
+	r.HandleFunc("/upcoming-payment/{id}", handlers.DeleteUpcomingPayment).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 }

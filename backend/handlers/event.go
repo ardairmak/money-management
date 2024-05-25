@@ -31,7 +31,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Event added successfully")
 }
 
-func GetEvents(w http.ResponseWriter, r *http.Request) {
+func GetEvent(w http.ResponseWriter, r *http.Request) {
 
 	ctx := context.Background()
 	iter := utils.FirestoreClient.Collection("events").Documents(ctx)

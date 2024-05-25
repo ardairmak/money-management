@@ -29,7 +29,7 @@ func AddIncomeExpense(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Income/Expense added successfully"))
 }
 
-func GetIncomeExpenses(w http.ResponseWriter, r *http.Request) {
+func GetIncomeExpense(w http.ResponseWriter, r *http.Request) {
 
 	ctx := context.Background()
 	iter := utils.FirestoreClient.Collection("incomeExpenses").Documents(ctx)

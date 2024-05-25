@@ -22,7 +22,7 @@ func setup() (*mux.Router, *firestore.Client) {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/income-expenses", handlers.AddIncomeExpense).Methods("POST")
-	r.HandleFunc("/income-expenses", handlers.GetIncomeExpenses).Methods("GET")
+	r.HandleFunc("/income-expenses", handlers.GetIncomeExpense).Methods("GET")
 	r.HandleFunc("/income-expenses/{id}", handlers.UpdateIncomeExpense).Methods("PUT")
 	r.HandleFunc("/income-expenses/{id}", handlers.DeleteIncomeExpense).Methods("DELETE")
 

@@ -29,7 +29,7 @@ func AddUpcomingPayment(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Upcoming payment added successfully"))
 }
 
-func GetUpcomingPayments(w http.ResponseWriter, r *http.Request) {
+func GetUpcomingPayment(w http.ResponseWriter, r *http.Request) {
 	var upcomingPayments []models.UpcomingPayment
 	ctx := context.Background()
 	iter := utils.FirestoreClient.Collection("upcomingPayments").Documents(ctx)
