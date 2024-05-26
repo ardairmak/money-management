@@ -21,6 +21,10 @@ func main() {
 
 	r := mux.NewRouter()
 
+	r.HandleFunc("/register", handlers.Register).Methods("POST")
+	r.HandleFunc("/login", handlers.Login).Methods("POST")
+	r.HandleFunc("/logout", handlers.Logout).Methods("POST")
+
 	r.HandleFunc("/income-expense", handlers.AddIncomeExpense).Methods("POST")
 	r.HandleFunc("/income-expense", handlers.GetIncomeExpense).Methods("GET")
 	r.HandleFunc("/income-expense/{id}", handlers.UpdateIncomeExpense).Methods("PUT")

@@ -10,6 +10,7 @@ import (
 	"google.golang.org/api/option"
 )
 
+var FirebaseApp *firebase.App
 var FirestoreClient *firestore.Client
 var FirebaseAuth *auth.Client
 

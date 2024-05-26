@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"ardairmak.com/money-management/utils"
@@ -15,8 +16,16 @@ type RegisterRequest struct {
 }
 
 type LoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	IDToken string `json:"idToken"`
+}
+
+type LoginResponse struct {
+	UID   string `json:"uid"`
+	Email string `json:"email"`
+}
+
+type LogoutRequest struct {
+	UID string `json:"uid"` // or other necessary fields
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {
@@ -38,6 +47,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(userRecord)
+
+	log.Println("User registered successfully.")
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -47,13 +58,46 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	customToken, err := utils.FirebaseAuth.CustomToken(context.Background(), req.Email)
+	ctx := context.Background()
+	tokenInfo, err := utils.FirebaseAuth.VerifyIDToken(ctx, req.IDToken)
+	if err != nil {
+		http.Error(w, "Invalid ID token", http.StatusUnauthorized)
+		return
+	}
+
+	userRecord, err := utils.FirebaseAuth.GetUser(ctx, tokenInfo.UID)
+	if err != nil {
+		http.Error(w, "Failed to get user record", http.StatusInternalServerError)
+		return
+	}
+
+	resp := LoginResponse{
+		UID:   userRecord.UID,
+		Email: userRecord.Email,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(resp)
+
+	log.Println("User logged in successfully.")
+}
+
+func Logout(w http.ResponseWriter, r *http.Request) {
+	var req LogoutRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err := utils.FirebaseAuth.RevokeRefreshTokens(context.Background(), req.UID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	json.NewEncoder(w).Encode(map[string]string{
-		"token": customToken,
+		"message": "User logged out successfully.",
 	})
+
+	log.Println("User logged out successfully.")
 }
