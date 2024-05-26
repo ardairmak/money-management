@@ -10,27 +10,28 @@ import (
 
 	"ardairmak.com/money-management/handlers"
 	"ardairmak.com/money-management/utils"
-	"cloud.google.com/go/firestore"
 	"github.com/gorilla/mux"
 	"google.golang.org/api/option"
 )
 
-func setup() (*mux.Router, *firestore.Client) {
+func setup() *mux.Router {
 	ctx := context.Background()
 	sa := option.WithCredentialsFile("../serviceAccountKey.json")
-	_, client, _ := utils.InitFirebase(ctx, sa)
+
+	utils.InitFirebase(ctx, sa)
 
 	r := mux.NewRouter()
+
 	r.HandleFunc("/income-expenses", handlers.AddIncomeExpense).Methods("POST")
 	r.HandleFunc("/income-expenses", handlers.GetIncomeExpense).Methods("GET")
 	r.HandleFunc("/income-expenses/{id}", handlers.UpdateIncomeExpense).Methods("PUT")
 	r.HandleFunc("/income-expenses/{id}", handlers.DeleteIncomeExpense).Methods("DELETE")
 
-	return r, client
+	return r
 }
 
 func TestAddIncomeExpense(t *testing.T) {
-	r, _ := setup()
+	r := setup()
 
 	incomeExpense := map[string]interface{}{
 		"isIncome":    true,
@@ -67,7 +68,7 @@ func TestAddIncomeExpense(t *testing.T) {
 }
 
 func TestGetIncomeExpenses(t *testing.T) {
-	r, _ := setup()
+	r := setup()
 
 	req, err := http.NewRequest("GET", "/income-expenses", nil)
 	if err != nil {
@@ -91,7 +92,7 @@ func TestGetIncomeExpenses(t *testing.T) {
 }
 
 func TestUpdateIncomeExpense(t *testing.T) {
-	r, _ := setup()
+	r := setup()
 
 	updatedIncomeExpense := map[string]interface{}{
 		"isIncome":    true,
@@ -129,7 +130,7 @@ func TestUpdateIncomeExpense(t *testing.T) {
 }
 
 func TestDeleteIncomeExpense(t *testing.T) {
-	r, _ := setup()
+	r := setup()
 
 	id := "aI6GXycBwCLiUmPJJent"
 	req, err := http.NewRequest("DELETE", "/income-expenses/"+id, nil)

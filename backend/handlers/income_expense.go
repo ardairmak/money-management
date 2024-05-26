@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"ardairmak.com/money-management/models"
@@ -27,10 +28,11 @@ func AddIncomeExpense(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte("Income/Expense added successfully"))
+
+	log.Println("IncomeExpense added successfully")
 }
 
 func GetIncomeExpense(w http.ResponseWriter, r *http.Request) {
-
 	ctx := context.Background()
 	iter := utils.FirestoreClient.Collection("incomeExpenses").Documents(ctx)
 
@@ -40,11 +42,13 @@ func GetIncomeExpense(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			break
 		}
-		var income models.IncomeExpense
-		doc.DataTo(&income)
-		incomeExpenses = append(incomeExpenses, income)
+		var incomeExpense models.IncomeExpense
+		doc.DataTo(&incomeExpense)
+		incomeExpenses = append(incomeExpenses, incomeExpense)
 	}
 	json.NewEncoder(w).Encode(incomeExpenses)
+
+	log.Println("IncomeExpenses fetched successfully")
 }
 
 func UpdateIncomeExpense(w http.ResponseWriter, r *http.Request) {
@@ -67,6 +71,8 @@ func UpdateIncomeExpense(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Income/Expense updated successfully"))
+
+	log.Println("IncomeExpense updated successfully")
 }
 
 func DeleteIncomeExpense(w http.ResponseWriter, r *http.Request) {
@@ -82,4 +88,6 @@ func DeleteIncomeExpense(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Income/Expense deleted successfully"))
+
+	log.Println("IncomeExpense deleted successfully")
 }

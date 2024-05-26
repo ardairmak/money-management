@@ -3,7 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 
 	"ardairmak.com/money-management/models"
@@ -28,11 +28,11 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte("Event added successfully"))
-	fmt.Println("Event added successfully")
+
+	log.Println("Event added successfully")
 }
 
 func GetEvent(w http.ResponseWriter, r *http.Request) {
-
 	ctx := context.Background()
 	iter := utils.FirestoreClient.Collection("events").Documents(ctx)
 
@@ -47,7 +47,8 @@ func GetEvent(w http.ResponseWriter, r *http.Request) {
 		events = append(events, event)
 	}
 	json.NewEncoder(w).Encode(events)
-	fmt.Println("Events fetched successfully")
+
+	log.Println("Events fetched successfully")
 }
 
 func UpdateEvent(w http.ResponseWriter, r *http.Request) {
@@ -70,7 +71,8 @@ func UpdateEvent(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte("Event updated successfully"))
-	fmt.Println("Event updated successfully")
+
+	log.Println("Event updated successfully")
 }
 
 func DeleteEvent(w http.ResponseWriter, r *http.Request) {
@@ -86,5 +88,6 @@ func DeleteEvent(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Event deleted successfully"))
-	fmt.Println("Event deleted successfully")
+
+	log.Println("Event deleted successfully")
 }

@@ -12,13 +12,12 @@ import (
 )
 
 func main() {
-
 	ctx := context.Background()
 	opt := option.WithCredentialsFile("serviceAccountKey.json")
 
-	_, client, _ := utils.InitFirebase(ctx, opt)
+	utils.InitFirebase(ctx, opt)
 
-	defer client.Close()
+	defer utils.FirestoreClient.Close()
 
 	r := mux.NewRouter()
 
