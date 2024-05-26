@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { useAuth } from '../context/AuthContext'
 
 import { Colors } from '../constants/Colors'
 import { toggleHamburger } from './HamburgerBar'
@@ -12,6 +13,8 @@ interface CustomHeaderProps {
 }
 
 const CustomHeader: React.FC<CustomHeaderProps> = ({ title, navigation }) => {
+
+  const {user} = useAuth()
   const onPressOnHamburgerMenuIcon = () => {
     console.log('Hamburger')
     toggleHamburger()

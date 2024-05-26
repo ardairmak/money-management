@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 
 import BottomTabBarNavigation from '../navigation/BottomTabBarNavigation'
 import FloatingActionButton from './FloatingActionButton'
@@ -10,6 +10,16 @@ interface CustomHeaderProps {
 }
 
 const MainComponent: React.FC<CustomHeaderProps> = ({ navigation }) => {
+  useEffect(() => {
+    // Your initialization function here
+    const initializeApp = () => {
+      navigation.navigate('LogIn')
+      console.log('App has started');
+    };
+
+    initializeApp();
+  }, []);
+
   return (
     <Fragment>
       <BottomTabBarNavigation navigation={navigation} />

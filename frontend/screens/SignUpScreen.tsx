@@ -1,45 +1,42 @@
 import { useState } from 'react'
 import { Text, StyleSheet, View, TextInput, TouchableOpacity, Alert } from 'react-native'
 import { auth } from "../helpers/firebaseConfig";
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { useAuth } from '../context/AuthContext'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+
 import { Colors } from '../constants/Colors'
 import { NavigationProp } from '../type'
 
-export default function LogInScreen({ navigation }: NavigationProp) {
-  const { logIn } = useAuth();
+export default function SignUpScreen({ navigation }: NavigationProp) {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
 
-  const handleLogin = async () => {
-    try {
-      await logIn(email, password); // Call the signIn function from the authentication context
-      navigation.goBack()
-    } catch (error) {
-      Alert.alert('Error', 'Failed to sign in. Please check your email and password.'); // Handle sign in errors
-    }
-  };
-
-  const handleForgotPassword = () => {
-    navigation.navigate('ForgetPassword')
-    console.log('Forgot Password pressed')
-  }
-
   const handleSignUp = () => {
-    navigation.navigate('SignUp')
-    console.log('Sign Up pressed')
-  }
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log("User signed up");
+
+        navigation.goBack()
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        Alert.alert('Error', 'Invalid email or password format')
+      });
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <Text style={styles.welcomeText}>Welcome!</Text>
+        <Text style={styles.welcomeText}>Sign Up!</Text>
       </View>
 
       <View style={styles.inputContainer}>
         <TextInput style={styles.input} value={email} onChangeText={setEmail} placeholder='Email' />
       </View>
-
+      
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -50,22 +47,9 @@ export default function LogInScreen({ navigation }: NavigationProp) {
         />
       </View>
 
-      <View style={styles.loginButton}>
-        <TouchableOpacity onPress={handleLogin}>
-          <Text style={styles.loginButtonText}>Log In</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.bottomButton}>
-        <TouchableOpacity onPress={handleForgotPassword}>
-          <Text style={[styles.buttomText, { color: 'white' }]}>Forgot password?</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.bottomButton}>
-        <Text style={styles.buttomText}>Don't have an account? </Text>
+      <View style={styles.signupButton}>
         <TouchableOpacity onPress={handleSignUp}>
-          <Text style={[styles.buttomText, { color: 'white', marginTop: 5 }]}>Sign Up</Text>
+          <Text style={styles.signupButtonText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -98,7 +82,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingHorizontal: 10,
   },
-  loginButton: {
+  signupButton: {
     backgroundColor: Colors.primary,
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -109,7 +93,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'white',
   },
-  loginButtonText: {
+  signupButtonText: {
     color: 'white',
     fontSize: 24,
     fontWeight: 'bold',
@@ -119,17 +103,5 @@ const styles = StyleSheet.create({
     fontSize: 64,
     fontWeight: 'bold',
     letterSpacing: 3,
-  },
-  bottomButton: {
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    borderRadius: 20,
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  buttomText: {
-    color: Colors.tertiary,
-    fontSize: 18,
-    fontWeight: 'bold',
   },
 })
