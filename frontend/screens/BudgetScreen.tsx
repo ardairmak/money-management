@@ -1,155 +1,186 @@
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
-import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { budgetData } from '../constants/MockData'
-import { Colors } from '../constants/Colors'
+import { Colors } from '../constants/Colors';
+import { Category, IncomeExpense } from '../type.d';
+
+interface displayData {
+  month: number;
+  data: displayEntry[];
+  total: string;
+}
+
+interface displayEntry {
+  id: number;
+  name: string;
+  isIncome: boolean;
+  price: number;
+  icon: Category;
+}
 
 export default function BudgetScreen() {
-  let Data = budgetData
+  const [totalMoney, setTotalMoney] = useState(1.65);
+  const [filteredData, setFilteredData] = useState<displayData[]>([]);
+  const [unfilteredData, setUnfilteredData] = useState<IncomeExpense[]>([]);
 
-  const [totalMoney, setTotalMoney] = useState(1.65)
-  const [filteredData, setFilteredData] = useState(Data)
-
-
-  const parseNegativeAmount = (amount: number) => {
-    if (amount < 0) {
-        return amount * -1
-        }
-    return amount
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  
+  function getMonthName(monthIndex: number): string {
+    if (monthIndex < 0 || monthIndex > 11) {
+      throw new Error("Invalid month index");
+    }
+    return monthNames[monthIndex];
   }
 
-  const renderItem = ({ item }: { item: { id: string; name: string; amount: string; icon: string; type: string } }) => (
+  useEffect(() => {
+    fetchIncomeExpense()
+      .then((data) => {
+        console.log('test');
+        setUnfilteredData(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
+  const fetchIncomeExpense = async () => {
+    try {
+      const response = await fetch(`http://192.168.0.30:8080/income-expense`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    } catch (error) {
+      console.error('Failed to fetch income expense:', error);
+      throw error;
+    }
+  };
+
+  const parseNegativeAmount = (amount: number) => {
+    return amount < 0 ? amount * -1 : amount;
+  };
+
+  const renderItem = ({ item }: { item: displayEntry }) => (
     <View>
       <View style={styles.separator} />
       <View style={styles.budgetContainer}>
         <View style={styles.budgetItemContainer}>
+          
           {renderIcon(item.icon)}
-          <Text style={styles.budgetItem}>{item.name}</Text>
-          <Text style={[styles.amount, item.type === 'expense' ? styles.negativeAmount : styles.positiveAmount]}>
-            {item.type === 'income' ? '+' : '-'}
-            {item.amount}
+          <Text style={styles.budgetText}>{item.name}</Text>
+          <View style={styles.test}>
+          <Text style={[styles.amount, item.isIncome ? styles.positiveAmount : styles.negativeAmount]}>
+            {item.isIncome ? '+' : '-'}
+            {item.price}
+            
           </Text>
+          </View>
         </View>
       </View>
     </View>
-  )
+  );
 
-  const renderIcon = (iconName: string) => {
-    switch (iconName) {
-      case 'home':
-        return <FontAwesome name='home' color={Colors.primary} style={styles.budgetItem} />
-      case 'money':
-        return <FontAwesome name='money' color={Colors.primary} style={styles.budgetItem} />
-      case 'netflix':
-        return <MaterialCommunityIcons name='netflix' color={Colors.primary} style={styles.budgetItem} />
-      case 'shopping-cart':
-        return <FontAwesome name='shopping-cart' color={Colors.primary} style={styles.budgetItem} />
+  const renderIcon = (category: Category) => {
+    switch (category) {
+      case Category.NONE:
+        return <FontAwesome name='dot-circle-o' color={Colors.primary} style={styles.budgetItem} />;
+      case Category.FOOD:
+        return <MaterialCommunityIcons name='food' color={Colors.primary} style={styles.budgetItem} />;
+      case Category.TRANSPORTATION:
+        return <FontAwesome name='car' color={Colors.primary} style={styles.budgetItem} />;
+      case Category.ENTERTAINMENT:
+        return <FontAwesome name='gamepad' color={Colors.primary} style={styles.budgetItem} />;
+      case Category.UTILITIES:
+        return <MaterialCommunityIcons name='toolbox-outline' color={Colors.primary} style={styles.budgetItem} />;
+      case Category.SHOPPING:
+        return <FontAwesome name='shopping-cart' color={Colors.primary} style={styles.budgetItem} />;
+      case Category.HEALTH:
+        return <FontAwesome name='heartbeat' color={Colors.primary} style={styles.budgetItem} />;
+      case Category.EDUCATION:
+        return <FontAwesome name='book' color={Colors.primary} style={styles.budgetItem} />;
+      case Category.OTHER:
+        return <FontAwesome name='th-large' color={Colors.primary} style={styles.budgetItem} />;
       default:
-        return null
+        return null;
     }
-  }
+  };
 
-  const handleTotalPress = (month: string) => {
-    let totalAmount = 0
+  const handleTotalPress = (month: number) => {
+    let totalAmount = 0;
 
-    Data.forEach((item) => {
-      if (item.month === month) {
-        item.data.forEach((item) => {
-          const amount = parseFloat(item.amount)
-
-          if (item.type === 'expense') {
-            totalAmount -= amount
-          } else if (item.type === 'income') {
-            totalAmount += amount
-          }
-        })
+    const giderData = unfilteredData.reduce((acc, item) => {
+      const itemDate = new Date(item.date); // Convert the date string to a Date object
+      if (itemDate.getMonth() === month) {
+        const amount = parseFloat(item.price);
+        totalAmount += (item.isIncome) ? amount : -amount;
+        acc.push({
+          id: Math.random(),
+          name: item.name,
+          isIncome: item.isIncome,
+          price: amount,
+          icon: item.category
+        });
       }
-    })
+      return acc;
+    }, [] as displayEntry[]);
 
-    console.log('Total pressed')
-    console.log('Total amount:', totalAmount)
-    setTotalMoney(totalAmount)
-    setFilteredData(Data)
-  }
+    console.log('Total expense:', totalAmount);
+    setTotalMoney(totalAmount);
+    setFilteredData([{ month, data: giderData, total: totalAmount.toFixed(2) }]);
+  };
 
-  const handleGelirPress = (month: string) => {
-    let totalIncome = 0
-    const gelirData = Data.map((item) => {
-      let monthlyIncome = 0
-      let incomeItems: any[] = []
+  const handleGelirPress = (month: number) => {
+    let totalIncome = 0;
 
-      // First iteration to calculate total income for the specific month
-      if (item.month === month) {
-        item.data.forEach((dataItem) => {
-          const amount = parseFloat(dataItem.amount) * (dataItem.type === 'income' ? 1 : -1)
-          if (amount > 0) {
-            monthlyIncome += amount
-          }
-        })
+    const gelirData = unfilteredData.reduce((acc, item) => {
+      const itemDate = new Date(item.date); // Convert the date string to a Date object
+      if (itemDate.getMonth()  === month && item.isIncome) {
+        const amount = parseFloat(item.price);
+        totalIncome += amount;
+        acc.push({
+          id: Math.random(),
+          name: item.name,
+          isIncome: item.isIncome,
+          price: amount,
+          icon: item.category
+        });
       }
+      return acc;
+    }, [] as displayEntry[]);
 
-      // Second iteration to filter and process income items for the specific month
-      item.data.forEach((dataItem) => {
-        const amount = parseFloat(dataItem.amount) * (dataItem.type === 'income' ? 1 : -1)
-        if (amount > 0) {
-          incomeItems.push({ ...dataItem })
-        }
-      })
 
-      // Update totalIncome for the specific month
-      if (item.month === month) {
-        totalIncome = monthlyIncome
+    console.log('Total income:', totalIncome);
+    setTotalMoney(totalIncome);
+    setFilteredData([{ month, data: gelirData, total: totalIncome.toFixed(2) }]);
+  };
+
+  const handleGiderPress = (month: number) => {
+    let totalExpense = 0;
+
+    const giderData = unfilteredData.reduce((acc, item) => {
+      const itemDate = new Date(item.date); // Convert the date string to a Date object
+      if (itemDate.getMonth() === month && !item.isIncome) {
+        const amount = parseFloat(item.price);
+        totalExpense += amount;
+        acc.push({
+          id: Math.random(),
+          name: item.name,
+          isIncome: item.isIncome,
+          price: amount,
+          icon: item.category
+        });
       }
-      return {
-        month: item.month,
-        data: incomeItems,
-        total: monthlyIncome.toFixed(2),
-      }
-    })
+      return acc;
+    }, [] as displayEntry[]);
 
-    console.log('Total income:', totalIncome)
-    setTotalMoney(totalIncome)
-    setFilteredData(gelirData)
-  }
-
-  const handleGiderPress = (month: string) => {
-    let totalExpense = 0
-    const giderData = Data.map((item) => {
-      let monthlyExpense = 0
-      let expenseItems: any[] = []
-
-      // First iteration to calculate total income for the specific month
-      if (item.month === month) {
-        item.data.forEach((dataItem) => {
-          const amount = parseFloat(dataItem.amount) * (dataItem.type === 'income' ? 1 : -1)
-          if (amount < 0) {
-            monthlyExpense += amount
-          }
-        })
-      }
-      // Second iteration to filter and process income items for the specific month
-      item.data.forEach((dataItem) => {
-        const amount = parseFloat(dataItem.amount) * (dataItem.type === 'income' ? 1 : -1)
-        if (amount < 0) {
-          expenseItems.push({ ...dataItem })
-        }
-      })
-      // Update totalIncome for the specific month
-      if (item.month === month) {
-        totalExpense = monthlyExpense
-      }
-      return {
-        month: item.month,
-        data: expenseItems,
-        total: monthlyExpense.toFixed(2),
-      }
-    })
-
-    console.log('Total expense:', totalExpense)
-    setTotalMoney(totalExpense)
-    setFilteredData(giderData)
-  }
+    console.log('Total expense:', totalExpense);
+    setTotalMoney(totalExpense);
+    setFilteredData([{ month, data: giderData, total: totalExpense.toFixed(2) }]);
+  };
 
   return (
     <View style={styles.container}>
@@ -159,20 +190,21 @@ export default function BudgetScreen() {
           size={45}
           style={[styles.currencyIcon, { color: totalMoney < 0 ? '#cc0000' : '#06c258' }]}
         />
-
-        <Text style={[styles.total, totalMoney < 0 ? styles.negativeAmount : styles.positiveAmount]}>{parseNegativeAmount(totalMoney)}</Text>
+        <Text style={[styles.total, totalMoney < 0 ? styles.negativeAmount : styles.positiveAmount]}>
+          {parseNegativeAmount(totalMoney)}
+        </Text>
       </View>
 
       <View style={[styles.paringRow, { marginLeft: 35 }]}>
-        <TouchableOpacity style={styles.pair} onPress={() => handleTotalPress('April')}>
+        <TouchableOpacity style={styles.pair} onPress={() => handleTotalPress(4)}>
           <Text style={styles.title}>Total</Text>
           <MaterialCommunityIcons name='ellipse' size={15} color={Colors.white} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.pair} onPress={() => handleGelirPress('April')}>
+        <TouchableOpacity style={styles.pair} onPress={() => handleGelirPress(4)}>
           <Text style={styles.title}>Income</Text>
           <MaterialCommunityIcons name='ellipse' size={15} color={Colors.white} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.pair} onPress={() => handleGiderPress('April')}>
+        <TouchableOpacity style={styles.pair} onPress={() => handleGiderPress(4)}>
           <Text style={styles.title}>Expense</Text>
           <MaterialCommunityIcons name='ellipse' size={15} color={Colors.white} />
         </TouchableOpacity>
@@ -180,23 +212,20 @@ export default function BudgetScreen() {
 
       <FlatList
         data={filteredData}
-        renderItem={({ item }) => {
-          // Check if there are any data items for the month
-          if (item.data.length > 0) {
-            return (
-              <View style={styles.monthBox}>
-                <Text style={styles.monthTitle}>{item.month}</Text>
-                <FlatList data={item.data} renderItem={renderItem} keyExtractor={(item) => item.id} />
-              </View>
-            )
-          } else {
-            return null // Skip rendering the month box if there are no data items
-          }
-        }}
+        renderItem={({ item }) => (
+          <View style={styles.monthBox}>
+            <Text style={styles.monthTitle}>{getMonthName(item.month)}</Text>
+            <FlatList
+              data={item.data}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id.toString()}
+            />
+          </View>
+        )}
         keyExtractor={(_, index) => index.toString()}
       />
     </View>
-  )
+  );
 }
 const styles = StyleSheet.create({
   container: {
@@ -210,9 +239,21 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     marginVertical: 5,
     color: 'white',
+    // backgroundColor: 'red',
+    // width: '50%'
+  },
+  budgetText: {
+    fontSize: 15,
+    fontWeight: '300',
+    marginLeft: 50,
+    marginVertical: 5,
+    color: 'white',
+    width: '25%',
+    // backgroundColor: 'red',
   },
   budgetContainer: {
     marginTop: 10,
+    // backgroundColor: 'red'
   },
   budgetItemContainer: {
     flexDirection: 'row',
@@ -220,8 +261,13 @@ const styles = StyleSheet.create({
   amount: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginHorizontal: 120,
+    marginHorizontal: 80,
     marginVertical: 5,
+    // backgroundColor: 'red'
+  },
+  test: {
+    // backgroundColor: 'red'
+
   },
   negativeAmount: {
     color: '#cc0000',
@@ -279,14 +325,14 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginHorizontal: 15,
     marginBottom: 15, // Add margin bottom to space boxes from each other
-    elevation: 3, // Add elevation to give it a shadow effect
   },
-  /* outerBox: {
-      flex: 1, // Make the outerBox take up all remaining space after the top sections
-      backgroundColor: '#9094ac', // Light background color for the box
-      borderRadius: 10, // Add some rounded corners for a nicer look
-      marginTop: 20, // Add some margin from the top section
-      marginBottom: 20, // Add some margin from the bottom
-      marginHorizontal: 10, // Add horizontal margin for spacing
-    },*/
+  monthBox2:{
+    backgroundColor: Colors.tertiary, //itemColor
+    borderRadius: 15, // Add border radius to make it look like a box
+    padding: 10, // Add padding to space content from the box edges
+    marginTop: 1,
+    // Add margin bottom to space boxes from each other
+  }
+  
+  
 })
