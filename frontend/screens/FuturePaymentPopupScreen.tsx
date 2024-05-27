@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react'
-import { Text, View, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import { Text, View, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import { Dropdown } from 'react-native-element-dropdown'
 import { FontAwesome5 } from '@expo/vector-icons'
@@ -50,16 +50,15 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
     reminderDate.setDate(reminderDate.getDate() - (reminder as unknown as number))
     return reminderDate
   }
-
-  const handleSave = () => {
+  const handleSave = async () => {
     const payment: FuturePayment = {
       name: name,
-      price: price as unknown as number,
-      renewalPeriod: (renewalPeriod as RenewalPeriod) || RenewalPeriod.NONE,
-      repetition: (repetition as unknown as number) || 0,
+      price: parseFloat(price),
+      renewalPeriod: RenewalPeriod[renewalPeriod as keyof typeof RenewalPeriod] || RenewalPeriod.NONE,
+      repetition: parseInt(repetition) || 0,
       date: date,
       reminder: calculateReminderDate(),
-      category: category as Category,
+      category: Category[category as keyof typeof Category],
       description: description,
     }
     console.log(payment)
@@ -68,7 +67,26 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
       return alert('Please provide payment name or price.')
     }
 
-    navigation.goBack()
+    try {
+      const response = await fetch('http://172.20.10.2:8080/upcoming-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payment),
+      })
+      console.log(response)
+
+      if (!response.ok) {
+        throw new Error('Failed to add upcoming payment')
+      }
+
+      Alert.alert('Success', 'Upcoming payment added successfully')
+      navigation.goBack()
+    } catch (error) {
+      console.error(error)
+      Alert.alert('Error', 'There was a problem adding the upcoming payment')
+    }
   }
 
   return (

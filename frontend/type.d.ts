@@ -10,7 +10,16 @@ export type MainStackNavigatorParamList = {
   SignUp: undefined // SignUpScreen
   ForgetPassword: undefined // SignUpScreen
 }
-export type NavigationProp = NativeStackScreenProps<MainStackNavigatorParamList, Main, FPPS, IEPS, APS, LogIn, SignUp, ForgetPassword>
+export type NavigationProp = NativeStackScreenProps<
+  MainStackNavigatorParamList,
+  Main,
+  FPPS,
+  IEPS,
+  APS,
+  LogIn,
+  SignUp,
+  ForgetPassword
+>
 
 export interface IncomeExpense {
   isIncome: boolean
@@ -26,8 +35,8 @@ export interface FuturePayment {
   price: int
   renewalPeriod: RenewalPeriod
   repetition: int
-  date: Date
-  reminder: Date | undefined
+  date: string
+  reminder: string | undefined
   category: Category
   description: string
 }
@@ -36,8 +45,8 @@ export interface Event {
   name: string
   date: Date
   isAllDay: boolean
-  timeStart: Date 
-  timeEnd: Date 
+  timeStart: Date
+  timeEnd: Date
   reminder: Date | undefined
   renewalPeriod: RenewalPeriod
   color: string

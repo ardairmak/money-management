@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Image,
   KeyboardAvoidingView,
@@ -11,59 +11,70 @@ import {
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { ScrollView, Swipeable } from 'react-native-gesture-handler'
+import axios from 'axios'
 
 import { Colors } from '../constants/Colors'
 import { getDaysDifference } from '../helpers/dateHelpers'
 import { iconPaths } from '../constants/IconPaths'
-import { MockData } from '../constants/MockData'
+import { FuturePayment } from '../type'
+import { useIsFocused } from '@react-navigation/native'
 
 const UpcomingPaymentScreen = () => {
-  let data = MockData
-
   const [searchItem, setSearchItem] = useState('')
-  const [filteredData, setFilteredData] = useState(data)
+  const [data, setData] = useState<FuturePayment[]>([])
+  const [filteredData, setFilteredData] = useState<FuturePayment[]>([])
 
-  data.sort((a, b) => {
-    const differenceInDaysA = getDaysDifference(a.date)
-    const differenceInDaysB = getDaysDifference(b.date)
-    return differenceInDaysA - differenceInDaysB
-  })
+  const isFocused = useIsFocused()
 
-  // Add more expense items here if needed
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://172.20.10.2:8080/upcoming-payment')
+        const fetchedData = response.data.map((item: FuturePayment) => ({
+          ...item,
+          date: formatDateString(item.date), // Ensure the date is formatted correctly
+        }))
+        const sortedData = fetchedData.sort((a, b) => {
+          const differenceInDaysA = getDaysDifference(a.date)
+          const differenceInDaysB = getDaysDifference(b.date)
+          return differenceInDaysA - differenceInDaysB
+        })
+        setData(sortedData)
+        setFilteredData(sortedData)
+        console.log('Data fetched:', sortedData)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    fetchData()
+  }, [isFocused])
+
+  const formatDateString = (dateString: string): string => {
+    if (!dateString) return ''
+    const date = new Date(dateString)
+    const options = { year: 'numeric', month: 'long', day: 'numeric' }
+    return date.toLocaleDateString('en-US', options) // Format to "Month Day, Year"
+  }
 
   const getItemBackgroundColor = (date: string) => {
-    const differenceIndays = getDaysDifference(date)
-    return differenceIndays <= 31 ? Colors.tertiary : Colors.upcomingPaymentColor
+    const differenceInDays = getDaysDifference(date)
+    return differenceInDays <= 31 ? Colors.tertiary : Colors.upcomingPaymentColor
   }
 
   const handleSearch = (text: string) => {
     setSearchItem(text)
-    const filteredData = data.filter((item) => item.name.toLowerCase().startsWith(searchItem.toLowerCase()))
+    const filteredData = data.filter((item) => item.name.toLowerCase().startsWith(text.toLowerCase()))
     setFilteredData(filteredData)
   }
 
-  const handleEdit = (id: string) => {
-    console.log('Edit', id)
+  const handleEdit = () => {
+    console.log('Edit')
   }
 
-  const handleDelete = (id: string) => {
-    data = filteredData.filter((item) => item.id !== id)
-    setFilteredData(data)
-  }
+  const handleDelete = () => {}
 
-  const renderItem = ({
-    item,
-    index,
-  }: {
-    item: {
-      id: string
-      name: string
-      date: string
-      price: string
-      icon: string
-    }
-    index: number
-  }) => {
+  const renderItem = ({ item, index }: { item: FuturePayment; index: number }) => {
     const backgroundColor = getItemBackgroundColor(item.date)
     const itemNameColor = backgroundColor === 'white' ? 'black' : 'white'
 
@@ -71,7 +82,7 @@ const UpcomingPaymentScreen = () => {
       return (
         <View style={[styles.swipeActions, { backgroundColor: backgroundColor }]}>
           <TouchableOpacity
-            onPress={() => handleEdit(item.id)}
+            onPress={() => handleEdit()}
             style={{
               width: 50,
               height: 50,
@@ -84,12 +95,11 @@ const UpcomingPaymentScreen = () => {
             <Ionicons
               name='information-circle-outline'
               size={30}
-              e
               style={{ justifyContent: 'center', alignItems: 'center', color: 'black' }}
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => handleDelete(item.id)}
+            onPress={() => handleDelete()}
             style={{
               width: 50,
               height: 50,
@@ -121,15 +131,15 @@ const UpcomingPaymentScreen = () => {
                 borderBottomLeftRadius: index === filteredData.length - 1 ? 20 : 0,
                 borderBottomRightRadius: index === filteredData.length - 1 ? 20 : 0,
               },
-              index === data.length - 1 && styles.noBottomBorder,
+              index === filteredData.length - 1 && styles.noBottomBorder,
             ]}
           >
             <Image source={iconPaths[item.name]} style={styles.itemIcon} />
             <View style={styles.itemDetails}>
-              <Text style={(styles.itemName, { color: itemNameColor })}>{item.name}</Text>
+              <Text style={[styles.itemName, { color: itemNameColor }]}>{item.name}</Text>
               <Text style={styles.itemDate}>{item.date}</Text>
             </View>
-            <Text style={styles.itemPrice}>{item.price}</Text>
+            <Text style={styles.itemPrice}>${item.price}</Text>
           </Animated.View>
         </View>
       </Swipeable>
@@ -153,9 +163,12 @@ const UpcomingPaymentScreen = () => {
               onChange={(e) => handleSearch(e.nativeEvent.text)}
             />
           </View>
-          {/* Fourth Section (Upcoming Payments) */}
-
-          <ScrollView style={[styles.upcomingContainer, { height: data.length * 70 > 350 ? 350 : data.length * 70 }]}>
+          <ScrollView
+            style={[
+              styles.upcomingContainer,
+              { height: filteredData.length * 70 > 350 ? 350 : filteredData.length * 70 },
+            ]}
+          >
             <Text style={styles.upcomingTitle}>Upcoming Payments</Text>
             {filteredData.map((item, index) => renderItem({ item, index }))}
             {filteredData.length === 0 && <Text style={styles.noPaymentText}>No upcoming payment!</Text>}
@@ -207,7 +220,6 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 25,
   },
-
   middleSection: {
     alignItems: 'center',
     marginTop: 20,
@@ -268,7 +280,6 @@ const styles = StyleSheet.create({
   },
   flatListContentContainer: {
     marginBottom: 20,
-    // Adjust the padding as needed
   },
   upcomingContainer: {
     borderRadius: 20,
