@@ -4,8 +4,8 @@ import { Ionicons } from '@expo/vector-icons'
 
 import { Colors } from '../constants/Colors'
 
-let toggleHamburger: () => void
-let closeHamburger: () => void
+let toggleHamburger = () => {}
+let closeHamburger = () => {}
 
 export default function HamburgerBar() {
   const [isHamburgerVisible, setIsHamburgerVisible] = useState(false)

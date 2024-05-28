@@ -24,12 +24,14 @@ const UpcomingPaymentScreen = () => {
   const [data, setData] = useState<FuturePayment[]>([])
   const [filteredData, setFilteredData] = useState<FuturePayment[]>([])
 
+  console.log("aaaa")
+
   const isFocused = useIsFocused()
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://172.20.10.2:8080/upcoming-payment')
+        const response = await axios.get('http://192.168.43.246:8080/upcoming-payment')
         const fetchedData = response.data.map((item: FuturePayment) => ({
           ...item,
           date: formatDateString(item.date), // Ensure the date is formatted correctly

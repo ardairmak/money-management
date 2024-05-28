@@ -10,16 +10,6 @@ interface CustomHeaderProps {
 }
 
 const MainComponent: React.FC<CustomHeaderProps> = ({ navigation }) => {
-  useEffect(() => {
-    // Your initialization function here
-    const initializeApp = () => {
-      navigation.navigate('LogIn')
-      console.log('App has started');
-    };
-
-    initializeApp();
-  }, []);
-
   return (
     <Fragment>
       <BottomTabBarNavigation navigation={navigation} />
