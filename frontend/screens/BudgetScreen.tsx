@@ -113,13 +113,14 @@ export default function BudgetScreen() {
   const handleTotalPress = (month: number) => {
     let totalAmount = 0;
 
-    unfilteredData.reduce((acc, item) => {
+    const giderData = unfilteredData.reduce((acc, item) => {
       const itemDate = new Date(item.date); // Convert the date string to a Date object
       if (itemDate.getMonth() === month) {
         const amount = parseFloat(item.price);
         totalAmount += (item.isIncome) ? amount : -amount;
       }
-    });
+      return acc;
+    }, [] as displayEntry[]);
 
     console.log('Total expense:', totalAmount);
     setTotalMoney(totalAmount);
