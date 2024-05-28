@@ -68,7 +68,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
     }
 
     try {
-      const response = await fetch('http://172.20.10.2:8080/upcoming-payment', {
+      const response = await fetch('http://192.168.43.246:8080/upcoming-payment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

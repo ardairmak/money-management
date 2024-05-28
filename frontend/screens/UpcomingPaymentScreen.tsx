@@ -168,7 +168,6 @@ const UpcomingPaymentScreen = () => {
           <ScrollView
             style={[
               styles.upcomingContainer,
-              { height: filteredData.length * 70 > 350 ? 350 : filteredData.length * 70 },
             ]}
           >
             <Text style={styles.upcomingTitle}>Upcoming Payments</Text>
@@ -289,6 +288,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     paddingTop: 10,
     backgroundColor: Colors.tertiary,
+    maxHeight: '65%',
   },
   noBottomBorder: {
     borderBottomWidth: 0,
