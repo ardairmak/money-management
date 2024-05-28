@@ -31,7 +31,7 @@ const UpcomingPaymentScreen = () => {
   const navigation = useNavigation<NavigationProp>()
   const isFocused = useIsFocused()
   const fetchData = async () => {
-    try {
+  try {
       const response = await axios.get('http://172.20.10.2:8080/upcoming-payment')
       console.log(response)
       const fetchedData = response.data.map((item: FuturePayment) => ({
@@ -297,6 +297,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     paddingTop: 10,
     backgroundColor: Colors.tertiary,
+    maxHeight: '65%',
   },
   noBottomBorder: {
     borderBottomWidth: 0,

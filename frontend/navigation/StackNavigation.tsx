@@ -19,7 +19,7 @@ const Stack = createStackNavigator<MainStackNavigatorParamList>()
 export default function StackNavigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="LogIn">
         <Stack.Screen name='Main' component={MainComponent} options={{ headerShown: false }} />
         <Stack.Screen
           name='IEPS'
@@ -67,16 +67,10 @@ export default function StackNavigation() {
         <Stack.Screen
           name='SignUp'
           component={SignUpScreen}
-          options={{
-            headerShown: false,
-          }}
         />
         <Stack.Screen
           name='ForgetPassword'
           component={ForgetPasswordScreen}
-          options={{
-            headerShown: false,
-          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

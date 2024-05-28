@@ -14,7 +14,7 @@ export default function LogInScreen({ navigation }: NavigationProp) {
   const handleLogin = async () => {
     try {
       await logIn(email, password); // Call the signIn function from the authentication context
-      navigation.goBack()
+      navigation.navigate('Main')
     } catch (error) {
       Alert.alert('Error', 'Failed to sign in. Please check your email and password.'); // Handle sign in errors
     }

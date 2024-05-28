@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '../constants/Colors'
 import { NavigationProp } from '../type'
 
-let closeFABPopup: () => void
+let closeFABPopup = () => {}
 
 function FloatingActionButtonPopup({ navigation }: NavigationProp) {
   const onButtonPressA = () => {
