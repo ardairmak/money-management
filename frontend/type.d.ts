@@ -3,23 +3,14 @@ import { ColorValue } from 'react-native'
 
 export type MainStackNavigatorParamList = {
   Main: undefined
-  FPPS: undefined // FuturePaymentPopupScreen
+  FPPS: { payment?: FuturePayment } // FuturePaymentPopupScreen
   IEPS: undefined // IncomeExpensePopupScreen
   APS: undefined // ActivityPopupScreen
   LogIn: undefined // LogInScreen
   SignUp: undefined // SignUpScreen
   ForgetPassword: undefined // SignUpScreen
 }
-export type NavigationProp = NativeStackScreenProps<
-  MainStackNavigatorParamList,
-  Main,
-  FPPS,
-  IEPS,
-  APS,
-  LogIn,
-  SignUp,
-  ForgetPassword
->
+export type NavigationProp = NativeStackScreenProps<MainStackNavigatorParamList>
 
 export interface IncomeExpense {
   isIncome: boolean
@@ -31,6 +22,7 @@ export interface IncomeExpense {
 }
 
 export interface FuturePayment {
+  id: string
   name: string
   price: int
   renewalPeriod: RenewalPeriod

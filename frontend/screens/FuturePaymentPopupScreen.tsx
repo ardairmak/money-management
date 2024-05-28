@@ -3,13 +3,16 @@ import { Text, View, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert 
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import { Dropdown } from 'react-native-element-dropdown'
 import { FontAwesome5 } from '@expo/vector-icons'
-
+import { useRoute } from '@react-navigation/native'
 import { Colors } from '../constants/Colors'
-import { Category, FuturePayment, NavigationProp, RenewalPeriod } from '../type.d'
+import { Category, FuturePayment, MainStackNavigatorParamList, NavigationProp, RenewalPeriod } from '../type.d'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+
+type FuturePaymentPopupScreenProps = NativeStackScreenProps<MainStackNavigatorParamList, 'FPPS'>
 
 const renewalPeriodData = Object.keys(RenewalPeriod).map((key) => ({
   label: RenewalPeriod[key as keyof typeof RenewalPeriod],
-  value: key,
+  value: RenewalPeriod[key as keyof typeof RenewalPeriod],
 }))
 
 const reminderData = [
@@ -20,18 +23,24 @@ const reminderData = [
 
 const categoryData = Object.keys(Category).map((key) => ({
   label: Category[key as keyof typeof Category],
-  value: key,
+  value: Category[key as keyof typeof Category],
 }))
 
-export default function FuturePaymentPopupScreen({ navigation }: NavigationProp) {
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState('')
-  const [renewalPeriod, setRenewalPeriod] = useState('')
-  const [repetition, setRepetition] = useState('')
-  const [date, setDate] = useState(new Date())
-  const [reminder, setReminder] = useState('')
-  const [category, setCategory] = useState('')
-  const [description, setDescription] = useState('')
+export default function FuturePaymentPopupScreen({ navigation }: FuturePaymentPopupScreenProps) {
+  const route = useRoute()
+  const routeParams = route.params as { payment?: FuturePayment }
+  const paymentToEdit = routeParams?.payment
+
+  const initialDate = paymentToEdit?.date ? new Date(paymentToEdit.date) : new Date()
+  console.log(initialDate)
+  const [name, setName] = useState(paymentToEdit?.name || '')
+  const [price, setPrice] = useState(paymentToEdit?.price.toString() || '')
+  const [renewalPeriod, setRenewalPeriod] = useState<RenewalPeriod>(paymentToEdit?.renewalPeriod || RenewalPeriod.NONE)
+  const [repetition, setRepetition] = useState(paymentToEdit?.repetition?.toString() || '')
+  const [date, setDate] = useState(initialDate)
+  const [reminder, setReminder] = useState(paymentToEdit?.reminder || '0')
+  const [category, setCategory] = useState(paymentToEdit?.category || '')
+  const [description, setDescription] = useState(paymentToEdit?.description || '')
 
   const [isAnyTextInputFocused, setIsAnyTextInputFocused] = useState(false)
   const [showDatePicker, setShowDatePicker] = useState(false)
@@ -47,18 +56,19 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
 
   const calculateReminderDate = () => {
     const reminderDate = new Date(date)
-    reminderDate.setDate(reminderDate.getDate() - (reminder as unknown as number))
+    reminderDate.setDate(reminderDate.getDate() - parseInt(reminder))
     return reminderDate
   }
   const handleSave = async () => {
     const payment: FuturePayment = {
+      id: paymentToEdit?.id || '',
       name: name,
       price: parseFloat(price),
-      renewalPeriod: RenewalPeriod[renewalPeriod as keyof typeof RenewalPeriod] || RenewalPeriod.NONE,
+      renewalPeriod: renewalPeriod,
       repetition: parseInt(repetition) || 0,
-      date: date,
-      reminder: calculateReminderDate(),
-      category: Category[category as keyof typeof Category],
+      date: date.toISOString(),
+      reminder: calculateReminderDate().toISOString(),
+      category: category as Category,
       description: description,
     }
     console.log(payment)
@@ -68,8 +78,12 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
     }
 
     try {
-      const response = await fetch('http://192.168.43.246:8080/upcoming-payment', {
-        method: 'POST',
+      const url = paymentToEdit
+        ? `http://172.20.10.2:8080/upcoming-payment/${paymentToEdit.id}`
+        : 'http://172.20.10.2:8080/upcoming-payment'
+      const method = paymentToEdit ? 'PUT' : 'POST'
+      const response = await fetch(url, {
+        method: method,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -81,7 +95,10 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
         throw new Error('Failed to add upcoming payment')
       }
 
-      Alert.alert('Success', 'Upcoming payment added successfully')
+      Alert.alert(
+        'Success',
+        paymentToEdit ? 'Upcoming payment updated successfully' : 'Upcoming payment added successfully',
+      )
       navigation.goBack()
     } catch (error) {
       console.error(error)
@@ -138,7 +155,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             placeholder={'Choose a period'}
             value={renewalPeriod}
             onChange={(item) => {
-              setRenewalPeriod(item.value)
+              setRenewalPeriod(item.value as RenewalPeriod)
             }}
           />
         </View>
@@ -210,7 +227,7 @@ export default function FuturePaymentPopupScreen({ navigation }: NavigationProp)
             placeholder={'Choose a category'}
             value={category}
             onChange={(item) => {
-              setCategory(item.value ? item.value : '')
+              setCategory(item.value as Category)
             }}
           />
         </View>
