@@ -41,6 +41,7 @@ export default function BudgetScreen() {
       .then((data) => {
         console.log('test');
         setUnfilteredData(data);
+        setData();
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -49,7 +50,7 @@ export default function BudgetScreen() {
 
   const fetchIncomeExpense = async () => {
     try {
-      const response = await fetch(`http://192.168.0.30:8080/income-expense`);
+      const response = await fetch(`http://172.20.10.2:8080/income-expense`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -112,25 +113,35 @@ export default function BudgetScreen() {
   const handleTotalPress = (month: number) => {
     let totalAmount = 0;
 
-    const giderData = unfilteredData.reduce((acc, item) => {
+    unfilteredData.reduce((acc, item) => {
       const itemDate = new Date(item.date); // Convert the date string to a Date object
       if (itemDate.getMonth() === month) {
         const amount = parseFloat(item.price);
         totalAmount += (item.isIncome) ? amount : -amount;
-        acc.push({
-          id: Math.random(),
-          name: item.name,
-          isIncome: item.isIncome,
-          price: amount,
-          icon: item.category
-        });
       }
-      return acc;
-    }, [] as displayEntry[]);
+    });
 
     console.log('Total expense:', totalAmount);
     setTotalMoney(totalAmount);
-    setFilteredData([{ month, data: giderData, total: totalAmount.toFixed(2) }]);
+    setData()
+    //setFilteredData([{ month, data: giderData, total: totalAmount.toFixed(2) }]);
+  };
+  const setData = () => {
+    if (unfilteredData.length > 0) {
+      const formattedData: displayData[] = Array.from({ length: 12 }, (_, month) => {
+        const monthData = unfilteredData.filter(item => new Date(item.date).getMonth() === month)
+          .map(item => ({
+            id: Math.random(),
+            name: item.name,
+            isIncome: item.isIncome,
+            price: parseFloat(item.price),
+            icon: item.category
+          }));
+        const total = monthData.reduce((acc, item) => acc + (item.isIncome ? item.price : -item.price), 0);
+        return { month, data: monthData, total: total.toFixed(2) };
+      }).filter(month => month.data.length > 0); // Filter out empty months
+      setFilteredData(formattedData);
+    }
   };
 
   const handleGelirPress = (month: number) => {
@@ -155,7 +166,8 @@ export default function BudgetScreen() {
 
     console.log('Total income:', totalIncome);
     setTotalMoney(totalIncome);
-    setFilteredData([{ month, data: gelirData, total: totalIncome.toFixed(2) }]);
+    setData()
+    //setFilteredData([{ month, data: gelirData, total: totalIncome.toFixed(2) }]);
   };
 
   const handleGiderPress = (month: number) => {
@@ -179,7 +191,8 @@ export default function BudgetScreen() {
 
     console.log('Total expense:', totalExpense);
     setTotalMoney(totalExpense);
-    setFilteredData([{ month, data: giderData, total: totalExpense.toFixed(2) }]);
+    setData()
+    //setFilteredData([{ month, data: giderData, total: totalExpense.toFixed(2) }]);
   };
 
   return (
@@ -211,19 +224,19 @@ export default function BudgetScreen() {
       </View>
 
       <FlatList
-        data={filteredData}
-        renderItem={({ item }) => (
-          <View style={styles.monthBox}>
-            <Text style={styles.monthTitle}>{getMonthName(item.month)}</Text>
-            <FlatList
-              data={item.data}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id.toString()}
-            />
-          </View>
-        )}
-        keyExtractor={(_, index) => index.toString()}
+  data={filteredData}
+  renderItem={({ item }) => (
+    <View style={styles.monthBox}>
+      <Text style={styles.monthTitle}>{getMonthName(item.month)}</Text>
+      <FlatList
+        data={item.data}
+        renderItem={renderItem}
+        keyExtractor={(entry) => entry.id.toString()}  // Corrected key extraction for nested FlatList
       />
+    </View>
+  )}
+  keyExtractor={(item) => item.month.toString()}  // Ensure top-level FlatList has unique keys
+/>
     </View>
   );
 }
