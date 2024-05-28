@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { Text, StyleSheet, View, TextInput, TouchableOpacity, Alert } from 'react-native'
-import { auth } from "../helpers/firebaseConfig";
-import { signInWithEmailAndPassword } from 'firebase/auth'
 import { useAuth } from '../context/AuthContext'
 import { Colors } from '../constants/Colors'
 import { NavigationProp } from '../type'

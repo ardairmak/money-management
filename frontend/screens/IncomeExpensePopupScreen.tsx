@@ -1,10 +1,11 @@
 import React, { Fragment, useState } from 'react'
-import { Text, StyleSheet, View, TextInput, TouchableOpacity, ScrollView } from 'react-native'
+import { Text, StyleSheet, View, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import { Dropdown } from 'react-native-element-dropdown'
 
 import { Colors } from '../constants/Colors'
 import { Category, IncomeExpense, NavigationProp } from '../type.d'
+import { IP } from '../constants/ip'
 
 const categoryData = Object.keys(Category).map((key) => ({
   label: Category[key as keyof typeof Category],
@@ -31,12 +32,12 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
     console.log(newDate.toLocaleDateString('tr-tr'))
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const incomeExpense: IncomeExpense = {
       isIncome: isIncome,
       name: name,
-      category: category as Category,
-      price: price as unknown as number,
+      category: Category[category as keyof typeof Category],
+      price: parseFloat(price),
       date: date,
       description: description,
     }
@@ -46,7 +47,26 @@ export default function IncomeExpensePopupScreen({ navigation }: NavigationProp)
       return alert(`Please provide the name of the ${incomeExpense.isIncome ? 'income' : 'expense'}!`)
     }
 
-    navigation.goBack()
+    try {
+      const response = await fetch(`http://${IP}:8080/income-expense`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(incomeExpense),
+      });
+      console.log(response)
+
+      if (!response.ok) {
+        throw new Error('Failed to add income/expense');
+      }
+
+      Alert.alert('Success', 'Income/Expense added successfully');
+      navigation.goBack();
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'There was a problem adding the income/expense');
+    }
   }
 
   return (

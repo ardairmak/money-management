@@ -4,6 +4,7 @@ import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Colors } from '../constants/Colors';
 import { Category, IncomeExpense } from '../type.d';
+import { IP } from '../constants/ip';
 
 interface displayData {
   month: number;
@@ -20,7 +21,7 @@ interface displayEntry {
 }
 
 export default function BudgetScreen() {
-  const [totalMoney, setTotalMoney] = useState(1.65);
+  const [totalMoney, setTotalMoney] = useState(0);
   const [filteredData, setFilteredData] = useState<displayData[]>([]);
   const [unfilteredData, setUnfilteredData] = useState<IncomeExpense[]>([]);
 
@@ -39,9 +40,8 @@ export default function BudgetScreen() {
   useEffect(() => {
     fetchIncomeExpense()
       .then((data) => {
-        console.log('test');
         setUnfilteredData(data);
-        setData();
+        setData(0);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -50,7 +50,7 @@ export default function BudgetScreen() {
 
   const fetchIncomeExpense = async () => {
     try {
-      const response = await fetch(`http://172.20.10.2:8080/income-expense`);
+      const response = await fetch(`http://${IP}:8080/income-expense`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -110,27 +110,10 @@ export default function BudgetScreen() {
     }
   };
 
-  const handleTotalPress = (month: number) => {
-    let totalAmount = 0;
-
-    const giderData = unfilteredData.reduce((acc, item) => {
-      const itemDate = new Date(item.date); // Convert the date string to a Date object
-      if (itemDate.getMonth() === month) {
-        const amount = parseFloat(item.price);
-        totalAmount += (item.isIncome) ? amount : -amount;
-      }
-      return acc;
-    }, [] as displayEntry[]);
-
-    console.log('Total expense:', totalAmount);
-    setTotalMoney(totalAmount);
-    setData()
-    //setFilteredData([{ month, data: giderData, total: totalAmount.toFixed(2) }]);
-  };
-  const setData = () => {
+  const setData = (setting: number) => {
     if (unfilteredData.length > 0) {
       const formattedData: displayData[] = Array.from({ length: 12 }, (_, month) => {
-        const monthData = unfilteredData.filter(item => new Date(item.date).getMonth() === month)
+        const monthData = unfilteredData.filter(item => new Date(item.date).getMonth() === month && (setting == 0 || (setting == 1 && item.isIncome) || (setting == 2 && !item.isIncome)))
           .map(item => ({
             id: Math.random(),
             name: item.name,
@@ -145,6 +128,23 @@ export default function BudgetScreen() {
     }
   };
 
+  const handleTotalPress = (month: number) => {
+    let totalAmount = 0;
+
+    const giderData = unfilteredData.reduce((acc, item) => {
+      const itemDate = new Date(item.date); // Convert the date string to a Date object
+      if (itemDate.getMonth() === month) {
+        const amount = parseFloat(item.price);
+        totalAmount += (item.isIncome) ? amount : -amount;
+      }
+      return acc;
+    }, [] as displayEntry[]);
+
+    console.log('Total:', totalAmount);
+    setTotalMoney(totalAmount);
+    setData(0)
+  };
+
   const handleGelirPress = (month: number) => {
     let totalIncome = 0;
 
@@ -153,13 +153,6 @@ export default function BudgetScreen() {
       if (itemDate.getMonth()  === month && item.isIncome) {
         const amount = parseFloat(item.price);
         totalIncome += amount;
-        acc.push({
-          id: Math.random(),
-          name: item.name,
-          isIncome: item.isIncome,
-          price: amount,
-          icon: item.category
-        });
       }
       return acc;
     }, [] as displayEntry[]);
@@ -167,8 +160,7 @@ export default function BudgetScreen() {
 
     console.log('Total income:', totalIncome);
     setTotalMoney(totalIncome);
-    setData()
-    //setFilteredData([{ month, data: gelirData, total: totalIncome.toFixed(2) }]);
+    setData(1)
   };
 
   const handleGiderPress = (month: number) => {
@@ -178,22 +170,15 @@ export default function BudgetScreen() {
       const itemDate = new Date(item.date); // Convert the date string to a Date object
       if (itemDate.getMonth() === month && !item.isIncome) {
         const amount = parseFloat(item.price);
-        totalExpense += amount;
-        acc.push({
-          id: Math.random(),
-          name: item.name,
-          isIncome: item.isIncome,
-          price: amount,
-          icon: item.category
-        });
+        totalExpense -= amount;
+        console.log(totalExpense)
       }
       return acc;
     }, [] as displayEntry[]);
 
     console.log('Total expense:', totalExpense);
     setTotalMoney(totalExpense);
-    setData()
-    //setFilteredData([{ month, data: giderData, total: totalExpense.toFixed(2) }]);
+    setData(2)
   };
 
   return (

@@ -20,6 +20,7 @@ import { iconPaths } from '../constants/IconPaths'
 import { FuturePayment, MainStackNavigatorParamList } from '../type'
 import { useIsFocused } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { IP } from '../constants/ip'
 
 type NavigationProp = NativeStackNavigationProp<MainStackNavigatorParamList, 'FPPS'>
 
@@ -32,7 +33,7 @@ const UpcomingPaymentScreen = () => {
   const isFocused = useIsFocused()
   const fetchData = async () => {
   try {
-      const response = await axios.get('http://172.20.10.2:8080/upcoming-payment')
+      const response = await axios.get(`http://${IP}:8080/upcoming-payment`)
       console.log(response)
       const fetchedData = response.data.map((item: FuturePayment) => ({
         ...item,
@@ -80,8 +81,8 @@ const UpcomingPaymentScreen = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      console.log('http://172.20.10.2/upcoming-payment/' + id)
-      await axios.delete(`http://172.20.10.2:8080/upcoming-payment/${id}`)
+      console.log(`http://${IP}/upcoming-payment/` + id)
+      await axios.delete(`http://${IP}:8080/upcoming-payment/${id}`)
       fetchData()
       console.log(`payment with id: ${id} deleted`)
     } catch (error) {

@@ -10,6 +10,7 @@ import {
   Modal,
   Button,
   Pressable,
+  Alert
 } from 'react-native'
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import { Dropdown } from 'react-native-element-dropdown'
@@ -18,6 +19,7 @@ import Animated, { useSharedValue } from 'react-native-reanimated'
 
 import { Colors } from '../constants/Colors'
 import { Event, NavigationProp, RenewalPeriod } from '../type.d'
+import { IP } from '../constants/ip'
 
 const renewalPeriodData = Object.keys(RenewalPeriod).map((key) => ({
   label: RenewalPeriod[key as keyof typeof RenewalPeriod],
@@ -36,7 +38,7 @@ export default function ActivityPopupScreen({ navigation }: NavigationProp) {
   const [isAllDay, setIsAllDay] = useState(false)
   const [timeStart, setTimeStart] = useState(new Date())
   const [timeEnd, setTimeEnd] = useState(new Date())
-  const [reminder, setReminder] = useState('')
+  const [reminder, setReminder] = useState<string>('0');
   const [renewalPeriod, setRenewalPeriod] = useState('')
   const [description, setDescription] = useState('')
 
@@ -56,8 +58,6 @@ export default function ActivityPopupScreen({ navigation }: NavigationProp) {
 
     const newDate = selectedDate || date
     setDate(newDate)
-
-    console.log(newDate.toLocaleDateString('tr-tr'))
   }
 
   const onTimeChange = (event: DateTimePickerEvent, selectedTime?: Date) => {
@@ -65,10 +65,11 @@ export default function ActivityPopupScreen({ navigation }: NavigationProp) {
 
     const newTime = selectedTime || (isStartTimeSelected ? timeStart : timeEnd)
 
-    if (isStartTimeSelected && newTime > timeEnd) {
+    //hatalı çalışıyor - saat seçiminde mantık hataları var takvimde gösterirken de yanlış saatleri gösteriyor
+    if ((isStartTimeSelected && newTime) > timeEnd) {
       return alert('Start time cannot be after end time.')
     }
-    if (!isStartTimeSelected && newTime < timeStart) {
+    if ((!isStartTimeSelected && newTime) < timeStart) {
       return alert('End time cannot be before start time.')
     }
 
@@ -87,39 +88,52 @@ export default function ActivityPopupScreen({ navigation }: NavigationProp) {
     console.log(color.hex)
   }
 
-  const calculateReminderDate = () => {
-    const reminderDate = new Date(date)
-    reminderDate.setDate(reminderDate.getDate() - (reminder as unknown as number))
-    return reminderDate
-  }
+  const convertToISODateString = (date: Date): string => {
+    return date.toISOString().split('T')[0];
+  };
+  
+  const convertToISOTimeString = (date: Date): string => {
+    return date.toISOString().split('T')[1].slice(0, 5);
+  };
 
-  const calculateDateTime = (date: Date, time: Date) => {
-    const newDate = new Date(date)
-    newDate.setHours(time.getHours(), time.getMinutes())
-    return newDate
-  }
-
-  const handleSave = () => {
-    const payment: Event = {
+  const handleSave = async () => {
+    const event: Event = {
       name: name,
-      date: date,
+      date: new Date(convertToISODateString(date)),
       isAllDay: isAllDay,
-      timeStart: calculateDateTime(date, timeStart),
-      timeEnd: calculateDateTime(date, timeEnd),
-      reminder: calculateReminderDate(),
-      renewalPeriod: (renewalPeriod as RenewalPeriod) || RenewalPeriod.NONE,
+      timeStart: new Date(convertToISOTimeString(timeStart)),
+      timeEnd: new Date(convertToISOTimeString(timeEnd)),
+      reminder: reminder !== '0' ? new Date(date.getTime() - Number(reminder) * 24 * 60 * 60 * 1000) : undefined,
+      renewalPeriod: RenewalPeriod[renewalPeriod as keyof typeof RenewalPeriod] || RenewalPeriod.NONE,
       color: selectedColor.value,
       description: description,
-      category: '',
-      time: '',
     }
-    console.log(payment)
+    console.log(event)
 
-    if (!payment.name || !payment.date) {
+    if (!event.name || !event.date) {
       return alert('Please provide event name or date.')
     }
 
-    navigation.goBack()
+    try {
+      const response = await fetch(`http://${IP}:8080/event`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(event),
+      });
+      console.log(response)
+
+      if (!response.ok) {
+        throw new Error('Failed to add event');
+      }
+
+      Alert.alert('Success', 'Event added successfully');
+      navigation.goBack();
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'There was a problem adding the event');
+    }
   }
 
   return (
@@ -366,6 +380,7 @@ const styles = StyleSheet.create({
   selectedTextStyle: {
     fontSize: 16,
     textAlign: 'right',
+    color: 'white',
   },
   dateText: {
     color: 'white',

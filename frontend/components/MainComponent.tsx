@@ -14,7 +14,7 @@ const MainComponent: React.FC<CustomHeaderProps> = ({ navigation }) => {
     <Fragment>
       <BottomTabBarNavigation navigation={navigation} />
       <FloatingActionButton />
-      <HamburgerBar />
+      <HamburgerBar navigation={navigation} />
     </Fragment>
   )
 }

@@ -1,13 +1,44 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Calendar } from 'react-native-calendars'
 import { FontAwesome5 } from '@expo/vector-icons'
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Colors } from '../constants/Colors'
-import { mockEvents } from '../constants/MockData'
+import { Event } from '../type.d'
+import { IP } from '../constants/ip';
 
 const CalendarScreen: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState<string | null>(null)
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [events, setEvents] = useState<{[key: string]: Event[]}>({});
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch(`http://${IP}:8080/event`);
+        const data: Event[] = await response.json();
+        if (data === null) {
+          throw new Error('Fetched data is null');
+        }
+        const formattedEvents = data.reduce((acc: { [key: string]: Event[] }, event: Event) => {
+          const dateString = new Date(event.date).toISOString().split('T')[0];
+
+          if (!acc[dateString]) {
+            acc[dateString] = [];
+          }
+          acc[dateString].push(event);
+          return acc;
+        }, {});
+        setEvents(formattedEvents);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+    fetchEvents();
+    const intervalId = setInterval(fetchEvents, 5000); // Poll every 10 seconds
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleDayPress = (day: { dateString: string }) => {
     setSelectedDate(day.dateString)
@@ -16,31 +47,41 @@ const CalendarScreen: React.FC = () => {
   const getMarkedDates = () => {
     const marked: { [date: string]: any } = {}
 
-    for (const date in mockEvents) {
-      marked[date] = { marked: true, dotColor: 'red' }
+    for (const date in events) {
+      marked[date] = { marked: true, dotColor: 'white' }
+    }
+
+    if (selectedDate) {
+      marked[selectedDate] = { ...marked[selectedDate], selected: true };
     }
 
     return marked
   }
 
   const renderEvents = () => {
-    const events = mockEvents[selectedDate || '']
+    const dayEvents = events[selectedDate || ''];
 
-    if (!events) return null
+    if (!dayEvents) return null
 
     return (
       <View style={styles.eventsContainer}>
         <View style={styles.eventListContainer}>
-          {events.map((event, index) => (
-            <View key={index} style={styles.eventItem}>
-              <FontAwesome5 name='coins' size={30} color={Colors.white} />
+        {dayEvents.map((event: Event, index: number) => {
+            const id = uuidv4();
+            
+            return (
+              <View key={id} style={styles.eventItem}>
+                <FontAwesome5 name='coins' size={30} color={Colors.white} />
 
-              <View style={styles.eventDetails}>
-                <Text style={event.category === 'Expense' ? styles.expenseText : styles.incomeText}>{event.name}</Text>
-                <Text style={styles.eventTime}>{event.time}</Text>
+                <View style={styles.eventDetails}>
+                  <Text>{event.name}</Text>
+                  {event.timeStart && event.timeEnd && (
+                    <Text style={styles.eventTime}>{`${new Date(event.timeStart).toLocaleTimeString()} - ${new Date(event.timeEnd).toLocaleTimeString()}`}</Text>
+                  )}
+                </View>
               </View>
-            </View>
-          ))}
+            )
+        })}
         </View>
       </View>
     )
@@ -50,10 +91,7 @@ const CalendarScreen: React.FC = () => {
     <View style={styles.container}>
       <Calendar
         onDayPress={handleDayPress}
-        markedDates={{
-          ...getMarkedDates(),
-          [selectedDate || '']: { selected: true, marked: true },
-        }}
+        markedDates={getMarkedDates()}
         style={{ backgroundColor: Colors.primary, height: 370 }}
         theme={{
           monthTextColor: Colors.white,

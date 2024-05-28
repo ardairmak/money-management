@@ -3,11 +3,12 @@ import { Text, StyleSheet, TouchableOpacity, Animated, Easing } from 'react-nati
 import { Ionicons } from '@expo/vector-icons'
 
 import { Colors } from '../constants/Colors'
+import { NavigationProp } from '../type'
 
 let toggleHamburger = () => {}
 let closeHamburger = () => {}
 
-export default function HamburgerBar() {
+export default function HamburgerBar({ navigation }: NavigationProp) {
   const [isHamburgerVisible, setIsHamburgerVisible] = useState(false)
   const slideAnim = useRef(new Animated.Value(-300)).current
 
@@ -31,16 +32,19 @@ export default function HamburgerBar() {
   const onButtonPressSettings = () => {
     console.log('Pressed Ayarlar')
     closeHamburger()
+    navigation.navigate('Settings')
   }
 
-  const onButtonPressContacts = () => {
+  const onButtonPressSupport = () => {
     console.log('Pressed İletişim')
     closeHamburger()
+    navigation.navigate('Support')
   }
 
   const onButtonPressLogOut = () => {
     console.log('Pressed Çıkış Yap')
     closeHamburger()
+    navigation.navigate('LogIn')
   }
 
   return (
@@ -56,7 +60,7 @@ export default function HamburgerBar() {
         <TouchableOpacity style={styles.barItem} onPress={onButtonPressSettings}>
           <Text style={styles.barItemText}>Settings</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.barItem} onPress={onButtonPressContacts}>
+        <TouchableOpacity style={styles.barItem} onPress={onButtonPressSupport}>
           <Text style={styles.barItemText}>Support</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.barItem, styles.signOut]} onPress={onButtonPressLogOut}>

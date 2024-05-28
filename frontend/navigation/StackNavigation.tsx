@@ -13,6 +13,8 @@ import LogInScreen from '../screens/LogInScreen'
 import SignUpScreen from '../screens/SignUpScreen'
 import ForgetPasswordScreen from '../screens/ForgetPassword'
 import { Colors } from '../constants/Colors'
+import Settings from '../screens/Settings'
+import Support from '../screens/Support'
 
 const Stack = createStackNavigator<MainStackNavigatorParamList>()
 
@@ -67,10 +69,46 @@ export default function StackNavigation() {
         <Stack.Screen
           name='SignUp'
           component={SignUpScreen}
+          options={{
+            headerStyle: styles.headerStyle,
+            headerTitleAlign: 'center',
+            headerTitleStyle: styles.headerTitle,
+            cardStyle: styles.cardStyle,
+            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.white} />,
+          }}
         />
         <Stack.Screen
           name='ForgetPassword'
           component={ForgetPasswordScreen}
+          options={{
+            headerStyle: styles.headerStyle,
+            headerTitleAlign: 'center',
+            headerTitleStyle: styles.headerTitle,
+            cardStyle: styles.cardStyle,
+            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.white} />,
+          }}
+        />
+        <Stack.Screen
+          name='Settings'
+          component={Settings}
+          options={{
+            headerStyle: styles.headerStyle,
+            headerTitleAlign: 'center',
+            headerTitleStyle: styles.headerTitle,
+            cardStyle: styles.cardStyle,
+            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.white} />,
+          }}
+        />
+        <Stack.Screen
+          name='Support'
+          component={Support}
+          options={{
+            headerStyle: styles.headerStyle,
+            headerTitleAlign: 'center',
+            headerTitleStyle: styles.headerTitle,
+            cardStyle: styles.cardStyle,
+            headerBackImage: () => <Ionicons name='close-sharp' size={36} color={Colors.white} />,
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

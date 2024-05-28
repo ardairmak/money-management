@@ -7,6 +7,7 @@ import { useRoute } from '@react-navigation/native'
 import { Colors } from '../constants/Colors'
 import { Category, FuturePayment, MainStackNavigatorParamList, NavigationProp, RenewalPeriod } from '../type.d'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { IP } from '../constants/ip'
 
 type FuturePaymentPopupScreenProps = NativeStackScreenProps<MainStackNavigatorParamList, 'FPPS'>
 
@@ -79,8 +80,8 @@ export default function FuturePaymentPopupScreen({ navigation }: FuturePaymentPo
 
     try {
       const url = paymentToEdit
-        ? `http://172.20.10.2:8080/upcoming-payment/${paymentToEdit.id}`
-        : 'http://172.20.10.2:8080/upcoming-payment'
+        ? `http://${IP}:8080/upcoming-payment/${paymentToEdit.id}`
+        : `http://${IP}:8080/upcoming-payment`
       const method = paymentToEdit ? 'PUT' : 'POST'
       const response = await fetch(url, {
         method: method,
