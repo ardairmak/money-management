@@ -9,6 +9,7 @@ import {
   Animated,
   TouchableOpacity,
 } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 import { ScrollView, Swipeable } from 'react-native-gesture-handler'
 import axios from 'axios'
@@ -16,37 +17,41 @@ import axios from 'axios'
 import { Colors } from '../constants/Colors'
 import { getDaysDifference } from '../helpers/dateHelpers'
 import { iconPaths } from '../constants/IconPaths'
-import { FuturePayment } from '../type'
+import { FuturePayment, MainStackNavigatorParamList } from '../type'
 import { useIsFocused } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+
+type NavigationProp = NativeStackNavigationProp<MainStackNavigatorParamList, 'FPPS'>
 
 const UpcomingPaymentScreen = () => {
   const [searchItem, setSearchItem] = useState('')
   const [data, setData] = useState<FuturePayment[]>([])
   const [filteredData, setFilteredData] = useState<FuturePayment[]>([])
 
+  const navigation = useNavigation<NavigationProp>()
   const isFocused = useIsFocused()
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://172.20.10.2:8080/upcoming-payment')
+      console.log(response)
+      const fetchedData = response.data.map((item: FuturePayment) => ({
+        ...item,
+        date: formatDateString(item.date), // Ensure the date is formatted correctly
+      }))
+      const sortedData = fetchedData.sort((a, b) => {
+        const differenceInDaysA = getDaysDifference(a.date)
+        const differenceInDaysB = getDaysDifference(b.date)
+        return differenceInDaysA - differenceInDaysB
+      })
+      setData(sortedData)
+      setFilteredData(sortedData)
+      console.log('Data fetched:', sortedData)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    }
+  }
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://172.20.10.2:8080/upcoming-payment')
-        const fetchedData = response.data.map((item: FuturePayment) => ({
-          ...item,
-          date: formatDateString(item.date), // Ensure the date is formatted correctly
-        }))
-        const sortedData = fetchedData.sort((a, b) => {
-          const differenceInDaysA = getDaysDifference(a.date)
-          const differenceInDaysB = getDaysDifference(b.date)
-          return differenceInDaysA - differenceInDaysB
-        })
-        setData(sortedData)
-        setFilteredData(sortedData)
-        console.log('Data fetched:', sortedData)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      }
-    }
-
     fetchData()
   }, [isFocused])
 
@@ -68,11 +73,21 @@ const UpcomingPaymentScreen = () => {
     setFilteredData(filteredData)
   }
 
-  const handleEdit = () => {
-    console.log('Edit')
+  const handleEdit = (payment: FuturePayment) => {
+    // Navigate to the edit screen
+    navigation.navigate('FPPS', { payment })
   }
 
-  const handleDelete = () => {}
+  const handleDelete = async (id: string) => {
+    try {
+      console.log('http://172.20.10.2/upcoming-payment/' + id)
+      await axios.delete(`http://172.20.10.2:8080/upcoming-payment/${id}`)
+      fetchData()
+      console.log(`payment with id: ${id} deleted`)
+    } catch (error) {
+      console.error('Error deleting data:', error)
+    }
+  }
 
   const renderItem = ({ item, index }: { item: FuturePayment; index: number }) => {
     const backgroundColor = getItemBackgroundColor(item.date)
@@ -82,7 +97,7 @@ const UpcomingPaymentScreen = () => {
       return (
         <View style={[styles.swipeActions, { backgroundColor: backgroundColor }]}>
           <TouchableOpacity
-            onPress={() => handleEdit()}
+            onPress={() => handleEdit(item)}
             style={{
               width: 50,
               height: 50,
@@ -99,7 +114,7 @@ const UpcomingPaymentScreen = () => {
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => handleDelete()}
+            onPress={() => handleDelete(item.id)}
             style={{
               width: 50,
               height: 50,
@@ -163,12 +178,7 @@ const UpcomingPaymentScreen = () => {
               onChange={(e) => handleSearch(e.nativeEvent.text)}
             />
           </View>
-          <ScrollView
-            style={[
-              styles.upcomingContainer,
-              { height: filteredData.length * 70 > 350 ? 350 : filteredData.length * 70 },
-            ]}
-          >
+          <ScrollView style={[styles.upcomingContainer]}>
             <Text style={styles.upcomingTitle}>Upcoming Payments</Text>
             {filteredData.map((item, index) => renderItem({ item, index }))}
             {filteredData.length === 0 && <Text style={styles.noPaymentText}>No upcoming payment!</Text>}
