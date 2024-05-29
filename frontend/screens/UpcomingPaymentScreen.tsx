@@ -32,7 +32,7 @@ const UpcomingPaymentScreen = () => {
   const navigation = useNavigation<NavigationProp>()
   const isFocused = useIsFocused()
   const fetchData = async () => {
-  try {
+    try {
       const response = await axios.get(`http://${IP}:8080/upcoming-payment`)
       console.log(response)
       const fetchedData = response.data.map((item: FuturePayment) => ({
