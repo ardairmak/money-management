@@ -1,0 +1,9 @@
+{
+  "files": "*.{js,jsx,ts,tsx,json}",
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true,
+  "jsxSingleQuote": true,
+  "printWidth": 120,
+  "proseWrap": "never"
+}
